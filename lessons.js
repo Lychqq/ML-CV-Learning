@@ -1,0 +1,361 @@
+// Уроки по библиотекам: от начального уровня до уверенного владения
+const LESSONS = [
+  // ---- NumPy: начальный → продвинутый ----
+  {
+    id: 'numpy-basics',
+    title: 'NumPy: начальный уровень — массивы и форма',
+    shortDesc: 'Массивы, форма, индексация, операции и линейная алгебра',
+    theory: `
+      <p><strong>NumPy</strong> — библиотека для работы с многомерными массивами и матричными операциями. Почти весь ML-код использует NumPy или строит на нём (PyTorch, TensorFlow).</p>
+      <p><strong>Массив</strong> создаётся из списка: <code>np.array([1, 2, 3])</code>. Форма — <code>.shape</code>, число элементов — <code>.size</code>, тип — <code>.dtype</code>.</p>
+      <p><strong>Индексация:</strong> <code>a[0]</code>, срез <code>a[1:4]</code>, для матрицы <code>a[i, j]</code> или <code>a[i][j]</code>. Отрицательные индексы с конца.</p>
+      <p><strong>Операции</strong> поэлементные: <code>a + b</code>, <code>a * b</code>. Матричное умножение: <code>A @ B</code> или <code>np.dot(A, B)</code>. Транспонирование: <code>A.T</code>.</p>
+      <p><strong>Полезные функции:</strong> <code>np.zeros(shape)</code>, <code>np.ones(shape)</code>, <code>np.random.randn(m, n)</code>, <code>np.linspace(0, 1, 10)</code>, <code>np.mean(a)</code>, <code>np.sum(a)</code>.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'fill', content: 'a = np.', placeholder: '???', correct: 'array' },
+          { type: 'text', content: '([1, 2, 3, 4, 5])  # одномерный массив' },
+          { type: 'hint', content: 'print(a.shape)   # (5,) — форма', hint: 'shape возвращает кортеж размеров по каждой оси' },
+          { type: 'fill', content: 'b = np.', placeholder: '???', correct: 'zeros' },
+          { type: 'text', content: '((3, 4))  # матрица 3×4 из нулей' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'M = np.random.randn(2, 3)  # случайная матрица 2×3' },
+          { type: 'fill', content: 'MT = M.', placeholder: '???', correct: 'T' },
+          { type: 'text', content: '  # транспонирование → форма (3, 2)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'x = np.array([1.0, 2.0, 3.0])' },
+          { type: 'fill', content: 's = np.', placeholder: '???', correct: 'mean' },
+          { type: 'text', content: '(x)  # среднее значение' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'gradient-descent',
+    title: 'Градиентный спуск',
+    shortDesc: 'Оптимизация: шаг обновления весов, learning rate, градиент',
+    theory: `
+      <p><strong>Градиентный спуск</strong> — основной метод минимизации функции потерь в ML. Идея: двигать параметры в направлении, противоположном градиенту, чтобы уменьшить потери.</p>
+      <p><strong>Формула:</strong> <code>w_new = w_old - learning_rate * gradient</code>. Градиент — вектор частных производных по каждому параметру; он указывает направление наибольшего роста функции.</p>
+      <p><strong>Learning rate (η)</strong> — размер шага. Слишком большой → колебания или расхождение; слишком маленький → медленная сходимость. Часто подбирают по сетке или используют расписания (например, уменьшение со временем).</p>
+      <p><strong>Варианты:</strong> (1) <em>Batch</em> — градиент по всем данным за раз. (2) <em>Stochastic (SGD)</em> — по одному примеру. (3) <em>Mini-batch</em> — по небольшой подвыборке; чаще всего используется в нейросетях.</p>
+      <p>Для линейной регрессии с MSE градиент по весам: <code>∇w = (2/n) * X^T * (Xw - y)</code>. Подставь это в формулу обновления и заполни пропуски в коде.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'def gradient_descent(X, y, lr=0.01, epochs=100):' },
+          { type: 'hint', content: '    w = np.zeros(X.shape[1])  # веса (инициализация нулями)', hint: 'Инициализация весов: начинаем с нулей, размер = число признаков в X' },
+          { type: 'text', content: '    for _ in range(epochs):' },
+          { type: 'hint', content: '        pred = X @ w  # предсказание: X * w', hint: 'Предсказание: матричное умножение X на вектор весов w' },
+          { type: 'hint', content: '        error = pred - y  # ошибка (разница с целевой переменной)', hint: 'Вектор ошибок: предсказание минус истинные значения y' },
+          { type: 'fill', content: '        grad = ', placeholder: '???', correct: 'X.T @ error / len(y)' },
+          { type: 'fill', content: '        w = w - ', placeholder: '???', correct: 'lr * grad' },
+          { type: 'text', content: '    return w' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'numpy-intermediate',
+    title: 'NumPy: средний уровень — broadcasting и индексация',
+    shortDesc: 'Broadcasting, булева маска, fancy indexing',
+    theory: `
+      <p><strong>Broadcasting</strong> — правила, по которым NumPy расширяет массивы разной формы при операциях. Например, массив (3,) + скаляр даёт поэлементное сложение; (3, 4) + (4,) — строка добавляется к каждой строке матрицы.</p>
+      <p><strong>Булева маска:</strong> <code>a[a > 0]</code> возвращает одномерный массив из элементов, где условие True. Условие — массив булев той же формы.</p>
+      <p><strong>Fancy indexing:</strong> <code>a[[0, 2, 4]]</code> — выбор по списку индексов. Для 2D: <code>a[rows, cols]</code> с массивами индексов.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: 'a = np.array([1, 2, 3, 4, 5])' },
+          { type: 'fill', content: 'mask = a ', placeholder: '???', correct: '> 2' },
+          { type: 'text', content: '  # булев массив' },
+          { type: 'fill', content: 'selected = a[', placeholder: '???', correct: 'mask' },
+          { type: 'text', content: ']  # элементы, где True' },
+          { type: 'text', content: '# Или короче: a[a > 2]' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'numpy-linear',
+    title: 'NumPy: линейная регрессия (MSE и градиентный спуск)',
+    shortDesc: 'MSE, градиенты и один цикл обучения',
+    theory: `
+      <p><strong>Линейная регрессия</strong> моделирует зависимость: <code>y ≈ Xw + b</code>. Часто b включают в w (добавляют столбец единиц в X). Цель — найти веса w, минимизирующие ошибку предсказания.</p>
+      <p><strong>MSE</strong> (Mean Squared Error): <code>L = (1/n) * Σ(y_true - y_pred)²</code>. Это среднеквадратичная ошибка; дифференцируема и удобна для градиентного спуска.</p>
+      <p><strong>Градиент MSE по w:</strong> при предсказании <code>y_pred = Xw</code> получается <code>∇w = (2/n) * X^T * (y_pred - y)</code>. Знак зависит от определения (pred-y или y-pred); в коде ниже используется <code>y_pred - y</code> и обновление <code>w -= lr * grad_w</code>.</p>
+      <p>Альтернатива — <strong>нормальное уравнение</strong> <code>w = (X^T X)^(-1) X^T y</code>: решение в один шаг без итераций, но при больших n или многих признаках градиентный спуск масштабируется лучше.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'def mse(y_true, y_pred):' },
+          { type: 'fill', content: '    return np.mean((', placeholder: '???', correct: 'y_true - y_pred' },
+          { type: 'text', content: ') ** 2)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'def train_linear(X, y, lr=0.01, epochs=500):' },
+          { type: 'text', content: '    w = np.random.randn(X.shape[1]) * 0.01' },
+          { type: 'text', content: '    for epoch in range(epochs):' },
+          { type: 'text', content: '        y_pred = X @ w' },
+          { type: 'fill', content: '        loss = mse(y, ', placeholder: '???', correct: 'y_pred' },
+          { type: 'text', content: ')' },
+          { type: 'hint', content: '        grad_w = (2 / len(y)) * X.T @ (y_pred - y)  # градиент MSE по w', hint: 'Градиент MSE: (2/n)*X^T*(y_pred-y)' },
+          { type: 'fill', content: '        w -= ', placeholder: '???', correct: 'lr * grad_w' },
+          { type: 'text', content: '    return w' },
+        ],
+      },
+    ],
+  },
+  // ---- Pandas: начальный → продвинутый ----
+  {
+    id: 'pandas-basics',
+    title: 'Pandas: начальный уровень — DataFrame и загрузка',
+    shortDesc: 'DataFrame, read_csv, head, columns',
+    theory: `
+      <p><strong>Pandas</strong> — библиотека для табличных данных. Основные объекты: <code>DataFrame</code> (таблица) и <code>Series</code> (столбец с индексами).</p>
+      <p><strong>Загрузка:</strong> <code>pd.read_csv("file.csv")</code> возвращает DataFrame. Параметры: sep, header, encoding.</p>
+      <p><strong>Просмотр:</strong> <code>df.head(n)</code>, <code>df.shape</code>, <code>df.columns</code>, <code>df.dtypes</code>.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import pandas as pd' },
+          { type: 'fill', content: 'df = pd.', placeholder: '???', correct: 'read_csv' },
+          { type: 'text', content: '("data.csv")' },
+          { type: 'hint', content: 'print(df.head(5))  # первые 5 строк', hint: 'head(n) — первые n строк' },
+          { type: 'fill', content: 'print(df.', placeholder: '???', correct: 'columns' },
+          { type: 'text', content: ')  # имена столбцов' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sklearn-basics',
+    title: 'scikit-learn: начальный уровень — fit и predict',
+    shortDesc: 'fit/predict, train_test_split, метрики, Pipeline',
+    theory: `
+      <p><strong>scikit-learn</strong> — основная библиотека для классического ML в Python. Единый интерфейс: модель создаётся, затем <code>model.fit(X, y)</code> для обучения, <code>model.predict(X)</code> для предсказаний.</p>
+      <p><strong>Разделение данных:</strong> <code>train_test_split(X, y, test_size=0.2, random_state=42)</code> — случайно делит на обучающую и тестовую выборки. Обучаем только на train, оцениваем на test.</p>
+      <p><strong>Регрессия:</strong> <code>from sklearn.linear_model import LinearRegression</code>. После <code>fit</code> веса в <code>model.coef_</code> и <code>model.intercept_</code>.</p>
+      <p><strong>Метрики:</strong> <code>mean_squared_error(y_true, y_pred)</code>, <code>mean_absolute_error</code>, <code>r2_score</code>. Для классификации: <code>accuracy_score</code>, <code>classification_report</code>, <code>confusion_matrix</code>.</p>
+      <p><strong>Pipeline</strong> объединяет шаги (например, масштабирование + модель): <code>Pipeline([("scaler", StandardScaler()), ("model", LinearRegression())])</code>. Вызов <code>fit</code> применяет все шаги по порядку.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from sklearn.linear_model import LinearRegression' },
+          { type: 'text', content: 'from sklearn.model_selection import train_test_split' },
+          { type: 'text', content: 'from sklearn.metrics import mean_squared_error' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)' },
+          { type: 'text', content: 'model = LinearRegression()' },
+          { type: 'fill', content: 'model.', placeholder: '???', correct: 'fit' },
+          { type: 'text', content: '(X_train, y_train)  # обучение' },
+          { type: 'fill', content: 'y_pred = model.', placeholder: '???', correct: 'predict' },
+          { type: 'text', content: '(X_test)' },
+          { type: 'fill', content: 'mse = mean_squared_error(', placeholder: '???', correct: 'y_test, y_pred' },
+          { type: 'text', content: ')' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sklearn-pipeline',
+    title: 'scikit-learn: средний уровень — Pipeline и препроцессинг',
+    shortDesc: 'StandardScaler, Pipeline, кросс-валидация',
+    theory: `
+      <p><strong>Препроцессинг</strong> важен: многие алгоритмы чувствительны к масштабу признаков. <code>StandardScaler</code> приводит каждый признак к среднему 0 и дисперсии 1: <code>scaler.fit(X_train)</code>, затем <code>scaler.transform(X_train)</code> и <code>scaler.transform(X_test)</code>. На тесте используем те же параметры (среднее/дисперсию с train), чтобы не было утечки информации.</p>
+      <p><strong>Pipeline</strong> связывает шаги: при <code>pipe.fit(X_train, y_train)</code> сначала применяется scaler к X_train, затем модель обучается на масштабированных данных. При <code>pipe.predict(X_test)</code> X_test масштабируется тем же scaler, затем идёт предсказание.</p>
+      <p><strong>Кросс-валидация:</strong> <code>cross_val_score(model, X, y, cv=5)</code> разбивает данные на 5 частей, по очереди одна — валидация, остальные — обучение; возвращает массив оценок. Так получаем более устойчивую оценку качества.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from sklearn.pipeline import Pipeline' },
+          { type: 'text', content: 'from sklearn.preprocessing import StandardScaler' },
+          { type: 'text', content: '' },
+          { type: 'fill', content: 'pipe = Pipeline([("scaler", ', placeholder: '???', correct: 'StandardScaler' },
+          { type: 'text', content: '()), ("model", LinearRegression())])' },
+          { type: 'text', content: 'pipe.fit(X_train, y_train)' },
+          { type: 'fill', content: 'score = pipe.', placeholder: '???', correct: 'score' },
+          { type: 'text', content: '(X_test, y_test)  # R² на тесте' },
+        ],
+      },
+    ],
+  },
+  // ---- OpenCV: начальный → продвинутый ----
+  {
+    id: 'opencv-basics',
+    title: 'OpenCV: начальный уровень — загрузка и отображение',
+    shortDesc: 'imread, imshow, waitKey, BGR',
+    theory: `
+      <p><strong>OpenCV (cv2)</strong> — библиотека для работы с изображениями и видео. Изображение в памяти — это ndarray (высота × ширина × каналы).</p>
+      <p><strong>Цвета:</strong> по умолчанию BGR (не RGB!). Для отображения в matplotlib конвертируют: <code>cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</code>.</p>
+      <p><strong>Загрузка:</strong> <code>cv2.imread("path.jpg")</code>. Показ: <code>cv2.imshow("window", img)</code>, <code>cv2.waitKey(0)</code>, <code>cv2.destroyAllWindows()</code>.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import cv2' },
+          { type: 'fill', content: 'img = cv2.', placeholder: '???', correct: 'imread' },
+          { type: 'text', content: '("image.jpg")' },
+          { type: 'text', content: 'cv2.imshow("window", img)' },
+          { type: 'fill', content: 'cv2.', placeholder: '???', correct: 'waitKey' },
+          { type: 'text', content: '(0)' },
+          { type: 'text', content: 'cv2.destroyAllWindows()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'opencv-filters',
+    title: 'OpenCV: средний уровень — фильтры и границы',
+    shortDesc: 'cvtColor, resize, GaussianBlur, Canny',
+    theory: `
+      <p><strong>Преобразования:</strong> <code>cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)</code> — в оттенки серого. <code>cv2.resize(img, (width, height))</code> — изменить размер.</p>
+      <p><strong>Размытие:</strong> <code>cv2.GaussianBlur(img, (5, 5), 0)</code> — размытие по Гауссу (ядро нечётное).</p>
+      <p><strong>Границы:</strong> <code>cv2.Canny(img, threshold1, threshold2)</code> — детектор границ Кэнни.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)' },
+          { type: 'fill', content: 'blurred = cv2.', placeholder: '???', correct: 'GaussianBlur' },
+          { type: 'text', content: '(img, (5, 5), 0)' },
+          { type: 'fill', content: 'edges = cv2.', placeholder: '???', correct: 'Canny' },
+          { type: 'text', content: '(gray, 100, 200)' },
+        ],
+      },
+    ],
+  },
+  // ---- PyTorch: начальный → продвинутый ----
+  {
+    id: 'pytorch-tensors',
+    title: 'PyTorch: начальный уровень — тензоры',
+    shortDesc: 'torch.tensor, shape, to(device)',
+    theory: `
+      <p><strong>PyTorch</strong> — библиотека для глубокого обучения. Основной объект — <code>torch.Tensor</code> (аналог ndarray с поддержкой автоградиента).</p>
+      <p><strong>Создание:</strong> <code>torch.tensor([1, 2, 3])</code>, <code>torch.zeros(2, 3)</code>, <code>torch.randn(2, 3)</code>. Свойства: <code>x.shape</code>, <code>x.dtype</code>.</p>
+      <p><strong>Устройство:</strong> <code>x.to("cuda")</code> или <code>x.cuda()</code> — перенос на GPU; <code>x.to("cpu")</code> — на CPU.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import torch' },
+          { type: 'fill', content: 'x = torch.', placeholder: '???', correct: 'tensor' },
+          { type: 'text', content: '([1, 2, 3])' },
+          { type: 'text', content: 'print(x.shape)' },
+          { type: 'fill', content: 'x = x.', placeholder: '???', correct: 'to' },
+          { type: 'text', content: '("cuda")  # если есть GPU' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'pytorch-nn',
+    title: 'PyTorch: средний уровень — nn.Module и цикл обучения',
+    shortDesc: 'nn.Module, forward, оптимизатор и loss',
+    theory: `
+      <p><strong>PyTorch</strong> — библиотека для глубокого обучения. Модель задаётся классом, наследующим <code>nn.Module</code>. В <code>__init__</code> создаются слои (например, <code>nn.Linear(in_features, out_features)</code>), в <code>forward(self, x)</code> описывается проход от входа к выходу.</p>
+      <p><strong>Слои:</strong> <code>nn.Linear</code> — полносвязный слой (матрица + смещение). <code>nn.Conv2d</code> — свёртка для изображений. <code>nn.ReLU()</code>, <code>nn.Sigmoid()</code> — функции активации (часто вызывают <code>torch.relu(x)</code> в forward).</p>
+      <p><strong>Цикл обучения:</strong> для каждого батча (x, y): (1) <code>optimizer.zero_grad()</code> — обнулить градиенты; (2) <code>out = model(x)</code>, <code>loss = criterion(out, y)</code>; (3) <code>loss.backward()</code> — посчитать градиенты; (4) <code>optimizer.step()</code> — обновить веса.</p>
+      <p><strong>Loss:</strong> для регрессии — <code>nn.MSELoss()</code>; для классификации по классам — <code>nn.CrossEntropyLoss()</code> (вход — логиты, цель — индексы классов).</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import torch' },
+          { type: 'text', content: 'import torch.nn as nn' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'class Net(nn.Module):' },
+          { type: 'text', content: '    def __init__(self, in_dim, hidden, out_dim):' },
+          { type: 'text', content: '        super().__init__()' },
+          { type: 'hint', content: '        self.fc1 = nn.Linear(in_dim, hidden)', hint: 'Linear(in, out): преобразует in_dim признаков в hidden нейронов' },
+          { type: 'fill', content: '        self.fc2 = nn.Linear(', placeholder: '???', correct: 'hidden, out_dim' },
+          { type: 'text', content: ')' },
+          { type: 'text', content: '    def forward(self, x):' },
+          { type: 'text', content: '        x = torch.relu(self.fc1(x))' },
+          { type: 'fill', content: '        x = self.', placeholder: '???', correct: 'fc2' },
+          { type: 'text', content: '(x)' },
+          { type: 'text', content: '        return x' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'model = Net(10, 64, 2)' },
+          { type: 'fill', content: 'optimizer = torch.optim.', placeholder: '???', correct: 'SGD' },
+          { type: 'text', content: '(model.parameters(), lr=0.01)' },
+          { type: 'text', content: 'for x, y in loader:' },
+          { type: 'fill', content: '    optimizer.', placeholder: '???', correct: 'zero_grad' },
+          { type: 'text', content: '()' },
+          { type: 'text', content: '    out = model(x); loss = criterion(out, y)' },
+          { type: 'text', content: '    loss.backward()' },
+          { type: 'fill', content: '    optimizer.', placeholder: '???', correct: 'step' },
+          { type: 'text', content: '()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'pytorch-dataloader',
+    title: 'PyTorch: DataLoader и батчи',
+    shortDesc: 'Dataset, DataLoader, цикл по батчам',
+    theory: `
+      <p><strong>DataLoader</strong> оборачивает Dataset и отдаёт батчи. Параметры: <code>batch_size</code>, <code>shuffle=True</code> для обучения.</p>
+      <p>Цикл: <code>for x, y in loader:</code> — x и y уже тензоры нужного размера (batch_size × ...).</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from torch.utils.data import DataLoader' },
+          { type: 'fill', content: 'loader = DataLoader(dataset, batch_size=32, ', placeholder: '???', correct: 'shuffle' },
+          { type: 'text', content: '=True)' },
+          { type: 'text', content: 'for x, y in loader:' },
+          { type: 'text', content: '    out = model(x)' },
+          { type: 'text', content: '    loss = criterion(out, y)' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'fix-errors',
+    title: 'Исправь ошибки в коде (PyTorch и NumPy)',
+    shortDesc: 'Типичные опечатки в PyTorch и NumPy',
+    theory: `
+      <p>В коде ниже пропущены имена функций или методов. Впиши правильные варианты для PyTorch и NumPy.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import torch' },
+          { type: 'fill', content: '# Тензор из списка: torch.', placeholder: '???', correct: 'tensor' },
+          { type: 'text', content: '([1, 2, 3])' },
+          { type: 'fill', content: '# Размер тензора: x.', placeholder: '???', correct: 'shape' },
+          { type: 'text', content: ' или x.size()' },
+          { type: 'text', content: '# Переместить на GPU: x.' },
+          { type: 'fill', content: '', placeholder: '???', correct: 'cuda' },
+          { type: 'text', content: '() или x.to("cuda")' },
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'fill', content: '# Создать массив: np.', placeholder: '???', correct: 'array' },
+          { type: 'text', content: '([1, 2, 3])' },
+        ],
+      },
+    ],
+  },
+];
+
+const SANDBOX_DEFAULTS = {
+  inputSize: 784,
+  hidden1: 128,
+  hidden2: 64,
+  outputSize: 10,
+  optimizer: 'Adam',
+  lr: 0.001,
+  loss: 'CrossEntropyLoss',
+};

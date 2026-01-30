@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML и Computer Vision — Интерактивное обучение</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>ML & Computer Vision</h1>
+    <p>NumPy · Pandas · scikit-learn · OpenCV · PyTorch · Python</p>
+  </header>
+
+  <nav class="nav">
+    <button class="nav-btn active" data-view="home">Главная</button>
+    <button class="nav-btn" data-view="lessons">Уроки</button>
+    <button class="nav-btn" data-view="references">Справочники</button>
+    <button class="nav-btn" data-view="flashcards">Флеш-карточки</button>
+    <button class="nav-btn" data-view="sandbox">Песочница нейросети</button>
+  </nav>
+
+  <main class="main">
+    <!-- Главная -->
+    <section id="view-home" class="view active">
+      <div class="welcome">
+        <h2>Добро пожаловать</h2>
+        <p>Выберите тему на сегодня: от градиентного спуска до своей нейросети. В каждом уроке — код с пропусками, подсказки и проверка ответов.</p>
+        <div class="topic-cards" id="topic-cards"></div>
+      </div>
+    </section>
+
+    <!-- Список уроков -->
+    <section id="view-lessons" class="view">
+      <div class="lessons-list" id="lessons-list"></div>
+    </section>
+
+    <!-- Справочники: список -->
+    <section id="view-references" class="view">
+      <h2>Справочники команд</h2>
+      <p class="references-intro">Полные шпаргалки по библиотекам: каждая команда с кратким описанием. Используй как advisory board.</p>
+      <div class="references-list" id="references-list"></div>
+    </section>
+
+    <!-- Конкретный урок или справочник -->
+    <section id="view-lesson" class="view">
+      <button class="back-btn" id="back-from-lesson">← Назад</button>
+      <div class="lesson-content" id="lesson-content"></div>
+    </section>
+
+    <!-- Флеш-карточки -->
+    <section id="view-flashcards" class="view">
+      <h2>Флеш-карточки</h2>
+      <p class="flashcards-intro">Две категории: <strong>Теория</strong> и <strong>Код</strong>. В каждой — три уровня (простой, средний, сложный) по 50 карточек — всего 300. Плюс колоды по библиотекам и свои карточки; генерация через AI (кнопка 💬).</p>
+      <div class="flashcards-toolbar">
+        <select id="flashcards-deck"></select>
+        <button type="button" class="flashcards-btn" id="flashcards-shuffle">Перемешать</button>
+        <button type="button" class="flashcards-btn" id="flashcards-add">+ Создать карточку</button>
+        <button type="button" class="flashcards-btn" id="flashcards-ai">Сгенерировать через AI</button>
+      </div>
+      <div class="flashcard-area" id="flashcard-area">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-inner" id="flashcard-inner">
+            <div class="flashcard-front" id="flashcard-front"></div>
+            <div class="flashcard-back" id="flashcard-back"></div>
+          </div>
+        </div>
+        <p class="flashcard-hint">Нажми на карточку, чтобы перевернуть. Используй стрелки или кнопки ниже.</p>
+        <div class="flashcard-nav">
+          <button type="button" class="flashcards-btn" id="flashcard-prev">← Назад</button>
+          <span id="flashcard-counter">1 / 1</span>
+          <button type="button" class="flashcards-btn" id="flashcard-next">Вперёд →</button>
+        </div>
+      </div>
+      <div class="flashcards-add-form" id="flashcards-add-form" style="display:none;">
+        <h3>Новая карточка</h3>
+        <label>Вопрос (лицевая сторона)</label>
+        <textarea id="flashcard-new-front" rows="2"></textarea>
+        <label>Ответ (оборотная сторона)</label>
+        <textarea id="flashcard-new-back" rows="3"></textarea>
+        <button type="button" class="flashcards-btn" id="flashcard-save">Сохранить</button>
+        <button type="button" class="flashcards-btn" id="flashcard-cancel">Отмена</button>
+      </div>
+    </section>
+
+    <!-- Песочница нейросети -->
+    <section id="view-sandbox" class="view">
+      <h2>Песочница: собери свою нейросеть</h2>
+      <p class="sandbox-desc">Выбери параметры — получи готовый код на PyTorch. Можно скопировать и запустить в Jupyter или Colab.</p>
+      <div class="sandbox-controls" id="sandbox-controls"></div>
+      <div class="sandbox-code-wrapper">
+        <pre class="sandbox-code" id="sandbox-code"></pre>
+        <button class="copy-btn" id="copy-sandbox-code">Копировать код</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- AI Assistant panel -->
+  <aside id="ai-panel" class="ai-panel">
+    <div class="ai-panel-header">
+      <h3>AI помощник</h3>
+      <button type="button" class="ai-panel-clear-chat" id="ai-panel-clear-chat" title="Новый чат (очистить историю)">🗑</button>
+      <button type="button" class="ai-panel-fullscreen-btn" id="ai-panel-fullscreen" aria-label="На весь экран" title="На весь экран">⛶</button>
+      <button type="button" class="ai-settings-btn" id="ai-settings-btn" title="Настройки API">⚙</button>
+      <button type="button" class="ai-panel-close" id="ai-panel-close" aria-label="Закрыть">×</button>
+    </div>
+    <p class="ai-panel-hint">Задай вопрос по уроку или попроси подготовить к следующему заданию. Ответы на русском.</p>
+    <div class="ai-messages" id="ai-messages"></div>
+    <div class="ai-input-row">
+      <textarea id="ai-input" class="ai-input" placeholder="Например: объясни градиентный спуск / подготовь меня к уроку по scikit-learn" rows="2"></textarea>
+      <button type="button" class="ai-send" id="ai-send">Отправить</button>
+    </div>
+  </aside>
+  <div class="ai-settings" id="ai-settings">
+    <div class="ai-settings-inner">
+      <h4>Настройки AI</h4>
+      <p>Чтобы помощник отвечал на вопросы, укажи API-ключ (OpenAI, OpenRouter или совместимый сервис). Ключ хранится только в твоём браузере.</p>
+      <label>API ключ</label>
+      <input type="password" id="ai-api-key" placeholder="sk-... или sk-or-v1-...">
+      <label>URL API</label>
+      <input type="text" id="ai-api-url" placeholder="https://api.openai.com/v1">
+      <p class="ai-settings-hint">Для OpenRouter укажи только базовый адрес: <code>https://openrouter.ai/api/v1</code> (без названия модели). Модель — в поле ниже.</p>
+      <label>Модель</label>
+      <input type="text" id="ai-api-model" placeholder="nvidia/nemotron-3-nano-30b-a3b:free">
+      <div class="ai-settings-actions">
+        <button type="button" class="ai-save-settings" id="ai-save-settings">Сохранить</button>
+        <button type="button" class="ai-close-settings" id="ai-close-settings">Закрыть</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="ai-fab" id="ai-fab" title="AI помощник">💬</button>
+
+  <script src="lessons.js"></script>
+  <script src="references.js"></script>
+  <script src="flashcards.js"></script>
+  <script src="app.js"></script>
+  <script src="ai.js"></script>
+</body>
+</html>
