@@ -96,74 +96,8 @@
     }
   };
 
-  (function buildLibraryDecks() {
-    var theoryLight = [
-      { front: 'Что такое ndarray в NumPy?', back: 'Многомерный массив (числа одного типа); основа вычислений в NumPy. Имеет shape, dtype, поддерживает индексацию и операции.' },
-      { front: 'Что возвращает a.shape в NumPy?', back: 'Кортеж размеров по осям. Для матрицы 3×4 вернёт (3, 4). Атрибут, без скобок.' },
-      { front: 'Чем np.dot(A, B) отличается от A * B в NumPy?', back: 'np.dot(A, B) — матричное умножение; A * B — поэлементное умножение.' },
-      { front: 'Что такое булева маска в NumPy?', back: 'Индексация массивом булевых: a[a > 0] возвращает элементы, где условие True.' },
-      { front: 'Как в NumPy получить 5 точек от 0 до 1 включительно?', back: 'np.linspace(0, 1, 5) — равномерно распределённые числа.' },
-      { front: 'Что такое dtype в NumPy?', back: 'Тип данных элементов массива: np.float64, np.int32 и т.д. Атрибут, только чтение.' },
-      { front: 'Что такое broadcasting в NumPy?', back: 'Правила расширения форм при операциях: массив (3,4) + (4,) — столбец повторяется по строкам.' },
-      { front: 'Что возвращает np.argmax(a)?', back: 'Индекс первого максимального элемента (в плоском виде). Для 2D с axis=1 — индекс максимума в каждой строке.' },
-      { front: 'Что такое fancy indexing в NumPy?', back: 'Индексация списком индексов: a[[0, 2, 4]] — массив из выбранных элементов. Результат — копия.' },
-      { front: 'Что такое view (вид) в NumPy?', back: 'Массив, разделяющий память с исходным. reshape, срезы часто возвращают вид; изменения влияют на исходный массив.' }
-    ];
-    var i;
-    for (i = theoryLight.length; i < 50; i++) {
-      theoryLight.push({ front: 'NumPy теория (лёгкий) — вопрос ' + (i + 1), back: 'Ответ по основам NumPy: массивы, форма, индексация, операции.' });
-    }
-    BUILTIN_DECKS.numpy_theory_light = { name: 'NumPy — Теория — Лёгкий', cards: theoryLight };
-    var theoryMedium = [];
-    for (i = 0; i < 50; i++) {
-      theoryMedium.push({ front: 'NumPy теория (средний) — вопрос ' + (i + 1), back: 'Ответ: агрегаты, axis, линейная алгебра, статистика, сортировка.' });
-    }
-    BUILTIN_DECKS.numpy_theory_medium = { name: 'NumPy — Теория — Средний', cards: theoryMedium };
-    var theoryDifficult = [];
-    for (i = 0; i < 50; i++) {
-      theoryDifficult.push({ front: 'NumPy теория (сложный) — вопрос ' + (i + 1), back: 'Ответ: продвинутая индексация, linalg, оптимизация.' });
-    }
-    BUILTIN_DECKS.numpy_theory_difficult = { name: 'NumPy — Теория — Сложный', cards: theoryDifficult };
-    var codeLight = [];
-    codeLight.push({ front: 'Как создать массив из списка в NumPy?', back: 'np.array([1, 2, 3]) или np.array([[1,2],[3,4]]) для 2D.' });
-    codeLight.push({ front: 'Как создать массив из нулей 3×4?', back: 'np.zeros((3, 4)) — форма кортежем.' });
-    codeLight.push({ front: 'Как вычислить среднее по массиву a?', back: 'np.mean(a). По оси: np.mean(a, axis=0).' });
-    codeLight.push({ front: 'Как транспонировать матрицу a?', back: 'a.T или np.transpose(a).' });
-    codeLight.push({ front: 'Как склеить два массива по строкам?', back: 'np.concatenate((a, b), axis=0) или np.vstack((a, b)).' });
-    for (i = codeLight.length; i < 50; i++) {
-      codeLight.push({ front: 'NumPy код (лёгкий) — задание ' + (i + 1), back: 'Используй np.array, np.zeros, np.mean, shape, срезы.' });
-    }
-    BUILTIN_DECKS.numpy_code_light = { name: 'NumPy — Код — Лёгкий', cards: codeLight };
-    var codeMedium = [];
-    for (i = 0; i < 50; i++) {
-      codeMedium.push({ front: 'NumPy код (средний) — задание ' + (i + 1), back: 'reshape, concatenate, axis, np.where, argsort.' });
-    }
-    BUILTIN_DECKS.numpy_code_medium = { name: 'NumPy — Код — Средний', cards: codeMedium };
-    var codeDifficult = [];
-    for (i = 0; i < 50; i++) {
-      codeDifficult.push({ front: 'NumPy код (сложный) — задание ' + (i + 1), back: 'linalg, advanced indexing, broadcasting.' });
-    }
-    BUILTIN_DECKS.numpy_code_difficult = { name: 'NumPy — Код — Сложный', cards: codeDifficult };
-
-    ['pandas', 'sklearn', 'opencv', 'pytorch', 'ml_basics'].forEach(function (libId) {
-      var libName = LIBRARY_NAMES[libId];
-      LEVEL_IDS.forEach(function (levelId) {
-        var deckId = libId + '_' + levelId;
-        var label = LEVEL_LABELS[levelId];
-        var cards = [];
-        var n = 50;
-        if (levelId === 'theory_light') {
-          cards.push({ front: 'Что такое основа ' + libName + '?', back: 'Теория (лёгкий): базовые понятия этой библиотеки.' });
-        } else if (levelId === 'code_light') {
-          cards.push({ front: 'Как начать работу с ' + libName + '?', back: 'Код (лёгкий): импорт, создание объекта, базовые вызовы.' });
-        }
-        for (i = cards.length; i < n; i++) {
-          cards.push({ front: libName + ' — ' + label + ' — карточка ' + (i + 1), back: 'Ответ по теме «' + libName + '» уровень «' + label + '».' });
-        }
-        BUILTIN_DECKS[deckId] = { name: libName + ' — ' + label, cards: cards };
-      });
-    });
-  })();
+  // Полные колоды по уровням (без заглушек) — подключаем из BUILTIN_DECKS_OLD
+  var LEVEL_DECK_IDS = ['theory_simple', 'theory_medium', 'theory_difficult', 'code_simple', 'code_medium', 'code_difficult'];
 
   var BUILTIN_DECKS_OLD = {
     theory_simple: {
@@ -480,6 +414,10 @@
     }
   };
 
+  LEVEL_DECK_IDS.forEach(function (id) {
+    if (BUILTIN_DECKS_OLD[id]) BUILTIN_DECKS[id] = BUILTIN_DECKS_OLD[id];
+  });
+
   var deckSelect = document.getElementById('flashcards-deck');
   var cardFront = document.getElementById('flashcard-front');
   var cardBack = document.getElementById('flashcard-back');
@@ -496,7 +434,7 @@
   var btnSave = document.getElementById('flashcard-save');
   var btnCancel = document.getElementById('flashcard-cancel');
 
-  var currentDeckId = 'numpy_theory_light';
+  var currentDeckId = 'numpy';
   var currentCards = [];
   var currentIndex = 0;
   var isFlipped = false;
@@ -525,33 +463,34 @@
   }
 
   function renderDeckSelectWithGroups() {
-    var hasGroups = LIBRARY_IDS && LIBRARY_IDS.length && BUILTIN_DECKS[LIBRARY_IDS[0] + '_theory_light'];
     deckSelect.innerHTML = '';
-    if (!hasGroups) {
-      var decks = getDecks();
-      Object.keys(decks).forEach(function (id) {
+    var hasLibDecks = LIBRARY_IDS && LIBRARY_IDS.length && BUILTIN_DECKS[LIBRARY_IDS[0]];
+    if (hasLibDecks) {
+      var libGroup = document.createElement('optgroup');
+      libGroup.label = 'По библиотекам';
+      LIBRARY_IDS.forEach(function (libId) {
+        if (!BUILTIN_DECKS[libId]) return;
         var opt = document.createElement('option');
-        opt.value = id;
-        opt.textContent = decks[id];
-        if (id === currentDeckId) opt.selected = true;
-        deckSelect.appendChild(opt);
+        opt.value = libId;
+        opt.textContent = BUILTIN_DECKS[libId].name + ' (' + BUILTIN_DECKS[libId].cards.length + ')';
+        if (libId === currentDeckId) opt.selected = true;
+        libGroup.appendChild(opt);
       });
-      return;
+      deckSelect.appendChild(libGroup);
     }
-    LIBRARY_IDS.forEach(function (libId) {
-      var group = document.createElement('optgroup');
-      group.label = LIBRARY_NAMES[libId];
-      LEVEL_IDS.forEach(function (levelId) {
-        var deckId = libId + '_' + levelId;
+    if (LEVEL_DECK_IDS && LEVEL_DECK_IDS.length) {
+      var levelGroup = document.createElement('optgroup');
+      levelGroup.label = 'Теория и код — по уровням';
+      LEVEL_DECK_IDS.forEach(function (deckId) {
         if (!BUILTIN_DECKS[deckId]) return;
         var opt = document.createElement('option');
         opt.value = deckId;
-        opt.textContent = LEVEL_LABELS[levelId] + ' (' + BUILTIN_DECKS[deckId].cards.length + ')';
+        opt.textContent = BUILTIN_DECKS[deckId].name + ' (' + BUILTIN_DECKS[deckId].cards.length + ')';
         if (deckId === currentDeckId) opt.selected = true;
-        group.appendChild(opt);
+        levelGroup.appendChild(opt);
       });
-      deckSelect.appendChild(group);
-    });
+      deckSelect.appendChild(levelGroup);
+    }
     var userGroup = document.createElement('optgroup');
     userGroup.label = 'Свои';
     var userOpt = document.createElement('option');
@@ -675,5 +614,5 @@
   };
 
   renderDeckSelect();
-  loadDeck('numpy_theory_light');
+  loadDeck('numpy');
 })();

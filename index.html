@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML и Computer Vision — Интерактивное обучение</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <header class="header">
     <h1>ML & Computer Vision</h1>
@@ -25,7 +27,8 @@
     <section id="view-home" class="view active">
       <div class="welcome">
         <h2>Добро пожаловать</h2>
-        <p>Выберите тему на сегодня: от градиентного спуска до своей нейросети. В каждом уроке — код с пропусками, подсказки и проверка ответов.</p>
+        <p>Выберите тему на сегодня: от градиентного спуска до своей нейросети. В каждом уроке — код с пропусками,
+          подсказки и проверка ответов.</p>
         <div class="topic-cards" id="topic-cards"></div>
       </div>
     </section>
@@ -38,7 +41,8 @@
     <!-- Справочники: список -->
     <section id="view-references" class="view">
       <h2>Справочники команд</h2>
-      <p class="references-intro">Полные шпаргалки по библиотекам: каждая команда с кратким описанием. Используй как advisory board.</p>
+      <p class="references-intro">Полные шпаргалки по библиотекам: каждая команда с кратким описанием. Используй как
+        advisory board.</p>
       <div class="references-list" id="references-list"></div>
     </section>
 
@@ -51,7 +55,9 @@
     <!-- Флеш-карточки -->
     <section id="view-flashcards" class="view">
       <h2>Флеш-карточки</h2>
-      <p class="flashcards-intro">Две категории: <strong>Теория</strong> и <strong>Код</strong>. В каждой — три уровня (простой, средний, сложный) по 50 карточек — всего 300. Плюс колоды по библиотекам и свои карточки; генерация через AI (кнопка 💬).</p>
+      <p class="flashcards-intro">Две категории: <strong>Теория</strong> и <strong>Код</strong>. В каждой — три уровня
+        (простой, средний, сложный) по 50 карточек — всего 300. Плюс колоды по библиотекам и свои карточки; генерация
+        через AI (кнопка 💬).</p>
       <div class="flashcards-toolbar">
         <select id="flashcards-deck"></select>
         <button type="button" class="flashcards-btn" id="flashcards-shuffle">Перемешать</button>
@@ -86,7 +92,8 @@
     <!-- Песочница нейросети -->
     <section id="view-sandbox" class="view">
       <h2>Песочница: собери свою нейросеть</h2>
-      <p class="sandbox-desc">Выбери параметры — получи готовый код на PyTorch. Можно скопировать и запустить в Jupyter или Colab.</p>
+      <p class="sandbox-desc">Выбери параметры — получи готовый код на PyTorch. Можно скопировать и запустить в Jupyter
+        или Colab.</p>
       <div class="sandbox-controls" id="sandbox-controls"></div>
       <div class="sandbox-code-wrapper">
         <pre class="sandbox-code" id="sandbox-code"></pre>
@@ -99,27 +106,32 @@
   <aside id="ai-panel" class="ai-panel">
     <div class="ai-panel-header">
       <h3>AI помощник</h3>
-      <button type="button" class="ai-panel-clear-chat" id="ai-panel-clear-chat" title="Новый чат (очистить историю)">🗑</button>
-      <button type="button" class="ai-panel-fullscreen-btn" id="ai-panel-fullscreen" aria-label="На весь экран" title="На весь экран">⛶</button>
+      <button type="button" class="ai-panel-clear-chat" id="ai-panel-clear-chat"
+        title="Новый чат (очистить историю)">🗑</button>
+      <button type="button" class="ai-panel-fullscreen-btn" id="ai-panel-fullscreen" aria-label="На весь экран"
+        title="На весь экран">⛶</button>
       <button type="button" class="ai-settings-btn" id="ai-settings-btn" title="Настройки API">⚙</button>
       <button type="button" class="ai-panel-close" id="ai-panel-close" aria-label="Закрыть">×</button>
     </div>
     <p class="ai-panel-hint">Задай вопрос по уроку или попроси подготовить к следующему заданию. Ответы на русском.</p>
     <div class="ai-messages" id="ai-messages"></div>
     <div class="ai-input-row">
-      <textarea id="ai-input" class="ai-input" placeholder="Например: объясни градиентный спуск / подготовь меня к уроку по scikit-learn" rows="2"></textarea>
+      <textarea id="ai-input" class="ai-input"
+        placeholder="Например: объясни градиентный спуск / подготовь меня к уроку по scikit-learn" rows="2"></textarea>
       <button type="button" class="ai-send" id="ai-send">Отправить</button>
     </div>
   </aside>
   <div class="ai-settings" id="ai-settings">
     <div class="ai-settings-inner">
       <h4>Настройки AI</h4>
-      <p>Чтобы помощник отвечал на вопросы, укажи API-ключ (OpenAI, OpenRouter или совместимый сервис). Ключ хранится только в твоём браузере.</p>
+      <p>Чтобы помощник отвечал на вопросы, укажи API-ключ (OpenAI, OpenRouter или совместимый сервис). Ключ хранится
+        только в твоём браузере.</p>
       <label>API ключ</label>
       <input type="password" id="ai-api-key" placeholder="sk-... или sk-or-v1-...">
       <label>URL API</label>
       <input type="text" id="ai-api-url" placeholder="https://api.openai.com/v1">
-      <p class="ai-settings-hint">Для OpenRouter укажи только базовый адрес: <code>https://openrouter.ai/api/v1</code> (без названия модели). Модель — в поле ниже.</p>
+      <p class="ai-settings-hint">Для OpenRouter укажи только базовый адрес: <code>https://openrouter.ai/api/v1</code>
+        (без названия модели). Модель — в поле ниже.</p>
       <label>Модель</label>
       <input type="text" id="ai-api-model" placeholder="nvidia/nemotron-3-nano-30b-a3b:free">
       <div class="ai-settings-actions">
@@ -129,11 +141,16 @@
     </div>
   </div>
   <button type="button" class="ai-fab" id="ai-fab" title="AI помощник">💬</button>
+  <button type="button" class="back-to-top" id="back-to-top" title="В начало страницы"
+    aria-label="В начало страницы">↑</button>
 
   <script src="lessons.js"></script>
   <script src="references.js"></script>
+  <script src="runcode.js"></script>
   <script src="flashcards.js"></script>
   <script src="app.js"></script>
   <script src="ai.js"></script>
+
 </body>
+
 </html>

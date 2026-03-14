@@ -133,6 +133,7 @@
     let html = '<h2>' + escapeHtml(ref.title) + '</h2>';
     html += '<div class="lesson-theory reference-content">' + ref.theory.trim() + '</div>';
     lessonContent.innerHTML = html;
+    if (typeof window.initRefRunButtons === 'function') window.initRefRunButtons(lessonContent);
     document.getElementById('back-from-lesson').textContent = '← Назад к справочникам';
   }
 
@@ -396,6 +397,19 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
   }
+
+  (function initBackToTop() {
+    var btn = document.getElementById('back-to-top');
+    if (!btn) return;
+    function toggleVisible() {
+      btn.classList.toggle('visible', window.scrollY > 300);
+    }
+    window.addEventListener('scroll', toggleVisible);
+    toggleVisible();
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
 
   renderTopicCards();
 })();
