@@ -348,6 +348,264 @@ const LESSONS = [
       },
     ],
   },
+  {
+    id: 'game-train-loop',
+    title: 'Игра: Цикл обучения PyTorch',
+    shortDesc: 'Собери цикл обучения шаг за шагом (zero_grad, backward, step)',
+    theory: `
+      <p><strong>Цикл обучения (Train Loop)</strong> — сердце любой нейросети на PyTorch. В нем происходит магия градиентного спуска.</p>
+      <p>Основные шаги:</p>
+      <ol>
+        <li><code>optimizer.zero_grad()</code> — очистить градиенты с прошлого шага (иначе они будут накапливаться).</li>
+        <li><code>out = model(x)</code> — пропустить данные через сеть (forward pass).</li>
+        <li><code>loss = criterion(out, y)</code> — посчитать ошибку.</li>
+        <li><code>loss.backward()</code> — вычислить градиенты для каждого веса (обратное распространение).</li>
+        <li><code>optimizer.step()</code> — обновить веса сети, используя вычисленные градиенты.</li>
+      </ol>
+      <p>Собери этот пазл в правильном порядке!</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'for epoch in range(epochs):' },
+          { type: 'text', content: '    for batch_x, batch_y in dataloader:' },
+          { type: 'text', content: '        # 1. Очищаем старые градиенты' },
+          { type: 'fill', content: '        optimizer.', placeholder: '???', correct: 'zero_grad()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 2. Делаем предсказание' },
+          { type: 'fill', content: '        predictions = ', placeholder: '???', correct: 'model(batch_x)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 3. Считаем ошибку (Loss)' },
+          { type: 'text', content: '        loss = criterion(predictions, batch_y)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 4. Считаем градиенты (насколько нужно изменить веса)' },
+          { type: 'fill', content: '        loss.', placeholder: '???', correct: 'backward()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 5. Делаем шаг оптимизации (обновляем веса)' },
+          { type: 'fill', content: '        optimizer.', placeholder: '???', correct: 'step()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-pandas-cleaning',
+    title: 'Игра: Очистка данных в Pandas',
+    shortDesc: 'Подготовь датасет к обучению: пропуски, дубликаты',
+    theory: `
+      <p><strong>Очистка данных (Data Cleaning)</strong> — первый и самый важный этап перед построением модели. Мусор на входе = мусор на выходе (Garbage In, Garbage Out).</p>
+      <p>Частые операции:</p>
+      <ul>
+        <li><code>df.head()</code> — посмотреть первые строки (убедиться, что загрузилось нормально).</li>
+        <li><code>df.drop_duplicates()</code> — удалить повторяющиеся строки.</li>
+        <li><code>df.fillna(value)</code> — заполнить пустые значения (NaN), например, средним или нулем. Можно использовать <code>inplace=True</code>.</li>
+        <li><code>df.dropna()</code> — удалить строки с пустыми значениями.</li>
+      </ul>
+      <p>Очисти датасет перед подачей в алгоритм!</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import pandas as pd' },
+          { type: 'text', content: 'df = pd.read_csv("dirty_data.csv")' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Смотрим первые 5 строк датасета' },
+          { type: 'fill', content: 'print(df.', placeholder: '???', correct: 'head())' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Удаляем полные дубликаты строк' },
+          { type: 'fill', content: 'df = df.', placeholder: '???', correct: 'drop_duplicates()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Заполняем пропуски в колонке "age" медианным значением' },
+          { type: 'text', content: 'median_age = df["age"].median()' },
+          { type: 'fill', content: 'df["age"].', placeholder: '???', correct: 'fillna(median_age, inplace=True)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Удаляем остальные строки, где всё еще есть NaN' },
+          { type: 'fill', content: 'df = df.', placeholder: '???', correct: 'dropna()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-numpy-shapes',
+    title: 'Игра: Битва с размерностями в NumPy',
+    shortDesc: 'Исправь shape mismatch, используя T, reshape и squeeze',
+    theory: `
+      <p><strong>Shape Mismatch</strong> (несовпадение размерностей) — самая частая ошибка новичков. Матрицы нельзя умножить, если их размеры не согласованы.</p>
+      <ul>
+        <li><code>A.T</code> — транспонирование матрицы (переворот: строки становятся столбцами). Если A была (10, 5), A.T будет (5, 10).</li>
+        <li><code>A.reshape(new_shape)</code> — изменение формы без изменения данных. <code>reshape(-1, 1)</code> делает из вектора-строки столбец.</li>
+        <li><code>A.squeeze()</code> — удаляет измерения равные 1 (например, из (10, 1) делает (10,)).</li>
+      </ul>
+      <p>Для матричного умножения <code>A @ B</code> внутренние размерности должны совпадать: (M, <strong>K</strong>) @ (<strong>K</strong>, N) = (M, N).</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'X = np.random.randn(100, 5)  # 100 примеров, 5 признаков' },
+          { type: 'text', content: 'W = np.random.randn(5, 10)   # Веса: 5 входов, 10 выходов' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Матричное умножение (forward pass линейного слоя)' },
+          { type: 'text', content: '# Размер результата будет (100, 10)' },
+          { type: 'fill', content: 'Z = X ', placeholder: '???', correct: '@ W' },
+          { type: 'text', content: '  # Используй оператор матричного умножения' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Теперь у нас вектор Y_pred формы (100,)' },
+          { type: 'text', content: 'Y_pred = np.random.randn(100)' },
+          { type: 'text', content: '# Нам нужно сделать его столбцом формы (100, 1)' },
+          { type: 'fill', content: 'Y_col = Y_pred.', placeholder: '???', correct: 'reshape(-1, 1)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Транспонирование: матрица A размера (3, 4)' },
+          { type: 'text', content: 'A = np.ones((3, 4))' },
+          { type: 'text', content: '# Делаем её размера (4, 3)' },
+          { type: 'fill', content: 'A_t = A.', placeholder: '???', correct: 'T' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-sklearn-predict',
+    title: 'Игра: Обучение и предсказание в scikit-learn',
+    shortDesc: 'Пройди полный цикл: fit, predict и оценка качества (accuracy)',
+    theory: `
+      <p><strong>Основы scikit-learn:</strong> Все модели (оценщики) имеют единый интерфейс.</p>
+      <ol>
+        <li><code>model.fit(X, y)</code> — обучить алгоритм на признаках X и целевой переменной y.</li>
+        <li><code>model.predict(X_new)</code> — сделать предсказание для новых данных.</li>
+        <li><code>accuracy_score(y_true, y_pred)</code> — посчитать долю правильных ответов (для классификации).</li>
+      </ol>
+      <p>Собери классический пайплайн обучения модели!</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from sklearn.ensemble import RandomForestClassifier' },
+          { type: 'text', content: 'from sklearn.metrics import accuracy_score' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Создаем модель' },
+          { type: 'text', content: 'model = RandomForestClassifier()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Обучаем модель на тренировочных данных' },
+          { type: 'fill', content: 'model.', placeholder: '???', correct: 'fit(X_train, y_train)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Делаем предсказания на тестовой выборке' },
+          { type: 'fill', content: 'predictions = model.', placeholder: '???', correct: 'predict(X_test)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 4. Оцениваем качество (Accuracy)' },
+          { type: 'fill', content: 'score = ', placeholder: '???', correct: 'accuracy_score(y_test, predictions)' },
+          { type: 'text', content: 'print(f"Точность: {score:.2f}")' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-opencv-drawing',
+    title: 'Игра: Рисование в OpenCV',
+    shortDesc: 'Нарисуй прямоугольник, круг и добавь текст на изображение',
+    theory: `
+      <p><strong>Рисование (OpenCV):</strong> OpenCV позволяет изменять пиксели напрямую, рисуя примитивы.</p>
+      <ul>
+        <li><code>cv2.rectangle(img, pt1, pt2, color, thickness)</code> — рисует прямоугольник. pt1 — верхний левый угол, pt2 — нижний правый.</li>
+        <li><code>cv2.circle(img, center, radius, color, thickness)</code> — рисует круг. Заливка: thickness=-1.</li>
+        <li><code>cv2.putText(img, text, org, fontFace, fontScale, color, thickness)</code> — добавляет текст.</li>
+      </ul>
+      <p>Цвета задаются в формате <strong>BGR</strong> (Blue, Green, Red). Пример: (0, 255, 0) — зеленый.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import cv2' },
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Создаем черный холст' },
+          { type: 'text', content: 'img = np.zeros((500, 500, 3), dtype=np.uint8)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Рисуем ЗЕЛЕНЫЙ прямоугольник' },
+          { type: 'fill', content: 'cv2.', placeholder: '???', correct: 'rectangle(img, (50, 50), (200, 200), (0, 255, 0), 2)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Рисуем КРАСНЫЙ закрашенный круг' },
+          { type: 'fill', content: 'cv2.', placeholder: '???', correct: 'circle(img, (350, 350), 50, (0, 0, 255), -1)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Пишем БЕЛЫЙ текст' },
+          { type: 'fill', content: 'cv2.', placeholder: '???', correct: 'putText(img, "OpenCV", (100, 450), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-pytorch-cnn',
+    title: 'Игра: Сборка сверточной нейросети (CNN)',
+    shortDesc: 'Построй forward pass: Conv2d, ReLU, MaxPool2d и Linear',
+    theory: `
+      <p><strong>Сверточные сети (CNN)</strong> отлично подходят для картинок. Классическая архитектура состоит из блоков:</p>
+      <ol>
+        <li><code>nn.Conv2d()</code> — свертка, извлекает признаки (границы, текстуры).</li>
+        <li>Активация (например, <code>torch.relu()</code>) — добавляет нелинейность.</li>
+        <li><code>nn.MaxPool2d()</code> — пулинг, уменьшает размер картинки в 2 раза, оставляя главные признаки.</li>
+        <li><code>torch.flatten()</code> — вытягивает трехмерный тензор (каналы, H, W) в одномерный вектор перед полносвязным слоем.</li>
+        <li><code>nn.Linear()</code> — полносвязный слой для итоговой классификации.</li>
+      </ol>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import torch' },
+          { type: 'text', content: 'import torch.nn as nn' },
+          { type: 'text', content: 'import torch.nn.functional as F' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'class SimpleCNN(nn.Module):' },
+          { type: 'text', content: '    def __init__(self):' },
+          { type: 'text', content: '        super().__init__()' },
+          { type: 'text', content: '        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3)' },
+          { type: 'text', content: '        self.pool = nn.MaxPool2d(kernel_size=2)' },
+          { type: 'text', content: '        self.fc = nn.Linear(16 * 13 * 13, 10)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '    def forward(self, x):' },
+          { type: 'text', content: '        # 1. Свертка + активация' },
+          { type: 'fill', content: '        x = F.', placeholder: '???', correct: 'relu(self.conv1(x))' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 2. Пулинг (уменьшение размерности)' },
+          { type: 'fill', content: '        x = self.', placeholder: '???', correct: 'pool(x)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 3. Вытягиваем в вектор' },
+          { type: 'fill', content: '        x = torch.', placeholder: '???', correct: 'flatten(x, 1)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 4. Классификация (полносвязный слой)' },
+          { type: 'fill', content: '        x = self.', placeholder: '???', correct: 'fc(x)' },
+          { type: 'text', content: '        return x' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-pandas-groupby',
+    title: 'Игра: Группировка и агрегация в Pandas',
+    shortDesc: 'Посчитай среднюю зарплату по отделам: groupby, agg',
+    theory: `
+      <p><strong>Группировка (Groupby):</strong> Метод <code>df.groupby("колонка")</code> разбивает данные на группы по уникальным значениям в колонке. После этого нужно применить <strong>агрегирующую функцию</strong> (sum, mean, count, max).</p>
+      <ul>
+        <li><code>df.groupby("department")["salary"].mean()</code> — средняя зарплата в каждом отделе. Возвращает Series.</li>
+        <li><code>df.groupby("department").agg({"salary": "mean", "age": "max"})</code> — более сложная агрегация: средняя ЗП и максимальный возраст.</li>
+        <li><code>.reset_index()</code> часто используется в конце, чтобы превратить результат обратно в красивый DataFrame.</li>
+      </ul>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import pandas as pd' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Группируем по отделу и считаем СРЕДНЮЮ зарплату' },
+          { type: 'fill', content: 'avg_salary = df.', placeholder: '???', correct: 'groupby("department")["salary"].mean()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Группируем и считаем КОЛИЧЕСТВО сотрудников в отделе' },
+          { type: 'fill', content: 'emp_count = df.', placeholder: '???', correct: 'groupby("department")["id"].count()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Считаем среднюю ЗП и делаем из результата DataFrame' },
+          { type: 'fill', content: 'result_df = df.groupby("department")["salary"].mean().', placeholder: '???', correct: 'reset_index()' },
+        ],
+      },
+    ],
+  },
 ];
 
 const SANDBOX_DEFAULTS = {
