@@ -348,6 +348,121 @@ const LESSONS = [
       },
     ],
   },
+  {
+    id: 'game-train-loop',
+    title: 'Игра: Цикл обучения PyTorch',
+    shortDesc: 'Собери цикл обучения шаг за шагом (zero_grad, backward, step)',
+    theory: `
+      <p><strong>Цикл обучения (Train Loop)</strong> — сердце любой нейросети на PyTorch. В нем происходит магия градиентного спуска.</p>
+      <p>Основные шаги:</p>
+      <ol>
+        <li><code>optimizer.zero_grad()</code> — очистить градиенты с прошлого шага (иначе они будут накапливаться).</li>
+        <li><code>out = model(x)</code> — пропустить данные через сеть (forward pass).</li>
+        <li><code>loss = criterion(out, y)</code> — посчитать ошибку.</li>
+        <li><code>loss.backward()</code> — вычислить градиенты для каждого веса (обратное распространение).</li>
+        <li><code>optimizer.step()</code> — обновить веса сети, используя вычисленные градиенты.</li>
+      </ol>
+      <p>Собери этот пазл в правильном порядке!</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'for epoch in range(epochs):' },
+          { type: 'text', content: '    for batch_x, batch_y in dataloader:' },
+          { type: 'text', content: '        # 1. Очищаем старые градиенты' },
+          { type: 'fill', content: '        optimizer.', placeholder: '???', correct: 'zero_grad()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 2. Делаем предсказание' },
+          { type: 'fill', content: '        predictions = ', placeholder: '???', correct: 'model(batch_x)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 3. Считаем ошибку (Loss)' },
+          { type: 'text', content: '        loss = criterion(predictions, batch_y)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 4. Считаем градиенты (насколько нужно изменить веса)' },
+          { type: 'fill', content: '        loss.', placeholder: '???', correct: 'backward()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '        # 5. Делаем шаг оптимизации (обновляем веса)' },
+          { type: 'fill', content: '        optimizer.', placeholder: '???', correct: 'step()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-pandas-cleaning',
+    title: 'Игра: Очистка данных в Pandas',
+    shortDesc: 'Подготовь датасет к обучению: пропуски, дубликаты',
+    theory: `
+      <p><strong>Очистка данных (Data Cleaning)</strong> — первый и самый важный этап перед построением модели. Мусор на входе = мусор на выходе (Garbage In, Garbage Out).</p>
+      <p>Частые операции:</p>
+      <ul>
+        <li><code>df.head()</code> — посмотреть первые строки (убедиться, что загрузилось нормально).</li>
+        <li><code>df.drop_duplicates()</code> — удалить повторяющиеся строки.</li>
+        <li><code>df.fillna(value)</code> — заполнить пустые значения (NaN), например, средним или нулем. Можно использовать <code>inplace=True</code>.</li>
+        <li><code>df.dropna()</code> — удалить строки с пустыми значениями.</li>
+      </ul>
+      <p>Очисти датасет перед подачей в алгоритм!</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import pandas as pd' },
+          { type: 'text', content: 'df = pd.read_csv("dirty_data.csv")' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Смотрим первые 5 строк датасета' },
+          { type: 'fill', content: 'print(df.', placeholder: '???', correct: 'head())' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Удаляем полные дубликаты строк' },
+          { type: 'fill', content: 'df = df.', placeholder: '???', correct: 'drop_duplicates()' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Заполняем пропуски в колонке "age" медианным значением' },
+          { type: 'text', content: 'median_age = df["age"].median()' },
+          { type: 'fill', content: 'df["age"].', placeholder: '???', correct: 'fillna(median_age, inplace=True)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Удаляем остальные строки, где всё еще есть NaN' },
+          { type: 'fill', content: 'df = df.', placeholder: '???', correct: 'dropna()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-numpy-shapes',
+    title: 'Игра: Битва с размерностями в NumPy',
+    shortDesc: 'Исправь shape mismatch, используя T, reshape и squeeze',
+    theory: `
+      <p><strong>Shape Mismatch</strong> (несовпадение размерностей) — самая частая ошибка новичков. Матрицы нельзя умножить, если их размеры не согласованы.</p>
+      <ul>
+        <li><code>A.T</code> — транспонирование матрицы (переворот: строки становятся столбцами). Если A была (10, 5), A.T будет (5, 10).</li>
+        <li><code>A.reshape(new_shape)</code> — изменение формы без изменения данных. <code>reshape(-1, 1)</code> делает из вектора-строки столбец.</li>
+        <li><code>A.squeeze()</code> — удаляет измерения равные 1 (например, из (10, 1) делает (10,)).</li>
+      </ul>
+      <p>Для матричного умножения <code>A @ B</code> внутренние размерности должны совпадать: (M, <strong>K</strong>) @ (<strong>K</strong>, N) = (M, N).</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'X = np.random.randn(100, 5)  # 100 примеров, 5 признаков' },
+          { type: 'text', content: 'W = np.random.randn(5, 10)   # Веса: 5 входов, 10 выходов' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Матричное умножение (forward pass линейного слоя)' },
+          { type: 'text', content: '# Размер результата будет (100, 10)' },
+          { type: 'fill', content: 'Z = X ', placeholder: '???', correct: '@ W' },
+          { type: 'text', content: '  # Используй оператор матричного умножения' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Теперь у нас вектор Y_pred формы (100,)' },
+          { type: 'text', content: 'Y_pred = np.random.randn(100)' },
+          { type: 'text', content: '# Нам нужно сделать его столбцом формы (100, 1)' },
+          { type: 'fill', content: 'Y_col = Y_pred.', placeholder: '???', correct: 'reshape(-1, 1)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# Транспонирование: матрица A размера (3, 4)' },
+          { type: 'text', content: 'A = np.ones((3, 4))' },
+          { type: 'text', content: '# Делаем её размера (4, 3)' },
+          { type: 'fill', content: 'A_t = A.', placeholder: '???', correct: 'T' },
+        ],
+      },
+    ],
+  },
 ];
 
 const SANDBOX_DEFAULTS = {
