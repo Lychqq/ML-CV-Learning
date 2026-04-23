@@ -1,537 +1,380 @@
-﻿// Справочники: для каждой команды — как в коде, детали, нюансы, ссылка на официальную документацию
-(function () {
-  var NP = 'https://numpy.org/doc/stable/reference/generated/';
-  var NP_R = 'https://numpy.org/doc/stable/reference/routines';
-  var PD = 'https://pandas.pydata.org/docs/reference/api/';
-  var SK = 'https://scikit-learn.org/stable/modules/generated/';
-  var CV = 'https://docs.opencv.org/4.x/';
-
-  function esc(s) {
-    if (!s) return '';
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+window.REFERENCES = [
+  {
+    "id": "np-array",
+    "library": "NumPy",
+    "title": "np.array()",
+    "shortDesc": "Создание массива",
+    "theory": "<p><code>np.array(object, dtype=None, copy=True, order='K', subok=False, ndmin=0)</code></p><p>Функция <code>np.array</code> является основной для создания массивов (объектов <code>ndarray</code>) в NumPy. Она принимает любой итерируемый объект Python (списки, кортежи, вложенные списки) и конвертирует его в оптимизированный C-массив.</p><h4 style='margin-top:20px;'>Пример 1: Создание простого 1D массива</h4><div class='code-block-container' id='code-block-np-array-code-0'></div><h4 style='margin-top:20px;'>Пример 2: Создание 2D массива (матрицы)</h4><div class='code-block-container' id='code-block-np-array-code-1'></div><h4 style='margin-top:20px;'>Пример 3: Явное указание типа данных (dtype)</h4><div class='code-block-container' id='code-block-np-array-code-2'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.array.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\narr = np.array([1, 2, 3, 4])\nprint('Массив:', arr)\nprint('Тип:', type(arr))\nprint('Форма:', arr.shape)",
+        "solution": "",
+        "hints": [],
+        "id": "np-array-code-0"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nmatrix = np.array([[1, 2], [3, 4], [5, 6]])\nprint(matrix)\nprint('Форма:', matrix.shape)",
+        "solution": "",
+        "hints": [],
+        "id": "np-array-code-1"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\n# Принудительно делаем массив вещественных чисел\narr_float = np.array([1, 2, 3], dtype=np.float32)\nprint(arr_float)\nprint(arr_float.dtype)",
+        "solution": "",
+        "hints": [],
+        "id": "np-array-code-2"
+      }
+    ]
+  },
+  {
+    "id": "np-zeros-ones",
+    "library": "NumPy",
+    "title": "np.zeros() / np.ones()",
+    "shortDesc": "Массивы из нулей или единиц",
+    "theory": "<p>Создаёт массив указанной формы, заполненный нулями (<code>np.zeros</code>) или единицами (<code>np.ones</code>).</p><h4 style='margin-top:20px;'>Пример 1: 1D массив нулей</h4><div class='code-block-container' id='code-block-np-zeros-ones-code-0'></div><h4 style='margin-top:20px;'>Пример 2: Матрица единиц заданного типа</h4><div class='code-block-container' id='code-block-np-zeros-ones-code-1'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.zeros.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nz = np.zeros(5)\nprint(z)",
+        "solution": "",
+        "hints": [],
+        "id": "np-zeros-ones-code-0"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nmatrix = np.ones((3, 3), dtype=np.int32)\nprint(matrix)",
+        "solution": "",
+        "hints": [],
+        "id": "np-zeros-ones-code-1"
+      }
+    ]
+  },
+  {
+    "id": "np-arange",
+    "library": "NumPy",
+    "title": "np.arange()",
+    "shortDesc": "Массив-прогрессия",
+    "theory": "<p><code>np.arange([start, ]stop, [step, ])</code></p><p>Аналог встроенной функции <code>range()</code> в Python, возвращает <code>ndarray</code>.</p><h4 style='margin-top:20px;'>Пример 1: От 0 до N</h4><div class='code-block-container' id='code-block-np-arange-code-0'></div><h4 style='margin-top:20px;'>Пример 2: Шаг</h4><div class='code-block-container' id='code-block-np-arange-code-1'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.arange.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nprint(np.arange(10))",
+        "solution": "",
+        "hints": [],
+        "id": "np-arange-code-0"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nprint(np.arange(10, 30, 5))",
+        "solution": "",
+        "hints": [],
+        "id": "np-arange-code-1"
+      }
+    ]
+  },
+  {
+    "id": "np-linspace",
+    "library": "NumPy",
+    "title": "np.linspace()",
+    "shortDesc": "Равномерно распределенные точки",
+    "theory": "<p><code>np.linspace(start, stop, num=50)</code></p><p>Генерирует N равномерно распределенных чисел между start и stop. Незаменимо для графиков.</p><h4 style='margin-top:20px;'>Пример 1: 5 точек от 0 до 1</h4><div class='code-block-container' id='code-block-np-linspace-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.linspace.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nprint(np.linspace(0, 1, 5))",
+        "solution": "",
+        "hints": [],
+        "id": "np-linspace-code-0"
+      }
+    ]
+  },
+  {
+    "id": "np-reshape",
+    "library": "NumPy",
+    "title": "np.reshape()",
+    "shortDesc": "Изменение формы массива",
+    "theory": "<p>Позволяет перегруппировать элементы массива. Количество элементов должно совпадать.</p><h4 style='margin-top:20px;'>Пример 1: 1D в 2D</h4><div class='code-block-container' id='code-block-np-reshape-code-0'></div><h4 style='margin-top:20px;'>Пример 2: Использование -1</h4><div class='code-block-container' id='code-block-np-reshape-code-1'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.reshape.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\narr = np.arange(12)\nmatrix = arr.reshape((3, 4))\nprint(matrix)",
+        "solution": "",
+        "hints": [],
+        "id": "np-reshape-code-0"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\narr = np.arange(10)\nmatrix = arr.reshape((2, -1))\nprint(matrix)",
+        "solution": "",
+        "hints": [],
+        "id": "np-reshape-code-1"
+      }
+    ]
+  },
+  {
+    "id": "np-random",
+    "library": "NumPy",
+    "title": "np.random.rand()",
+    "shortDesc": "Случайные числа",
+    "theory": "<p>Генерация случайных чисел от 0 до 1.</p><h4 style='margin-top:20px;'>Пример 1: Матрица случайных чисел</h4><div class='code-block-container' id='code-block-np-random-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/random/generated/numpy.random.rand.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\n\nprint(np.random.rand(2, 2))",
+        "solution": "",
+        "hints": [],
+        "id": "np-random-code-0"
+      }
+    ]
+  },
+  {
+    "id": "np-stats",
+    "library": "NumPy",
+    "title": "arr.max(), arr.min(), arr.mean()",
+    "shortDesc": "Статистика",
+    "theory": "<p>Быстрое вычисление статистических агрегатов. Можно указать <code>axis</code> для вычисления по строкам или столбцам.</p><h4 style='margin-top:20px;'>Пример 1: Общая статистика</h4><div class='code-block-container' id='code-block-np-stats-code-0'></div><h4 style='margin-top:20px;'>Пример 2: По осям (axis)</h4><div class='code-block-container' id='code-block-np-stats-code-1'></div><p style=\"margin-top:20px;\"><a href=\"https://numpy.org/doc/stable/reference/generated/numpy.mean.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\narr = np.array([[1, 2], [3, 4]])\nprint('Max:', arr.max())\nprint('Mean:', arr.mean())",
+        "solution": "",
+        "hints": [],
+        "id": "np-stats-code-0"
+      },
+      {
+        "type": "runnable",
+        "initialCode": "import numpy as np\narr = np.array([[1, 2], [3, 4]])\nprint('Сумма столбцов:', arr.sum(axis=0))\nprint('Сумма строк:', arr.sum(axis=1))",
+        "solution": "",
+        "hints": [],
+        "id": "np-stats-code-1"
+      }
+    ]
+  },
+  {
+    "id": "pd-dataframe",
+    "library": "Pandas",
+    "title": "pd.DataFrame()",
+    "shortDesc": "Таблица данных",
+    "theory": "<p>DataFrame — это двумерная структура данных в Pandas.</p><h4 style='margin-top:20px;'>Пример 1: Из словаря</h4><div class='code-block-container' id='code-block-pd-dataframe-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import pandas as pd\n\ndata = {'Имя': ['Анна', 'Иван'], 'Возраст': [25, 30]}\ndf = pd.DataFrame(data)\nprint(df)",
+        "solution": "",
+        "hints": [],
+        "id": "pd-dataframe-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pd-series",
+    "library": "Pandas",
+    "title": "pd.Series()",
+    "shortDesc": "Одномерный массив с индексами",
+    "theory": "<p>Колонка в DataFrame. Поддерживает математические операции.</p><h4 style='margin-top:20px;'>Пример 1: Создание Series</h4><div class='code-block-container' id='code-block-pd-series-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pandas.pydata.org/docs/reference/api/pandas.Series.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import pandas as pd\n\ns = pd.Series([10, 20, 30], index=['A', 'B', 'C'])\nprint(s)",
+        "solution": "",
+        "hints": [],
+        "id": "pd-series-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pd-head",
+    "library": "Pandas",
+    "title": "df.head() / df.tail()",
+    "shortDesc": "Просмотр начала/конца данных",
+    "theory": "<p>Возвращает первые (или последние) 5 строк таблицы.</p><h4 style='margin-top:20px;'>Пример 1: Первые 2 строки</h4><div class='code-block-container' id='code-block-pd-head-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.head.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import pandas as pd\ndata = {'A': [1,2,3,4,5], 'B': [5,4,3,2,1]}\ndf = pd.DataFrame(data)\nprint(df.head(2))",
+        "solution": "",
+        "hints": [],
+        "id": "pd-head-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pd-info",
+    "library": "Pandas",
+    "title": "df.info() / df.describe()",
+    "shortDesc": "Сводная информация",
+    "theory": "<p><code>info()</code> показывает типы колонок и пустые значения. <code>describe()</code> выводит статистику.</p><h4 style='margin-top:20px;'>Пример 1: Статистика числовых колонок</h4><div class='code-block-container' id='code-block-pd-info-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import pandas as pd\ndf = pd.DataFrame({'Возраст': [20, 30, 40], 'Зарплата': [50, 60, 70]})\nprint(df.describe())",
+        "solution": "",
+        "hints": [],
+        "id": "pd-info-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pd-groupby",
+    "library": "Pandas",
+    "title": "df.groupby()",
+    "shortDesc": "Группировка",
+    "theory": "<p>Группирует данные по уникальным значениям в одном или нескольких столбцах.</p><h4 style='margin-top:20px;'>Пример 1: Среднее по группам</h4><div class='code-block-container' id='code-block-pd-groupby-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import pandas as pd\n\ndata = {'Отдел': ['IT', 'HR', 'IT'], 'Зарплата': [100, 80, 150]}\ndf = pd.DataFrame(data)\nprint(df.groupby('Отдел').mean())",
+        "solution": "",
+        "hints": [],
+        "id": "pd-groupby-code-0"
+      }
+    ]
+  },
+  {
+    "id": "sk-train-test-split",
+    "library": "scikit-learn",
+    "title": "train_test_split()",
+    "shortDesc": "Разбиение выборки",
+    "theory": "<p>Разделяет массивы на случайные обучающие и тестовые подмножества.</p><h4 style='margin-top:20px;'>Пример 1: Разбиение массивов</h4><div class='code-block-container' id='code-block-sk-train-test-split-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "from sklearn.model_selection import train_test_split\nimport numpy as np\n\nX = np.arange(10).reshape((5, 2))\ny = np.array([0, 1, 0, 1, 0])\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\nprint('X_train length:', len(X_train))",
+        "solution": "",
+        "hints": [],
+        "id": "sk-train-test-split-code-0"
+      }
+    ]
+  },
+  {
+    "id": "sk-rf",
+    "library": "scikit-learn",
+    "title": "RandomForestClassifier",
+    "shortDesc": "Случайный лес",
+    "theory": "<p>Ансамблевая модель для классификации.</p><h4 style='margin-top:20px;'>Пример 1: Обучение</h4><div class='code-block-container' id='code-block-sk-rf-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "from sklearn.ensemble import RandomForestClassifier\nfrom sklearn.datasets import make_classification\n\nX, y = make_classification(n_samples=100, n_features=4, random_state=0)\nclf = RandomForestClassifier(n_estimators=10)\nclf.fit(X, y)\nprint('Предсказание:', clf.predict([X[0]]))",
+        "solution": "",
+        "hints": [],
+        "id": "sk-rf-code-0"
+      }
+    ]
+  },
+  {
+    "id": "sk-scaler",
+    "library": "scikit-learn",
+    "title": "StandardScaler",
+    "shortDesc": "Стандартизация",
+    "theory": "<p>Приводит признаки к стандартному нормальному распределению (среднее 0, дисперсия 1).</p><h4 style='margin-top:20px;'>Пример 1: Масштабирование данных</h4><div class='code-block-container' id='code-block-sk-scaler-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "from sklearn.preprocessing import StandardScaler\nimport numpy as np\n\ndata = np.array([[1000], [2000], [3000]])\nscaler = StandardScaler()\nscaled = scaler.fit_transform(data)\nprint(scaled)",
+        "solution": "",
+        "hints": [],
+        "id": "sk-scaler-code-0"
+      }
+    ]
+  },
+  {
+    "id": "cv-imread",
+    "library": "OpenCV",
+    "title": "cv2.imread()",
+    "shortDesc": "Чтение изображения",
+    "theory": "<p>Считывает изображение из файла в формате BGR.</p><h4 style='margin-top:20px;'>Пример 1: Загрузка изображения (теория, нужен файл)</h4><div class='code-block-container' id='code-block-cv-imread-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://docs.opencv.org/4.x/d4/da8/group__imgcodecs.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import cv2\n# img = cv2.imread('image.jpg')\nprint('Чтение изображения: cv2.imread(путь)')",
+        "solution": "",
+        "hints": [],
+        "id": "cv-imread-code-0"
+      }
+    ]
+  },
+  {
+    "id": "cv-cvtcolor",
+    "library": "OpenCV",
+    "title": "cv2.cvtColor()",
+    "shortDesc": "Цветовое преобразование",
+    "theory": "<p>Конвертирует изображение из одного цветового пространства в другое.</p><h4 style='margin-top:20px;'>Пример 1: BGR в Grayscale</h4><div class='code-block-container' id='code-block-cv-cvtcolor-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://docs.opencv.org/4.x/d8/d01/group__imgproc__color__conversions.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import cv2\nimport numpy as np\n\nimage_bgr = np.array([[[255, 0, 0]]], dtype=np.uint8)\ngray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)\nprint('Серый пиксель:', gray)",
+        "solution": "",
+        "hints": [],
+        "id": "cv-cvtcolor-code-0"
+      }
+    ]
+  },
+  {
+    "id": "cv-blur",
+    "library": "OpenCV",
+    "title": "cv2.GaussianBlur()",
+    "shortDesc": "Размытие по Гауссу",
+    "theory": "<p>Сглаживает изображение, убирает шум.</p><h4 style='margin-top:20px;'>Пример 1: Применение фильтра Гаусса</h4><div class='code-block-container' id='code-block-cv-blur-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import cv2\nimport numpy as np\n\nimage = np.ones((5,5), dtype=np.uint8) * 255\nblurred = cv2.GaussianBlur(image, (3,3), 0)\nprint('Ок!')",
+        "solution": "",
+        "hints": [],
+        "id": "cv-blur-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pt-tensor",
+    "library": "PyTorch",
+    "title": "torch.tensor()",
+    "shortDesc": "Создание тензора",
+    "theory": "<p>Создаёт тензор (многомерный массив, поддерживающий GPU).</p><h4 style='margin-top:20px;'>Пример 1: Базовый тензор</h4><div class='code-block-container' id='code-block-pt-tensor-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pytorch.org/docs/stable/generated/torch.tensor.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import torch\n\nt = torch.tensor([[1.0, 2.0], [3.0, 4.0]])\nprint(t)\nprint('Размер:', t.size())",
+        "solution": "",
+        "hints": [],
+        "id": "pt-tensor-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pt-linear",
+    "library": "PyTorch",
+    "title": "nn.Linear()",
+    "shortDesc": "Линейный слой",
+    "theory": "<p>Применяет линейное преобразование к входящим данным.</p><h4 style='margin-top:20px;'>Пример 1: Пропуск данных</h4><div class='code-block-container' id='code-block-pt-linear-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pytorch.org/docs/stable/generated/torch.nn.Linear.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import torch\nimport torch.nn as nn\n\nlayer = nn.Linear(in_features=3, out_features=2)\nx = torch.tensor([[1.0, 2.0, 3.0]])\nprint(layer(x))",
+        "solution": "",
+        "hints": [],
+        "id": "pt-linear-code-0"
+      }
+    ]
+  },
+  {
+    "id": "pt-adam",
+    "library": "PyTorch",
+    "title": "torch.optim.Adam",
+    "shortDesc": "Оптимизатор",
+    "theory": "<p>Обновляет веса нейронной сети в процессе обучения.</p><h4 style='margin-top:20px;'>Пример 1: Инициализация</h4><div class='code-block-container' id='code-block-pt-adam-code-0'></div><p style=\"margin-top:20px;\"><a href=\"https://pytorch.org/docs/stable/generated/torch.optim.Adam.html\" target=\"_blank\" class=\"ref-link\" style=\"color: #60a5fa; text-decoration: none; border-bottom: 1px dotted #60a5fa;\">Официальная документация →</a></p>",
+    "codeBlocks": [
+      {
+        "type": "runnable",
+        "initialCode": "import torch\nimport torch.nn as nn\n\nmodel = nn.Linear(2, 1)\noptimizer = torch.optim.Adam(model.parameters(), lr=0.01)\nprint('Оптимизатор готов')",
+        "solution": "",
+        "hints": [],
+        "id": "pt-adam-code-0"
+      }
+    ]
   }
-  function entry(code, details, url) {
-    var safeDetails = esc(details).replace(/\n/g, '<br>');
-    return (
-      '<div class="ref-entry">' +
-      '<pre class="ref-code"><code>' + esc(code) + '</code></pre>' +
-      '<div class="ref-details">' + safeDetails + '</div>' +
-      (url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" class="ref-link">Официальная документация →</a>' : '') +
-      '</div>'
-    );
-  }
-  function section(title, sectionUrl, items) {
-    var s = '<h3 class="ref-section">' + esc(title) + '</h3>';
-    if (sectionUrl) s += '<p class="ref-section-link"><a href="' + esc(sectionUrl) + '" target="_blank" rel="noopener noreferrer">Раздел в официальной документации</a></p>';
-    items.forEach(function (it) { s += entry(it.code, it.details, it.link); });
-    return s;
-  }
-  function sectionWithId(id, title, sectionUrl, items) {
-    var s = '<h3 id="' + esc(id) + '" class="ref-section">' + esc(title) + '</h3>';
-    if (sectionUrl) s += '<p class="ref-section-link"><a href="' + esc(sectionUrl) + '" target="_blank" rel="noopener noreferrer">Раздел в официальной документации</a></p>';
-    items.forEach(function (it) { s += entry(it.code, it.details, it.link); });
-    return s;
-  }
-  function refToc(items) {
-    var html = '<nav class="ref-toc" aria-label="Содержание"><h3 class="ref-toc-title">Содержание</h3><p class="ref-toc-desc">Клик по пункту — переход к нужному разделу.</p><ul class="ref-toc-list">';
-    items.forEach(function (it) { html += '<li><a href="#' + esc(it.id) + '" class="ref-toc-link">' + esc(it.title) + '</a></li>'; });
-    html += '</ul></nav>';
-    return html;
-  }
-
-  // ---- NumPy: содержание и разделы по темам ----
-  var numpyToc = [
-    { id: 'ref-numpy-import', title: 'Импорт' },
-    { id: 'ref-numpy-creation', title: 'Создание массивов' },
-    { id: 'ref-numpy-random', title: 'Случайные числа' },
-    { id: 'ref-numpy-props', title: 'Свойства массива' },
-    { id: 'ref-numpy-indexing', title: 'Индексация и срезы' },
-    { id: 'ref-numpy-shape', title: 'Форма и объединение' },
-    { id: 'ref-numpy-math', title: 'Математика (поэлементно)' },
-    { id: 'ref-numpy-linalg', title: 'Линейная алгебра' },
-    { id: 'ref-numpy-stats', title: 'Статистика и агрегаты' },
-    { id: 'ref-numpy-sort', title: 'Сортировка и поиск' }
-  ];
-  var numpyTheory =
-    refToc(numpyToc) +
-    '<p class="ref-intro">Справочник дополняет <strong>полный каталог</strong> официальной документации NumPy. Ниже для каждой команды: синтаксис, параметры, что возвращает, нюансы и когда использовать.</p>' +
-    '<p class="ref-section-link"><a href="https://numpy.org/doc/stable/reference/index.html" target="_blank" rel="noopener noreferrer">NumPy Reference — полный индекс (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="https://numpy.org/doc/stable/reference/routines.html" target="_blank" rel="noopener noreferrer">NumPy Routines — полный каталог функций по разделам</a></p>' +
-    '<h3 id="ref-numpy-import" class="ref-section">Импорт</h3>' +
-    entry('import numpy as np', 'Стандартный импорт: все функции вызываются через префикс np. (np.array, np.zeros и т.д.). NumPy — это модуль, не класс: не создаёте объект, а вызываете функции модуля. Сокращение "np" принято во всей документации и примерах.', 'https://numpy.org/doc/stable/user/absolute_beginners.html') +
-
-    sectionWithId('ref-numpy-creation', 'Создание массивов (функции модуля np.)', NP_R + '.array-creation.html', [
-      { code: 'np.array([1, 2, 3])\nnp.array([[1,2],[3,4]])', details: 'Создаёт массив ndarray из списка Python. Параметры: object (обязательный — список или вложенные списки), dtype=None (тип элементов — подбирается автоматически), copy=True, order=\'K\', ndmin=0. Возвращает ndarray. Для 2D передаёте список списков; если в данных есть float — dtype станет float64. Нюанс: вложенные списки должны иметь одинаковую длину по каждому уровню.', link: NP + 'numpy.array.html' },
-      { code: 'np.zeros((3, 4))', details: 'Массив из нулей заданной формы. Форма — кортеж: (3, 4) значит 3 строки, 4 столбца. Параметры: shape (обязательный), dtype=float64, order=\'C\'. Возвращает ndarray. По умолчанию тип float64 — для целых укажите dtype=np.int32. Вызов всегда через np.zeros(...), не от массива.', link: NP + 'numpy.zeros.html' },
-      { code: 'np.ones((2, 3))', details: 'Массив из единиц. Аналогично zeros: shape — кортеж размеров, dtype по умолчанию float64. Удобно для инициализации весов или масок перед заполнением.', link: NP + 'numpy.ones.html' },
-      { code: 'np.full((2, 2), 7)', details: 'Массив заданной формы, все элементы равны fill_value (здесь 7). Параметры: shape, fill_value, dtype=None. Если fill_value — целое и dtype не указан, тип будет int. Полезно для константных матриц или заполнения "пустышкой".', link: NP + 'numpy.full.html' },
-      { code: 'np.eye(3)', details: 'Единичная матрица: на главной диагонали 1, остальное 0. Параметры: N (размер), M=None (если задать — прямоугольная матрица), k=0 (сдвиг диагонали: k>0 — выше главной, k<0 — ниже). Возвращает 2D массив. Используется в линейной алгебре (обратная, системы).', link: NP + 'numpy.eye.html' },
-      { code: 'np.arange(0, 10, 2)', details: 'Аналог range(), но возвращает массив: [0, 2, 4, 6, 8]. Параметры: start (по умолчанию 0), stop (обязательный, не входит в результат!), step=1, dtype=None. Из-за погрешности float лучше для дробных шагов использовать np.linspace.', link: NP + 'numpy.arange.html' },
-      { code: 'np.linspace(0, 1, 5)', details: 'Равномерно распределённые числа от start до stop включительно (если endpoint=True). Здесь 5 точек: [0., 0.25, 0.5, 0.75, 1.]. Параметры: start, stop, num=50 (число точек), endpoint=True, retstep=False, dtype=None. Идеально для сеток по оси (графики, выборка).', link: NP + 'numpy.linspace.html' },
-      { code: 'np.empty((2, 3))', details: 'Массив заданной формы без инициализации ячеек — в памяти остаётся "мусор". Быстрее zeros/ones, но значения непредсказуемы до записи. Используйте, когда сразу заполняете массив целиком (избегая лишнего обнуления).', link: NP + 'numpy.empty.html' },
-      { code: 'np.copy(a)', details: 'Создаёт копию массива a. Изменения в копии не затрагивают исходный массив. Параметр order=\'K\'. Если нужна копия с другой раскладкой в памяти — order=\'C\' или \'F\'.', link: NP + 'numpy.copy.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-random', 'Случайные числа (все через np.random.)', NP_R + '.random.html', [
-      { code: 'np.random.rand(2, 3)', details: 'Случайные числа из равномерного распределения на [0, 1). Форма задаётся отдельными аргументами: rand(d0, d1, d2, ...). Возвращает массив формы (2, 3). Не передавайте кортеж: rand((2,3)) даст ошибку интерпретации. Для воспроизводимости перед этим вызовите np.random.seed(42).', link: NP + 'numpy.random.rand.html' },
-      { code: 'np.random.randn(2, 3)', details: 'Стандартное нормальное распределение (среднее 0, дисперсия 1). Форма — отдельные аргументы, как у rand. Используется для инициализации весов нейросетей, генерации шума.', link: NP + 'numpy.random.randn.html' },
-      { code: 'np.random.randint(0, 10, size=(3, 4))', details: 'Случайные целые числа. low (включительно), high (не входит!) — диапазон; size — число или кортеж формы. Здесь числа от 0 до 9, массив 3×4. Если передать только high — low считается 0. Возвращает int по умолчанию (платформозависимо).', link: NP + 'numpy.random.randint.html' },
-      { code: 'np.random.random((2, 3))', details: 'Равномерное [0, 1). В отличие от rand, размер задаётся одним числом или кортежем: random((2, 3)) или random(6). Удобно когда форма в переменной: random(shape).', link: NP + 'numpy.random.random.html' },
-      { code: 'np.random.choice([1, 2, 3], size=5)', details: 'Случайная выборка из массива или из range(int). Параметры: a (массив или int), size=None (число или форма), replace=True (с возвратом или без), p=None (вероятности элементов). Возвращает массив размера size. Для replace=False размер не может быть больше длины a.', link: NP + 'numpy.random.choice.html' },
-      { code: 'np.random.shuffle(x)', details: 'Перемешивает массив x по первой оси на месте (исходный массив меняется). Возвращает None. Для 1D перемешиваются элементы; для 2D — порядок строк. Чтобы не портить исходный массив, используйте np.random.permutation(x) — он возвращает новую перемешанную копию.', link: NP + 'numpy.random.shuffle.html' },
-      { code: 'np.random.seed(42)', details: 'Устанавливает начальное состояние генератора случайных чисел. Один и тот же seed даёт одну и ту же последовательность. Вызывайте один раз в начале скрипта (или в начале цикла экспериментов) для воспроизводимости результатов. Число 42 — произвольное, любое фиксированное подойдёт.', link: NP + 'numpy.random.Generator.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-props', 'Свойства массива (через точку от массива a)', NP_R + '.array-creation.html', [
-      { code: 'a.shape', details: 'Кортеж размеров по осям. Для матрицы 3×4 вернёт (3, 4). Это атрибут — вызывается без скобок: a.shape, не a.shape(). Для 1D массив из n элементов даст (n,). Удобно проверять размерности перед операциями.', link: NP + 'numpy.ndarray.shape.html' },
-      { code: 'a.ndim', details: 'Число измерений (осей). 1 — вектор, 2 — матрица, 3 — тензор и т.д. Атрибут, без скобок. len(a.shape) даёт то же значение.', link: 'https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html' },
-      { code: 'a.size', details: 'Общее число элементов в массиве (произведение всех размеров shape). Атрибут. Эквивалентно np.prod(a.shape).', link: 'https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html' },
-      { code: 'a.dtype', details: 'Тип данных элементов: np.float64, np.int32, np.bool_ и т.д. Только чтение. Важно при смешивании с другими типами или при сохранении в файл.', link: 'https://numpy.org/doc/stable/reference/generated/numpy.ndarray.dtype.html' },
-      { code: 'a.astype(np.float32)', details: 'Метод: возвращает новый массив с приведением к типу dtype. Исходный массив не меняется. Параметры: dtype (обязательный), copy=True. При приведении float → int дробная часть отбрасывается (не округление!).', link: NP + 'numpy.ndarray.astype.html' },
-      { code: 'a.T', details: 'Транспонирование: строки и столбцы меняются местами. Для 2D (матрица) — атрибут, без скобок. Возвращает вид (view), где возможно — без копии данных. Для 1D массив не меняется (тот же вид).', link: NP + 'numpy.ndarray.T.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-indexing', 'Индексация и срезы (синтаксис через квадратные скобки)', 'https://numpy.org/doc/stable/user/basics.indexing.html', [
-      { code: 'a[0]\na[i, j]  # 2D', details: 'Один элемент: a[0] — первый (индексы с нуля); для 2D a[i, j] — элемент в строке i, столбце j. Отрицательный индекс: a[-1] — последний элемент. Возвращает скаляр (тип np — int64, float64 и т.д.).', link: 'https://numpy.org/doc/stable/user/basics.indexing.html' },
-      { code: 'a[1:4]\na[0:3, 1:4]  # 2D срезы', details: 'Срезы: start:stop:step. stop не входит! a[1:4] — индексы 1, 2, 3. Для 2D a[0:3, 1:4] — подматрица: строки 0,1,2 и столбцы 1,2,3. Пропуск start/stop: a[:4] — с начала, a[2:] — до конца. step: a[::2] — каждый второй. Срез возвращает вид (view), изменения влияют на исходный массив.', link: 'https://numpy.org/doc/stable/user/basics.indexing.html' },
-      { code: 'a[a > 0]', details: 'Булева маска: в скобках выражение, дающее массив булевых той же формы (a > 0, a == 5 и т.д.). Возвращается 1D массив из элементов, где условие True. Удобно фильтровать данные. Результат — копия, не вид.', link: 'https://numpy.org/doc/stable/user/basics.indexing.html' },
-      { code: 'a[[0, 2, 4]]', details: 'Fancy indexing: передаёте список или массив индексов — получаете массив из выбранных элементов (в 1D) или строк (в 2D). a[[0, 2, 4]] — элементы с индексами 0, 2, 4. Результат — копия. Порядок в списке может быть любым, повторения допустимы.', link: 'https://numpy.org/doc/stable/user/basics.indexing.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-shape', 'Форма и объединение', NP_R + '.array-manipulation.html', [
-      { code: 'a.reshape(6, 2)', details: 'Метод: придаёт массиву новую форму. Общее число элементов должно совпадать (например 3×4 = 12 и 6×2 = 12). Параметр shape можно передать отдельными аргументами или кортежем. reshape(-1) — "развернуть" в 1D (одна строка). reshape(-1, 2) — неизвестное число строк, 2 столбца. Возвращает вид, если память непрерывна; иначе копию.', link: NP + 'numpy.ndarray.reshape.html' },
-      { code: 'a.flatten()', details: 'Метод: возвращает копию массива, сведённую к одному измерению (все элементы подряд, порядок C — по строкам). Всегда копия. Для вида используйте ravel() (но ravel может вернуть вид или копию).', link: NP + 'numpy.ndarray.flatten.html' },
-      { code: 'np.concatenate((a, b), axis=0)', details: 'Склеивает массивы вдоль заданной оси. Первый аргумент — последовательность массивов (кортеж или список). axis=0 — добавлять по строкам (вертикально); axis=1 — по столбцам (горизонтально). Размеры по остальным осям должны совпадать. Возвращает новый массив.', link: NP + 'numpy.concatenate.html' },
-      { code: 'np.vstack((a, b))\nnp.hstack((a, b))', details: 'vstack — вертикальное объединение (по оси 0): массивы ставятся друг под другом. hstack — горизонтальное (по оси 1): друг рядом. Удобные обёртки над concatenate. Для 1D массивов vstack сделает из них строки матрицы.', link: NP + 'numpy.vstack.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-math', 'Математика (поэлементно)', NP_R + '.math.html', [
-      { code: 'a + b\na * b', details: 'Операторы +, -, *, /, ** применяются поэлементно (element-wise). Для a * b каждый элемент умножается с соответствующим. Формы массивов должны быть совместимы: одинаковые или по правилам broadcasting (например массив (3,4) + массив (4,) — столбец повторяется по строкам). Результат — массив.', link: 'https://numpy.org/doc/stable/user/basics.broadcasting.html' },
-      { code: 'np.sqrt(a)\nnp.abs(a)', details: 'Универсальные функции (ufunc): один массив на вход, массив той же формы на выход. np.sqrt(a) — корень из каждого элемента (для отрицательных — nan). np.abs(a) — модуль. Вызов через np., не через точку от массива. Другие: np.exp, np.log, np.sin, np.round.', link: NP + 'numpy.sqrt.html' },
-      { code: 'np.dot(A, B)\nA @ B  # Python 3.5+', details: 'Матричное умножение. Для 2D массивов: (A @ B)[i,j] = сумма по k A[i,k]*B[k,j]. Размеры: (n, k) @ (k, m) = (n, m). Оператор @ — то же для матриц. np.dot для 1D — скалярное произведение; для 2D — произведение матриц. Не путать с поэлементным умножением *.', link: NP + 'numpy.dot.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-linalg', 'Линейная алгебра (np.linalg.)', NP_R + '.linalg.html', [
-      { code: 'np.linalg.inv(A)', details: 'Обратная матрица A⁻¹ такая, что A @ inv(A) ≈ I. A должна быть квадратной и невырожденной (определитель ≠ 0). При плохой обусловленности возможны численные ошибки. Для решения систем лучше использовать solve.', link: NP + 'numpy.linalg.inv.html' },
-      { code: 'np.linalg.solve(A, b)', details: 'Решает систему линейных уравнений Ax = b. Возвращает x. Параметры: A (матрица коэффициентов), b (вектор или матрица правых частей). Численно устойчивее, чем x = inv(A) @ b. Если b 2D, решается несколько систем с разными правыми частями.', link: NP + 'numpy.linalg.solve.html' },
-      { code: 'np.linalg.norm(x)', details: 'Норма вектора или матрицы. По умолчанию ord=None — L2-норма (евклидова). Параметры: x, ord (например 2, 1, np.inf), axis (по какой оси считать). Для вектора norm(x) — длина. Для матрицы — норма Фробениуса.', link: NP + 'numpy.linalg.norm.html' }
-    ]) +
-
-    sectionWithId('ref-numpy-stats', 'Статистика и агрегаты', NP_R + '.statistics.html', [
-      { code: 'np.sum(a)\nnp.mean(a)', details: 'Сумма и среднее арифметическое по всем элементам (или по оси). Параметры: a, axis=None (None — по всем элементам), dtype, keepdims. axis=0 — по столбцам (результат по строкам); axis=1 — по строкам. Вызов через np.sum(a), не a.sum() (хотя метод тоже есть).', link: NP + 'numpy.sum.html' },
-      { code: 'np.min(a)\nnp.max(a)\nnp.argmin(a)\nnp.argmax(a)', details: 'min/max — минимальное и максимальное значение; с axis — по оси. argmin/argmax — индекс первого минимума/максимума (в плоском виде, если axis не задан). Для 2D с axis=1 argmax по строкам даёт индекс максимума в каждой строке. Полезно для классификации (индекс класса).', link: NP + 'numpy.min.html' },
-      { code: 'np.std(a)\nnp.var(a)', details: 'Стандартное отклонение и дисперсия. Параметр ddof: ddof=0 (по умолчанию) — деление на N; ddof=1 — на N−1 (несмещённая оценка для выборки). axis — по какой оси считать. Для выборки из генеральной совокупности обычно ddof=1.', link: NP + 'numpy.std.html' }
-    ]) +
-    '<h3 id="ref-numpy-sort" class="ref-section">Сортировка и поиск</h3>' +
-    '<p class="ref-section-link"><a href="' + NP_R + '.sort.html" target="_blank" rel="noopener noreferrer">Раздел Sort — официальная документация</a></p>' +
-    entry('np.sort(a)\na.sort()', 'np.sort(a) — возвращает отсортированную копию массива; исходный массив не меняется. a.sort() — сортировка на месте (исходный массив перезаписывается), возвращает None. Параметр axis: по умолчанию -1 (последняя ось). Для 2D axis=0 сортирует каждую колонку, axis=1 — каждую строку. Порядок по возрастанию.', NP + 'numpy.sort.html') +
-    entry('np.argsort(a)', 'Возвращает массив индексов, задающих порядок сортировки по возрастанию. То есть a[np.argsort(a)] даёт отсортированный массив. Используется для сортировки по одному массиву и перестановки другого (например сортировка меток по оценкам). axis — по какой оси.', NP + 'numpy.argsort.html') +
-    entry('np.where(condition)', 'Возвращает кортеж массивов индексов, где condition истинно. Для 1D один массив: np.where(a > 0) — индексы положительных элементов. Для 2D два массива (индексы строк и столбцов). Трёхаргументная форма: np.where(cond, x, y) — где cond истинно взять x, иначе y (поэлементно).', NP + 'numpy.where.html') +
-    entry('np.unique(a)', 'Возвращает отсортированный массив уникальных значений. Параметры: return_index (индексы первого вхождения), return_inverse (обратные индексы для восстановления), return_counts (сколько раз каждый элемент). Полезно для категориальных признаков и подсчёта уникальных меток.', NP + 'numpy.unique.html') +
-    '<p class="ref-section-link"><a href="https://numpy.org/doc/stable/reference/index.html" target="_blank" rel="noopener noreferrer">Полный индекс NumPy Reference — официальная документация</a></p>';
-
-  // ---- Pandas: содержание и разделы по темам ----
-  var pandasToc = [
-    { id: 'ref-pandas-import', title: 'Импорт и создание' },
-    { id: 'ref-pandas-io', title: 'Загрузка и сохранение' },
-    { id: 'ref-pandas-view', title: 'Просмотр и структура' },
-    { id: 'ref-pandas-selection', title: 'Выборка данных' },
-    { id: 'ref-pandas-missing', title: 'Пропуски и очистка' },
-    { id: 'ref-pandas-groupby', title: 'Группировка и агрегаты' }
-  ];
-  var pandasTheory =
-    refToc(pandasToc) +
-    '<p class="ref-intro">Справочник дополняет <strong>полный каталог</strong> официальной документации Pandas. Ниже для каждой команды: синтаксис, параметры, что возвращает и когда использовать.</p>' +
-    '<p class="ref-section-link"><a href="https://pandas.pydata.org/docs/reference/index.html" target="_blank" rel="noopener noreferrer">Pandas API Reference — полный индекс (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html" target="_blank" rel="noopener noreferrer">DataFrame — полный список методов и атрибутов</a></p>' +
-    '<h3 id="ref-pandas-import" class="ref-section">Импорт и создание</h3>' +
-    entry('import pandas as pd', 'Стандартный импорт: все классы и функции вызываются через pd. (pd.DataFrame, pd.read_csv, pd.Series и т.д.). Сокращение "pd" принято во всей документации.', 'https://pandas.pydata.org/docs/getting_started/index.html') +
-    entry('pd.DataFrame({"A": [1, 2], "B": [3, 4]})\ndf = pd.DataFrame(data, columns=["x", "y"], index=[0, 1])', 'DataFrame — таблица с именованными столбцами и индексом строк. Создание: из словаря (ключи — имена столбцов, значения — списки/массивы данных), из списка списков с указанием columns, из ndarray. index — метки строк (по умолчанию 0, 1, 2, ...). columns задаёт порядок и набор столбцов. Возвращает DataFrame.', PD + 'pandas.DataFrame.html') +
-    entry('pd.Series([1, 2, 3], index=["a", "b", "c"])', 'Series — одномерная структура с метками (индексом). data — список или массив; index — метки (по умолчанию 0, 1, 2, ...). Один столбец DataFrame по сути Series. Используется для одной переменной или для результата выборки одного столбца.', PD + 'pandas.Series.html') +
-    '<h3 id="ref-pandas-io" class="ref-section">Загрузка и сохранение (все через pd.)</h3>' +
-    entry('pd.read_csv("file.csv", sep=",", header=0, encoding="utf-8")', 'Читает CSV в DataFrame. Параметры: filepath_or_buffer (путь или URL), sep="," (разделитель), header=0 (какая строка — заголовки; None если заголовков нет), encoding="utf-8" (для кириллицы часто utf-8 или cp1251), usecols (какие столбцы читать), na_values (что считать пропуском). Возвращает DataFrame. Для больших файлов: chunksize — читать по кускам.', PD + 'pandas.read_csv.html') +
-    entry('pd.read_excel("file.xlsx", sheet_name=0)', 'Читает лист Excel. sheet_name — номер листа (0, 1, ...) или имя листа (строка). Требует установленный openpyxl (для .xlsx) или xlrd (для .xls). Возвращает DataFrame. Несколько листов: sheet_name=None возвращает словарь {имя_листа: DataFrame}.', PD + 'pandas.read_excel.html') +
-    entry('df.to_csv("out.csv")\ndf.to_excel("out.xlsx")', 'Методы DataFrame: сохраняют таблицу в файл. to_csv: sep=",", index=True (писать ли индекс), encoding. to_excel: нужен openpyxl. Возвращают None. Для больших данных to_csv быстрее и компактнее.', PD + 'pandas.DataFrame.to_csv.html') +
-    '<h3 id="ref-pandas-view" class="ref-section">Просмотр и структура (методы и атрибуты df.)</h3>' +
-    entry('df.head(5)\ndf.tail(5)', 'Методы: первые или последние n строк таблицы. head(n=5), tail(n=5). Удобно для быстрого просмотра без вывода всего датасета. Возвращают DataFrame.', PD + 'pandas.DataFrame.head.html') +
-    entry('df.shape\ndf.columns\ndf.dtypes', 'Атрибуты (без скобок). shape — кортеж (число строк, число столбцов). columns — индекс с именами столбцов (можно перебирать или df.columns = ["a","b"]). dtypes — тип каждого столбца (int64, float64, object и т.д.).', 'https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html') +
-    entry('df.info()\ndf.describe()', 'info() — краткая сводка: число строк, список столбцов, типы, число непустых значений, использование памяти. describe() — статистика по числовым столбцам (count, mean, std, min, квантили, max). Для категориальных describe(include="object"). Вызов: df.info(), df.describe().', PD + 'pandas.DataFrame.info.html') +
-    '<h3 id="ref-pandas-selection" class="ref-section">Выборка данных</h3>' +
-    entry('df["col"]\ndf.col', 'Один столбец: возвращает Series. Синтаксис df["col"] работает всегда (в т.ч. если имя с пробелами). df.col — только если имя столбца без пробелов и не конфликтует с методом. Результат — ссылка на данные; изменение может изменить исходный df (осторожно с присваиванием).', 'https://pandas.pydata.org/docs/user_guide/indexing.html') +
-    entry('df[["col1", "col2"]]', 'Несколько столбцов: передаёте список имён — возвращается DataFrame с этими столбцами в указанном порядке. Удобно для подмножества признаков или перестановки столбцов.', 'https://pandas.pydata.org/docs/user_guide/indexing.html') +
-    entry('df.loc[0, "A"]\ndf.loc[df["x"] > 0]', 'Доступ по меткам (labels): loc[индекс_строки, индекс_столбца]. Одна метка — скаляр; срез — подтаблица. df.loc[df["x"] > 0] — фильтр строк: оставить только те, где в столбце "x" значение больше 0. Можно передать список меток, срез меток или булев Series (длина как у индекса).', PD + 'pandas.DataFrame.loc.html') +
-    entry('df.iloc[0:5, 1:4]', 'Доступ по целочисленным позициям: iloc[позиция_строки, позиция_столбца]. Работает как срезы в NumPy: 0:5 — строки 0,1,2,3,4. Удобно когда не важно имя столбца/индекса, важна только позиция. Отрицательные индексы — с конца.', PD + 'pandas.DataFrame.iloc.html') +
-    '<h3 id="ref-pandas-missing" class="ref-section">Пропуски и очистка</h3>' +
-    entry('df.isna()\ndf.dropna(axis=0, how="any")', 'isna() — DataFrame той же формы с True там, где пропуск (NaN, None). dropna() — удаляет строки (axis=0) или столбцы (axis=1) с пропусками. how="any" — удалить если есть хотя бы один пропуск; how="all" — только если все значения в строке/столбце пропуски. inplace=False — по умолчанию возвращает новый DataFrame.', PD + 'pandas.DataFrame.dropna.html') +
-    entry('df.fillna(0)\ndf.fillna(method="ffill")', 'Заполняет пропуски. fillna(0) — константой 0. fillna(method="ffill") — forward fill: предыдущее известное значение (по столбцу). method="bfill" — backward fill. limit — максимум подряд заполняемых пропусков. Возвращает новый DataFrame (или меняет inplace=True).', PD + 'pandas.DataFrame.fillna.html') +
-    entry('df.drop(columns=["col"])\ndf.drop_duplicates()', 'drop(columns=["col"]) — удалить столбец (столбцы). drop(index=[...]) — удалить строки по меткам. drop_duplicates() — оставить уникальные строки (по всем столбцам или по subset=["col"]). keep="first" — какую дублирующую строку оставить. Возвращает новый DataFrame.', PD + 'pandas.DataFrame.drop.html') +
-    '<h3 id="ref-pandas-groupby" class="ref-section">Группировка и агрегаты</h3>' +
-    entry('df.groupby("col")\ndf.groupby("col").agg({"other": "mean", "x": "sum"})', 'groupby("col") — разбивает DataFrame на группы по значениям столбца "col". Дальше вызывают агрегаты: .sum(), .mean(), .agg({"other": "mean", "x": "sum"}) — для каждого столбца своя функция. Результат — DataFrame с индексом по уникальным значениям "col". Несколько столбцов группировки: groupby(["col1", "col2"]).', PD + 'pandas.DataFrame.groupby.html') +
-    entry('df.mean()\ndf.sum()\ndf.corr()', 'Методы по умолчанию считают по столбцам (axis=0): каждая строка результата — одно число по столбцу. mean(), sum() — среднее и сумма; пропуски пропускаются. corr() — корреляционная матрица между числовыми столбцами. axis=1 — считать по строкам. Возвращают Series или DataFrame.', PD + 'pandas.DataFrame.mean.html') +
-    '<p class="ref-section-link"><a href="https://pandas.pydata.org/docs/reference/index.html" target="_blank" rel="noopener noreferrer">Pandas API Reference — полный индекс</a></p>';
-
-  // ---- scikit-learn: содержание и разделы по темам ----
-  var sklearnToc = [
-    { id: 'ref-sklearn-split', title: 'Импорты и разбиение данных' },
-    { id: 'ref-sklearn-models', title: 'Регрессия и классификация' },
-    { id: 'ref-sklearn-metrics', title: 'Метрики' }
-  ];
-  var sklearnTheory =
-    refToc(sklearnToc) +
-    '<p class="ref-intro">Справочник дополняет <strong>полный каталог</strong> официальной документации scikit-learn. Ниже для каждой команды: синтаксис, параметры, порядок вызовов и когда использовать.</p>' +
-    '<p class="ref-section-link"><a href="https://scikit-learn.org/stable/modules/classes.html" target="_blank" rel="noopener noreferrer">scikit-learn API — полный индекс классов (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="https://scikit-learn.org/stable/api/index.html" target="_blank" rel="noopener noreferrer">API Reference — все модули по разделам</a></p>' +
-    '<h3 id="ref-sklearn-split" class="ref-section">Импорты и разбиение данных</h3>' +
-    entry('from sklearn.model_selection import train_test_split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)', 'Функция разбивает данные на обучающую и тестовую выборки. Параметры: X, y — признаки и целевая переменная (массивы или DataFrame); test_size — доля теста (0.2 = 20%) или целое число примеров; random_state — фиксирует разбиение для воспроизводимости; shuffle=True по умолчанию. Возвращает четыре массива: X_train, X_test, y_train, y_test. На обучающей выборке вызываете fit модели, на тестовой — только predict (никогда не обучать на тесте).', SK + 'sklearn.model_selection.train_test_split.html') +
-    entry('from sklearn.preprocessing import StandardScaler\nscaler = StandardScaler()\nscaler.fit(X_train)\nX_train_scaled = scaler.transform(X_train)', 'StandardScaler приводит признаки к нулевому среднему и единичной дисперсии (z-score). Создаёте экземпляр scaler; fit(X_train) считает среднее и std по обучающей выборке; transform(X_train) применяет формулу (x - mean) / std. На тестовых данных вызывайте только transform(X_test) — с параметрами, полученными на train (иначе утечка информации). fit_transform(X_train) — объединяет fit и transform в одном вызове для train.', SK + 'sklearn.preprocessing.StandardScaler.html') +
-    entry('from sklearn.pipeline import Pipeline\npipe = Pipeline([("scaler", StandardScaler()), ("model", LinearRegression())])\npipe.fit(X_train, y_train)\ny_pred = pipe.predict(X_test)', 'Pipeline объединяет несколько шагов (препроцессинг + модель) в один объект. Каждый шаг — кортеж (имя, объект). При pipe.fit(X_train, y_train) сначала вызывается fit/transform у scaler, затем fit у модели на уже преобразованных данных. При pipe.predict(X_test) — transform у scaler и predict у модели. Удобно для кросс-валидации и избежания утечки: препроцессинг всегда подгоняется только по train.', SK + 'sklearn.pipeline.Pipeline.html') +
-    '<h3 id="ref-sklearn-models" class="ref-section">Регрессия и классификация</h3>' +
-    entry('from sklearn.linear_model import LinearRegression\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\ny_pred = model.predict(X_test)', 'Линейная регрессия: предсказание непрерывной цели. Конструктор без аргументов или с параметрами (fit_intercept=True и т.д.). fit(X_train, y_train) — подгоняет веса по МНК. predict(X_test) — возвращает предсказания. После fit: model.coef_ — веса признаков (массив), model.intercept_ — свободный член. X — 2D массив формы (n_samples, n_features).', SK + 'sklearn.linear_model.LinearRegression.html') +
-    entry('from sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression()\nmodel.fit(X_train, y_train)\nmodel.predict(X_test)\nmodel.predict_proba(X_test)', 'Логистическая регрессия: бинарная или многоклассовая классификация. fit(X_train, y_train) — обучает; y — метки классов (0, 1, 2, ...). predict(X_test) — предсказанный класс. predict_proba(X_test) — вероятности по классам (форма [n_samples, n_classes]). Параметры: C (регуляризация), max_iter, solver. После fit: coef_, intercept_.', SK + 'sklearn.linear_model.LogisticRegression.html') +
-    entry('from sklearn.ensemble import RandomForestClassifier\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)', 'Случайный лес: ансамбль решающих деревьев. n_estimators — число деревьев (больше — стабильнее, но дольше). fit(X_train, y_train) — обучение. predict(X_test), predict_proba(X_test) — предсказания. После fit: model.feature_importances_ — важность признаков (массив). Параметры: max_depth, min_samples_split, random_state для воспроизводимости. Хорошо работает "из коробки", устойчив к переобучению.', SK + 'sklearn.ensemble.RandomForestClassifier.html') +
-    '<h3 id="ref-sklearn-metrics" class="ref-section">Метрики (функции модуля, не через точку)</h3>' +
-    entry('from sklearn.metrics import mean_squared_error, accuracy_score, classification_report, confusion_matrix\nmse = mean_squared_error(y_true, y_pred)\nacc = accuracy_score(y_true, y_pred)', 'Метрики — функции, принимают y_true и y_pred (массивы одинаковой длины). mean_squared_error — для регрессии (средний квадрат ошибки). accuracy_score — доля правильных ответов для классификации. classification_report(y_true, y_pred) — precision, recall, F1 по классам. confusion_matrix(y_true, y_pred) — матрица: строки — истинный класс, столбцы — предсказанный. Вызов: mean_squared_error(y_true, y_pred), не от объекта модели.', SK + 'sklearn.metrics.mean_squared_error.html') +
-    '<p class="ref-section-link"><a href="' + SK.replace('/generated/', '/') + '" target="_blank" rel="noopener noreferrer">Полный API scikit-learn</a></p>';
-
-  // ---- OpenCV: содержание и разделы по темам ----
-  var opencvToc = [
-    { id: 'ref-opencv-io', title: 'Чтение, запись, отображение' },
-    { id: 'ref-opencv-props', title: 'Свойства изображения' },
-    { id: 'ref-opencv-color', title: 'Цвет и геометрия' },
-    { id: 'ref-opencv-filters', title: 'Фильтры и границы' },
-    { id: 'ref-opencv-contours', title: 'Контуры и рисование' },
-    { id: 'ref-opencv-map', title: 'Полная карта модулей OpenCV' }
-  ];
-  var opencvTheory =
-    refToc(opencvToc) +
-    '<p class="ref-intro">Справочник дополняет <strong>полный каталог</strong> официальной документации OpenCV. Ниже для каждой команды: синтаксис, параметры, формат данных и нюансы. Все вызовы через <code>cv2.</code>.</p>' +
-    '<p class="ref-section-link"><a href="https://docs.opencv.org/4.x/" target="_blank" rel="noopener noreferrer">OpenCV 4.x Documentation — главная (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="https://docs.opencv.org/4.x/d7/dbd/group__imgproc.html" target="_blank" rel="noopener noreferrer">Image Processing (imgproc) — полный каталог фильтров, геометрии, контуров</a></p>' +
-    '<p class="ref-section-link"><a href="https://docs.opencv.org/4.x/d4/da8/group__imgcodecs.html" target="_blank" rel="noopener noreferrer">Image codecs (imread, imwrite)</a></p>' +
-    '<h3 id="ref-opencv-io" class="ref-section">Чтение, запись, отображение</h3>' +
-    entry('import cv2\nimg = cv2.imread("path.jpg", cv2.IMREAD_COLOR)', 'Читает изображение из файла. Возвращает NumPy-массив (ndarray) или None, если файл не найден. Второй аргумент: cv2.IMREAD_COLOR (по умолчанию) — 3 канала BGR; cv2.IMREAD_GRAYSCALE — один канал; cv2.IMREAD_UNCHANGED — с альфа-каналом. Важно: OpenCV хранит цвета в порядке BGR, а не RGB — при отображении через matplotlib или сохранении в другие форматы часто делают cv2.cvtColor(img, cv2.COLOR_BGR2RGB). Форма массива: (высота, ширина, 3) для цветного.', CV + 'd4/da8/group__imgcodecs.html#ga288b8b3da0892bd6519ce98888a17668') +
-    entry('cv2.imshow("window", img)\ncv2.waitKey(0)\ncv2.destroyAllWindows()', 'imshow(имя_окна, массив) — показывает изображение в окне с заданным именем. waitKey(0) — ждёт нажатия клавиши; аргумент — задержка в мс (0 — бесконечно). destroyAllWindows() — закрывает все окна. В средах без GUI (например сервер) imshow может не работать — тогда сохраняйте через imwrite и смотрите файл. После imshow обязательно нужен waitKey, иначе окно не обновится.', CV + 'd7/d9e/tutorial_py_highgui.html') +
-    entry('cv2.imwrite("out.jpg", img)', 'Сохраняет массив как изображение. Параметры: путь к файлу (строка), массив (обычно uint8, BGR). Расширение файла задаёт формат (.jpg, .png и т.д.). Возвращает True при успехе, False при ошибке. Качество JPEG: cv2.imwrite("out.jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 95]).', CV + 'd4/da8/group__imgcodecs.html#gabbc7ef1aa2edf6623730eb5eba4a2e4c') +
-    '<h3 id="ref-opencv-props" class="ref-section">Свойства изображения (через точку от массива)</h3>' +
-    entry('img.shape\nimg.size\nimg.dtype', 'Изображение в OpenCV — это ndarray NumPy. shape — кортеж: для цветного (высота, ширина, 3), для grayscale (высота, ширина). Порядок: сначала строки (высота), потом столбцы (ширина). size — общее число элементов (H*W*3 или H*W). dtype — обычно np.uint8 (0–255). Обращение к пикселю: img[y, x] (сначала строка y, потом столбец x).', 'https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html') +
-    '<h3 id="ref-opencv-color" class="ref-section">Цвет и геометрия</h3>' +
-    entry('gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)', 'Преобразует изображение из одного цветового пространства в другое. Первый аргумент — массив изображения, второй — код преобразования: cv2.COLOR_BGR2GRAY (в оттенки серого), cv2.COLOR_BGR2RGB (для matplotlib), cv2.COLOR_BGR2HSV (для сегментации по цвету) и т.д. Возвращает новый массив. Размер не меняется (кроме числа каналов).', CV + 'd8/d01/group__imgproc__color__conversions.html') +
-    entry('resized = cv2.resize(img, (width, height))\nresized = cv2.resize(img, None, fx=0.5, fy=0.5)', 'Изменяет размер изображения. Второй аргумент: (width, height) — целевой размер в пикселях (обратите внимание: width идёт первым, в shape — наоборот height, width). Либо None и тогда fx, fy — масштаб по осям (0.5 — в два раза меньше). Интерполяция по умолчанию — cv2.INTER_LINEAR; для уменьшения часто используют cv2.INTER_AREA.', CV + 'da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d') +
-    '<h3 id="ref-opencv-filters" class="ref-section">Фильтры и границы</h3>' +
-    entry('blurred = cv2.GaussianBlur(img, (5, 5), 0)', 'Гауссово размытие: сглаживает изображение, уменьшает шум. Параметры: изображение, размер ядра (кортеж (kwidth, kheight); оба числа нечётные), sigmaX (0 — считается по размеру ядра). Возвращает новый массив той же формы. Большое ядро — сильнее размытие. Часто применяют перед Canny для уменьшения шума на границах.', CV + 'd4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193eff0bccac43a3') +
-    entry('edges = cv2.Canny(img, 100, 200)', 'Детектор границ Кэнни: находит границы по градиенту. Параметры: изображение (лучше одноканальное, иначе обрабатывается каждый канал), threshold1, threshold2 — два порога гистерезиса (пиксели сильнее threshold2 — граница; между threshold1 и threshold2 — граница, если связаны с сильной). Результат — одноканальное бинарное изображение (0 или 255). Пороги подбирают под контраст сцены.', CV + 'dd/d1a/group__imgproc__feature.html#ga04723e007ed888d43411ea5a0a94b8bf') +
-    '<h3 id="ref-opencv-contours" class="ref-section">Контуры и рисование</h3>' +
-    entry('contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)\ncv2.drawContours(img, contours, -1, (0, 255, 0), 2)', 'findContours находит контуры на бинарном изображении (обычно после threshold или Canny). Параметры: изображение (8-bit, один канал), mode (cv2.RETR_TREE — все контуры с иерархией; RETR_EXTERNAL — только внешние), method (cv2.CHAIN_APPROX_SIMPLE — сжимает отрезки). Возвращает contours (список массивов точек) и hierarchy. drawContours рисует контуры на изображении: img (изменяется!), contours, индекс контура (-1 — все), цвет (BGR), толщина (линия; -1 — заливка).', CV + 'd3/dc0/group__imgproc__shape.html#gadf1ad6a0b82947fa1fe3c3d497f260e0') +
-    entry('cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)\ncv2.circle(img, (cx, cy), radius, (0, 0, 255), -1)\ncv2.putText(img, "text", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255))', 'rectangle — рисует прямоугольник: угловые точки (x1,y1) и (x2,y2), цвет (BGR), толщина линии (-1 — заливка). circle — центр (cx, cy), радиус, цвет, толщина. putText — текст, левый нижний угол (x, y), шрифт (cv2.FONT_HERSHEY_SIMPLEX и др.), масштаб шрифта, цвет. Все функции изменяют img на месте и возвращают None. Координаты — целые числа; цвет — кортеж (B, G, R).', CV + 'd6/d6e/group__imgproc__draw.html') +
-
-    '<h3 id="ref-opencv-morph" class="ref-section">Морфология и пороги</h3>' +
-    entry('import numpy as np\nimport cv2\nimg = np.zeros((100, 100), dtype=np.uint8)\ncv2.rectangle(img, (20, 20), (80, 80), 255, -1)\nkernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))\neros = cv2.erode(img, kernel, iterations=1)\ndilat = cv2.dilate(img, kernel, iterations=1)\nprint("Erode/Dilate:", eros.shape, dilat.shape)', 'erode — эрозия (съедает белые пиксели с краев). dilate — дилатация (наращивает белые пиксели). getStructuringElement — создаёт ядро (MORPH_RECT, MORPH_ELLIPSE, MORPH_CROSS). Для удаления шума и склеивания компонентов.', CV + 'd4/d86/group__imgproc__filter.html', true) +
-    entry('import numpy as np\nimport cv2\nimg = np.random.randint(0, 256, (100, 100), dtype=np.uint8)\nkernel = np.ones((5, 5), np.uint8)\nclosing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)\nopening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)\nprint("MorphologyEx:", closing.shape, opening.shape)', 'morphologyEx: MORPH_OPEN (эрозия -> дилатация, убирает белый шум), MORPH_CLOSE (дилатация -> эрозия, закрывает черные дыры), MORPH_GRADIENT (разница между дилатацией и эрозией, выделяет контур).', CV + 'd4/d86/group__imgproc__filter.html', true) +
-    entry('import numpy as np\nimport cv2\nimg = np.random.randint(0, 256, (100, 100), dtype=np.uint8)\n_, thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)\n_, thresh2 = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)\nprint("Thresholded shapes:", thresh1.shape, thresh2.shape)', 'threshold — глобальный порог. THRESH_BINARY (если > thresh, то maxval, иначе 0). THRESH_OTSU — автоматический поиск оптимального порога по бимодальной гистограмме. adaptiveThreshold — локальный порог (для неравномерного освещения).', CV + 'd7/d1b/group__imgproc__misc.html', true) +
-    '<h3 id="ref-opencv-hist" class="ref-section">Цвет и гистограммы</h3>' +
-    entry('import numpy as np\nimport cv2\nimg = np.random.randint(0, 256, (100, 100, 3), dtype=np.uint8)\nhist = cv2.calcHist([img], [0], None, [256], [0, 256])\nprint("calcHist shape:", hist.shape)\n# cv2.normalize(hist, hist, 0, 255, cv2.NORM_MINMAX)', 'calcHist — вычисление гистограммы цвета/интенсивности. Аргументы: изображения, каналы, маска, кол-во корзин (histSize), диапазоны. Для анализа экспозиции и поиска похожих изображений (compareHist).', CV + 'd6/dc7/group__imgproc__hist.html', true) +
-    entry('import numpy as np\nimport cv2\ngray = np.random.randint(0, 256, (50, 50), dtype=np.uint8)\neq = cv2.equalizeHist(gray)\nclahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))\nclahe_img = clahe.apply(gray)\nprint("Equalize:", eq.shape, "CLAHE:", clahe_img.shape)', 'equalizeHist — глобальное выравнивание гистограммы (повышает контраст, но может пересветить). CLAHE (Contrast Limited Adaptive Histogram Equalization) — локальное выравнивание по блокам, предотвращает усиление шума.', CV + 'd6/dc7/group__imgproc__hist.html', true) +
-    '<h3 id="ref-opencv-template" class="ref-section">Шаблоны и фичи</h3>' +
-    entry('import numpy as np\nimport cv2\nimg = np.random.randint(0, 256, (100, 100), dtype=np.uint8)\ntemplate = img[20:40, 20:40]\nres = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)\nmin_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)\nprint("Best match at:", max_loc, "val:", round(max_val, 2))', 'matchTemplate — поиск точного фрагмента на изображении. Двигает шаблон скользящим окном и считает метрику (TM_SQDIFF, TM_CCORR_NORMED, TM_CCOEFF_NORMED). minMaxLoc находит координаты экстремумов результатов. Не устойчив к масштабу и повороту.', CV + 'df/dfb/group__imgproc__object.html', true) +
-    entry('import numpy as np\nimport cv2\ngray = np.float32(np.random.randint(0, 256, (50, 50), dtype=np.uint8))\ndst = cv2.cornerHarris(gray, 2, 3, 0.04)\nprint("cornerHarris:", dst.shape)\n# result[dst > 0.01 * dst.max()] = [0, 0, 255]', 'cornerHarris — детектор углов Харриса. Работает с float32. Результат — карта уверенности, где углы имеют большие значения. Устойчив к повороту, но НЕ устойчив к масштабу.', CV + 'dd/d1a/group__imgproc__feature.html', true) +
-    '<h3 id="ref-opencv-dnn" class="ref-section">Глубокое обучение (cv2.dnn)</h3>' +
-    entry('import numpy as np\nimport cv2\n# net = cv2.dnn.readNetFromDarknet("yolov3.cfg", "yolov3.weights")\n# blob = cv2.dnn.blobFromImage(img, 1/255.0, (416, 416), swapRB=True, crop=False)\n# net.setInput(blob)\n# out_names = net.getUnconnectedOutLayersNames()\n# outs = net.forward(out_names)\nprint("dnn: blobFromImage, setInput, forward, getUnconnectedOutLayersNames")', 'blobFromImage — предобработка изображения для сети (масштабирование, ресайз, swapRB=True (BGR->RGB)). Метод forward(out_names) возвращает выходы конкретных слоёв (например, слоёв детекции YOLO).', CV + 'd2/d58/group__dnn.html', true) +
-    '<h3 id="ref-opencv-video" class="ref-section">Видео: захват и обработка</h3>' +
-    entry('import numpy as np\nimport cv2\n# cap = cv2.VideoCapture(0)  # или "video.mp4"\n# width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))\n# height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))\n# fps = cap.get(cv2.CAP_PROP_FPS)\n# cap.set(cv2.CAP_PROP_POS_MSEC, 5000) # перемотка на 5с\nprint("VideoCapture get/set properties: PROP_FRAME_WIDTH, PROP_FPS, PROP_POS_FRAMES")', 'cap.get(propId) и cap.set(propId, value) — доступ к метаданным видео и настройкам камеры. Можно менять разрешение, перематывать (POS_MSEC, POS_FRAMES), узнавать общее число кадров (FRAME_COUNT).', CV + 'd4/d15/group__videoio__flags__base.html', true) +
-    entry('import numpy as np\nimport cv2\n# fourcc = cv2.VideoWriter_fourcc(*"mp4v")\n# out = cv2.VideoWriter("output.mp4", fourcc, 30.0, (640, 480))\n# out.write(frame)\n# out.release()\nprint("VideoWriter: cv2.VideoWriter_fourcc(*XVID), write, release")', 'VideoWriter_fourcc — кодек (в Windows часто *\"DIVX\" -> .avi, *\"mp4v\" -> .mp4). VideoWriter(filename, fourcc, fps, (width, height)). Для сохранения обработанных кадров в видеофайл.', CV + 'dd/d9e/classcv_1_1VideoWriter.html', true) +
-    '<h3 id="ref-opencv-geom" class="ref-section">Геометрия: Hough, перспектива, аффинные</h3>' +
-    entry('import numpy as np\nimport cv2\ngray = np.zeros((100, 100), dtype=np.uint8)\ncv2.line(gray, (10, 50), (90, 50), 255, 2)\nedges = cv2.Canny(gray, 50, 150)\nlines = cv2.HoughLinesP(edges, 1, np.pi/180, threshold=20, minLineLength=20, maxLineGap=5)\nprint("HoughLinesP: найдено", len(lines) if lines is not None else 0, "линий")', 'HoughLinesP — вероятностное преобразование Хафа для линий. rho — точность в пикселях. theta — угловая точность. threshold — порог голосов. minLineLength, maxLineGap. Для детекции дорожной разметки, границ. HoughLines — классический (бесконечные линии).', CV + 'dd/d1a/group__imgproc__feature.html', true) +
-    entry('import numpy as np\nimport cv2\ngray = np.zeros((100, 100), dtype=np.uint8)\ncv2.circle(gray, (50, 50), 20, 255, 2)\ncircles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=1, minDist=30, param1=50, param2=15, minRadius=10, maxRadius=30)\nprint("HoughCircles:", "найдено" if circles is not None else "не найдено", "окружностей")', 'HoughCircles — преобразование Хафа для окружностей. dp — разрешение аккумулятора. minDist — мин. расстояние между центрами. param1, param2 — пороги Canny и аккумулятора. Для детекции монет, глаз, круглых объектов.', CV + 'dd/d1a/group__imgproc__feature.html', true) +
-    entry('import numpy as np\nimport cv2\n# Perspective Transform: 4 точки -> 4 точки\nsrc = np.float32([[0,0],[100,0],[100,100],[0,100]])\ndst = np.float32([[10,10],[90,5],[85,95],[15,90]])\nM = cv2.getPerspectiveTransform(src, dst)\nprint("perspective matrix shape:", M.shape)\n# result = cv2.warpPerspective(img, M, (width, height))', 'getPerspectiveTransform(src, dst) — матрица 3×3 из 4 пар точек. warpPerspective(img, M, size) — применяет. Для коррекции перспективы (документы, дорожные знаки). getAffineTransform — для 3 точек (без перспективы).', CV + 'da/d54/group__imgproc__transform.html', true) +
-    entry('import numpy as np\nimport cv2\n# Affine Transform: масштаб + поворот + сдвиг\ncenter = (50, 50)\nangle = 45\nscale = 1.0\nM = cv2.getRotationMatrix2D(center, angle, scale)\nprint("rotation matrix:", M.shape)\n# result = cv2.warpAffine(img, M, (w, h))', 'getRotationMatrix2D(center, angle, scale) — матрица 2×3 для поворота. warpAffine(img, M, size) — применяет аффинное преобразование. Для поворота, сдвига, масштабирования изображений. Аугментация данных.', CV + 'da/d54/group__imgproc__transform.html', true) +
-    '<h3 id="ref-opencv-bitwise" class="ref-section">Арифметика и маски</h3>' +
-    entry('import numpy as np\nimport cv2\nimg1 = np.zeros((50,50,3), dtype=np.uint8); img1[:] = 100\nimg2 = np.zeros((50,50,3), dtype=np.uint8); img2[:] = 200\nresult = cv2.add(img1, img2)\nprint("add (saturated):", result[0,0])\nresult2 = cv2.addWeighted(img1, 0.7, img2, 0.3, 0)\nprint("addWeighted:", result2[0,0])', 'add(a, b) — насыщающее сложение (макс 255). subtract — вычитание. addWeighted(a, alpha, b, beta, gamma) — взвешенная сумма (бленд). Отличие от a+b: numpy обрезает по модулю 256, cv2.add насыщает.', CV + 'db/dda/group__core.html', true) +
-    entry('import numpy as np\nimport cv2\nimg = np.zeros((50,50), dtype=np.uint8); img[10:40, 10:40] = 255\nmask = np.zeros_like(img); mask[20:30, 20:30] = 255\nresult_and = cv2.bitwise_and(img, img, mask=mask)\nresult_or = cv2.bitwise_or(img, mask)\nresult_not = cv2.bitwise_not(img)\nprint("and sum:", result_and.sum(), "or sum:", result_or.sum())', 'bitwise_and/or/xor/not — побитовые операции. mask — маска (где 0 — не обрабатывать). Для наложения логотипов, ROI (Region of Interest), сложных масок. Типичный паттерн: создать маску → bitwise_and с изображением.', CV + 'db/dda/group__core.html', true) +
-    entry('import numpy as np\nimport cv2\nimg = np.random.randint(0, 256, (100, 100, 3), dtype=np.uint8)\nhsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)\n# Пример: выделить красный цвет\nlower = np.array([0, 120, 70])\nupper = np.array([10, 255, 255])\nmask = cv2.inRange(hsv, lower, upper)\nprint("inRange mask shape:", mask.shape)\nprint("pixels in range:", mask.sum() // 255)', 'inRange(src, lower, upper) — бинарная маска: 255 где значения в диапазоне. Для цветовой сегментации в HSV. H: 0-180 (в OpenCV!), S: 0-255, V: 0-255. Красный: H=0-10 или 170-180. Синий: H=100-130.', CV + 'd7/d1b/group__imgproc__misc.html', true) +
-    '<h3 id="ref-opencv-detect" class="ref-section">Детекция: каскады и фон</h3>' +
-    entry('import numpy as np\nimport cv2\n# Каскад Хаара для детекции лиц:\n# face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")\n# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)\n# faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))\n# for (x, y, w, h) in faces:\n#     cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)\nprint("CascadeClassifier: haarcascade для лиц, глаз, тела")\nprint("detectMultiScale: scaleFactor, minNeighbors")', 'CascadeClassifier — классический детектор объектов (лица, глаза). detectMultiScale(gray, scaleFactor, minNeighbors). scaleFactor=1.1 — масштаб пирамиды. minNeighbors=5 — уверенность. cv2.data.haarcascades — путь к XML-файлам. Быстрый, но менее точный чем DNN.', CV + 'db/d28/tutorial_cascade_classifier.html', true) +
-    entry('import numpy as np\nimport cv2\n# Background Subtraction (фоновое вычитание)\n# fgbg = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=16)\n# fgbg = cv2.createBackgroundSubtractorKNN()\n# while cap.isOpened():\n#     ret, frame = cap.read()\n#     fgmask = fgbg.apply(frame)\n#     # fgmask — бинарная маска переднего плана\nprint("BackgroundSubtractorMOG2: history, varThreshold")\nprint("BackgroundSubtractorKNN: альтернатива")', 'createBackgroundSubtractorMOG2/KNN — выделение переднего плана (движущихся объектов) из видео. apply(frame) → маска. history — число кадров для модели фона. Для видеонаблюдения, трекинга движения.', CV + 'dc/d6b/group__video__track.html', true) +
-    entry('import numpy as np\nimport cv2\n# Contour analysis: площадь, периметр, выпуклая оболочка\nbinary = np.zeros((100, 100), dtype=np.uint8)\ncv2.circle(binary, (50, 50), 30, 255, -1)\ncontours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)\nc = contours[0]\nprint("area:", cv2.contourArea(c))\nprint("perimeter:", round(cv2.arcLength(c, True), 2))\nhull = cv2.convexHull(c)\nprint("convexHull points:", len(hull))\nM = cv2.moments(c)\nprint("center:", int(M["m10"]/M["m00"]), int(M["m01"]/M["m00"]))', 'contourArea — площадь контура. arcLength — периметр (closed=True). convexHull — выпуклая оболочка. moments — моменты (m10/m00, m01/m00 — центр масс). boundingRect — вписанный прямоугольник. minEnclosingCircle — вписанная окружность. approxPolyDP — аппроксимация полигоном.', CV + 'd3/dc0/group__imgproc__shape.html', true) +
-    '<h3 id="ref-opencv-map" class="ref-section">Полная карта официальной документации OpenCV (подробно)</h3>' +
-    '<p class="ref-details">Ниже — все основные и дополнительные модули OpenCV с подробным описанием: что входит в модуль, когда использовать и на что обратить внимание. Ссылки ведут на официальную документацию docs.opencv.org.</p>' +
-
-    '<h4 class="ref-subsection">Main modules (основные модули)</h4>' +
-    entry('core — Core functionality', 'Ядро OpenCV: базовые структуры данных (Mat, Scalar, Point, Rect, Size), операции с матрицами и массивами, типы данных, управление памятью, XML/YAML I/O, оптимизация (SSE, OpenCL). Здесь же — рисование примитивов низкого уровня и утилиты. Почти все остальные модули опираются на core. Новичку важно: изображение в OpenCV — это Mat (в Python это ndarray NumPy); координаты и размеры задаются через кортежи (x, y) или (width, height).', CV + 'db/dda/group__core.html') +
-    entry('imgproc — Image Processing', 'Обработка изображений: фильтры (размытие, морфология, производные), геометрические преобразования (resize, warp, rotate), цветовые пространства (cvtColor), пороговая обработка (threshold, adaptiveThreshold), контуры (findContours, drawContours), гистограммы, сегментация. Это основной модуль для предобработки кадров перед детекцией или классификацией. Функции: GaussianBlur, Canny, Sobel, morphologyEx, getStructuringElement и многие другие.', CV + 'd7/dbd/group__imgproc.html') +
-    entry('imgcodecs — Image file reading and writing', 'Чтение и запись изображений в файлы. Функции: imread() — загрузка из файла (поддержка JPEG, PNG, BMP, TIFF и др.); imwrite() — сохранение; imdecode()/imencode() — работа с памятью (буфер байтов). Параметры: флаги загрузки (IMREAD_COLOR, IMREAD_GRAYSCALE, IMREAD_UNCHANGED), параметры сохранения (качество JPEG, сжатие PNG). В Python доступны как cv2.imread, cv2.imwrite.', CV + 'd4/da8/group__imgcodecs.html') +
-    entry('videoio — Video I/O', 'Захват и запись видео. VideoCapture — открытие видеофайла или камеры (индекс 0 — веб-камера), read() — следующий кадр, get()/set() — свойства (ширина, высота, FPS). VideoWriter — запись видео (кодек, размер, FPS). Удобно для обработки видео по кадрам и сохранения результата. В коде: cap = cv2.VideoCapture(0); ret, frame = cap.read(); cap.release().', CV + 'd8/dfe/group__videoio.html') +
-    entry('highgui — High-level GUI', 'Высокоуровневый GUI: окна, отображение изображений, обработка мыши и клавиатуры. Функции: namedWindow(), imshow(), waitKey(), destroyAllWindows(), createTrackbar() (слайдеры для параметров). Основа для интерактивных демо и отладки. В средах без дисплея (сервер, SSH) highgui может быть недоступен — тогда используют только imwrite и просмотр файлов.', CV + 'd7/d9e/group__highgui.html') +
-    entry('video — Video Analysis', 'Анализ видео: оценка движения (optical flow — calcOpticalFlowFarneback, calcOpticalFlowPyrLK), трекинг объектов (TrackerKCF, TrackerMOSSE и др.), фоновое вычитание (BackgroundSubtractorMOG2, BackgroundSubtractorKNN). Используется для отслеживания объектов между кадрами и выделения переднего плана. Документация по каждому алгоритму: параметры, когда какой выбирать.', CV + 'd7/d9b/group__video.html') +
-    entry('calib3d — Camera Calibration and 3D Reconstruction', 'Калибровка камеры и 3D-реконструкция. Калибровка: findChessboardCorners(), calibrateCamera() — получение матрицы камеры и коэффициентов искажений; undistort() — исправление искажений. Стереозрение: stereoCalibrate(), stereoRectify(), reprojectImageTo3D(). Оценка позы: solvePnP(), solvePnPRansac(). Нужно для AR, робототехники, измерений по изображению. Требует калибровочный паттерн (шахматная доска).', CV + 'd9/d0c/group__calib3d.html') +
-    entry('features2d — 2D Features Framework', 'Детекция и описание 2D-признаков: ключевые точки и дескрипторы. Детекторы: SIFT, ORB, BRISK, AKAZE и др. (в Python: cv2.SIFT_create(), cv2.ORB_create()). Описание: compute() — дескрипторы по ключевым точкам. Сопоставление: BFMatcher, FlannBasedMatcher; match(), knnMatch(). Используется для стыковки изображений (stitching), навигации по картинке, трекинга по признакам. drawKeypoints(), drawMatches() — визуализация.', CV + 'd0/d13/group__features2d.html') +
-    entry('objdetect — Object Detection', 'Детекция объектов: каскады Хаара (CascadeClassifier — лица, глаза), HOG + SVM, детекция по шаблону. Функции: detectMultiScale() — поиск объектов заданного класса (лицо и т.д.) в разных масштабах. Рисование: rectangle() по найденным боксам. Классические методы; для современной детекции (YOLO, Faster R-CNN) чаще используют модуль dnn с загруженными моделями. В OpenCV 4.x сюда перенесена часть функциональности aruco.', CV + 'd1/dc6/group__objdetect.html') +
-    entry('dnn — Deep Neural Network module', 'Загрузка и запуск нейросетей из внешних фреймворков. Backends: OpenCV, OpenVINO, CUDA, TensorRT и др. Функции: readNetFromCaffe(), readNetFromTensorflow(), readNetFromONNX(), readNet() — загрузка модели; setInput(), forward() — прямой проход. Удобно для быстрого инференса детекторов (YOLO, SSD) и классификаторов без PyTorch/TensorFlow в рантайме. Документация: поддерживаемые форматы, примеры для разных моделей.', CV + 'd2/d58/group__dnn.html') +
-    entry('ml — Machine Learning', 'Классическое машинное обучение внутри OpenCV: SVM (cv2.ml.SVM_create()), KNN, деревья решений, бустинг, нейросети (старый API). Методы: train(), predict(), predictProb(). Используется когда нужна простая модель без scikit-learn/PyTorch (например встроенная в C++ приложение). В Python чаще используют sklearn; ml полезен для совместимости с C++ кодом и готовых примеров OpenCV.', CV + 'd1/dd9/group__ml.html') +
-    entry('flann — Clustering and Search in Multi-Dimensional Spaces', 'Быстрый поиск ближайших соседей в многомерных пространствах. FLANN (Fast Library for Approximate Nearest Neighbors): построение индекса по набору векторов (дескрипторов), поиск k ближайших или радиуса. Используется внутри features2d для матчинга дескрипторов и в любых задачах поиска по множеству точек. Index_create(), index.knnSearch(), index.radiusSearch().', CV + 'd2/d75/group__flann.html') +
-    entry('photo — Computational Photography', 'Вычислительная фотография: устранение шума (fastNlMeansDenoising, denoise_TVL1), inpainting (восстановление повреждённых областей), HDR (mergeExposures), декомпозиция (seamlessClone). Удобно для улучшения снимков и ретуши. Функции работают с целым изображением или маской.', CV + 'd1/dd9/group__photo.html') +
-    entry('stitching — Images stitching', 'Сшивание изображений в панораму: Stitcher создаёт панораму из нескольких перекрывающихся кадров. Внутри: детекция признаков, матчинг, оценка гомографии, блендинг. Используется для панорамных снимков и склейки видео. Stitcher.create(), stitcher.stitch(images). Параметры режима (панорама, сканер и т.д.).', CV + 'd8/d19/group__stitching.html') +
-    entry('gapi — Graph API', 'Graph API: построение графа операций обработки изображений с автоматической оптимизацией и выполнением на CPU/GPU. Позволяет описать пайплайн один раз и выполнять его эффективно. Используется в продвинутых сценариях и встроенных системах. В Python доступность ограничена; в основном C++ API.', CV + 'd1/dd9/group__gapi.html') +
-
-    '<h4 class="ref-subsection">Extra modules (дополнительные модули)</h4>' +
-    entry('alphamat — Alpha Matting', 'Выделение полупрозрачных границ объекта (alpha matting): по тримапу и изображению уточняется альфа-канал на границах. Нужно для качественного вырезания объектов и композитинга.', CV + 'd1/dd9/group__alphamat.html') +
-    entry('aruco — ArUco markers', 'Маркеры ArUco для дополненной реальности и калибровки: детекция маркеров, оценка позы. В OpenCV 4.x часть функциональности перенесена в objdetect. Используется для AR, робототехники, калибровки камер.', CV + 'd1/dd9/group__aruco.html') +
-    entry('bgsegm — Background-Foreground Segmentation', 'Улучшенные методы выделения переднего плана: дополнительные алгоритмы фонового вычитания (сверх MOG2/KNN из video). Для видеонаблюдения и сегментации движущихся объектов.', CV + 'd1/dd9/group__bgsegm.html') +
-    entry('bioinspired — Biologically inspired vision', 'Биологически мотивированные модели зрения: сетчатка, адаптация к освещению. Исследовательские и специализированные задачи.', CV + 'd1/dd9/group__bioinspired.html') +
-    entry('cuda* — CUDA-ускоренные модули', 'Модули с суффиксом cuda: cudaarithm (матричные операции), cudabgsegm (фоновое вычитание), cudacodec (кодеки), cudafeatures2d (признаки), cudafilters (фильтры), cudaimgproc (обработка), cudaobjdetect, cudaoptflow (optical flow), cudastereo (стерео), cudawarping (геометрия), cudev (устройство). Требуют сборку OpenCV с CUDA и совместимый GPU. Значительно ускоряют пайплайн на NVIDIA.', CV + 'd1/dd9/group__cuda.html') +
-    entry('dnn_objdetect / dnn_superres', 'dnn_objdetect — готовые DNN-модели для детекции объектов (в т.ч. специфичные форматы). dnn_superres — супер-разрешение на основе нейросетей (увеличение разрешения изображения). Требуют загрузки весов; удобны для быстрого прототипа.', CV + 'd2/d58/group__dnn.html') +
-    entry('face — Face Analysis', 'Анализ лиц: распознавание (LBPH, Eigenfaces, Fisherfaces), детекция ориентира (landmarks). Функции для построения пайплайна распознавания лиц. Дополняет objdetect (детекция лица) и dnn (современные сети).', CV + 'd1/dd9/group__face.html') +
-    entry('freetype — Drawing UTF-8 strings', 'Отрисовка текста в UTF-8 с помощью FreeType/Harfbuzz: поддержка разных языков и шрифтов. Расширяет базовый putText для нелатинских символов.', CV + 'd1/dd9/group__freetype.html') +
-    entry('img_hash — Image hashing', 'Алгоритмы хеширования изображений (pHash, aHash и др.): компактное представление для быстрого сравнения «похожести» картинок. Поиск дубликатов, похожих изображений.', CV + 'd1/dd9/group__img__hash.html') +
-    entry('intensity_transform — Intensity transformation', 'Преобразования яркости/контраста: коррекция гистограммы, адаптация контраста. Удобно для предобработки перед детекцией или для улучшения визуализации.', CV + 'd1/dd9/group__intensity__transform.html') +
-    entry('optflow — Optical Flow Algorithms', 'Расширенные алгоритмы оптического потока (помимо video): плотный и разрежённый поток, различные методы. Для трекинга и оценки движения между кадрами.', CV + 'd1/dd9/group__optflow.html') +
-    entry('plot — Plot for Mat data', 'Визуализация данных Mat: построение графиков (гистограммы, кривые) в окне OpenCV. Альтернатива matplotlib для простых графиков внутри OpenCV-приложения.', CV + 'd1/dd9/group__plot.html') +
-    entry('quality — Image Quality Analysis (IQA)', 'Оценка качества изображения: метрики резкости, шума, артефактов. Полезно для автоматической оценки снимков и выбора лучшего кадра.', CV + 'd1/dd9/group__quality.html') +
-    entry('reg — Image Registration', 'Регистрация изображений: выравнивание двух изображений одной сцены (сдвиг, поворот, нелинейные деформации). Медицинская визуализация, мультиспектральные данные.', CV + 'd1/dd9/group__reg.html') +
-    entry('rgbd — RGB-Depth Processing', 'Обработка RGB-D камер (Kinect, RealSense и др.): работа с глубиной, выравнивание глубины и цвета, нормали, сегментация по глубине.', CV + 'd1/dd9/group__rgbd.html') +
-    entry('saliency — Saliency API', 'Выделение заметных (salient) областей изображения: статическая и динамическая салиентность. Используется для привлечения внимания модели к важным регионам.', CV + 'd1/dd9/group__saliency.html') +
-    entry('sfm — Structure From Motion', 'Восстановление 3D структуры и движения камеры по нескольким кадрам. Классические методы SfM; для больших сцен часто используют внешние библиотеки (COLMAP и др.).', CV + 'd1/dd9/group__sfm.html') +
-    entry('shape — Shape Distance and Matching', 'Сравнение и сопоставление форм контуров: расстояния между формами, матчинг. Для распознавания по форме объекта.', CV + 'd1/dd9/group__shape.html') +
-    entry('stereo — Stereo Correspondence', 'Стереосоответствие: построение карты глубины из стереопары. Алгоритмы блочного матчинга и др. Дополняет calib3d для полного стереопайплайна.', CV + 'd1/dd9/group__stereo.html') +
-    entry('structured_light — Structured Light API', 'Структурированный свет: 3D-сканирование с помощью проектора и камеры. Специализированные приложения для реконструкции поверхности.', CV + 'd1/dd9/group__structured__light.html') +
-    entry('superres — Super Resolution', 'Супер-разрешение классическими методами (без DNN): увеличение разрешения изображения. dnn_superres даёт более качественный результат при наличии модели.', CV + 'd1/dd9/group__superres.html') +
-    entry('surface_matching — Surface Matching', 'Сопоставление 3D поверхностей: обнаружение объектов по 3D модели. Для робототехники и промышленной инспекции.', CV + 'd1/dd9/group__surface__matching.html') +
-    entry('text — Scene Text Detection and Recognition', 'Детекция и распознавание текста на сцене (OCR): детектор областей с текстом, распознавание символов. Классические и нейросетевые компоненты; для production часто используют Tesseract или специализированные сети.', CV + 'd1/dd9/group__text.html') +
-    entry('tracking — Tracking API', 'API трекинга объектов: трекеры по bounding box (KCF, CSRT, MedianFlow и др.), обновление положения объекта в следующих кадрах. Используется после детектора для стабильного слежения.', CV + 'd1/dd9/group__tracking.html') +
-    entry('videostab — Video Stabilization', 'Стабилизация видео: устранение дрожания камеры, выравнивание кадров. Улучшает качество съёмки с рук.', CV + 'd1/dd9/group__videostab.html') +
-    entry('viz — 3D Visualizer', '3D визуализация: отображение облаков точек, координатных систем, мешей. Требует VTK. Для отладки 3D-реконструкции и калибровки.', CV + 'd1/dd9/group__viz.html') +
-    entry('wechat_qrcode — WeChat QR code detector', 'Детектор и декодер QR-кодов от WeChat: обнаружение и распознавание QR в кадре. Альтернатива встроенному QR-детектору OpenCV (если доступен в сборке).', CV + 'd1/dd9/group__wechat__qrcode.html') +
-    entry('xfeatures2d — Extra 2D Features', 'Дополнительные 2D-признаки: SIFT, SURF (в non-free части), BRIEF, FREAK и др. Расширяет features2d; часть алгоритмов может требовать отдельной сборки (contrib).', CV + 'd1/dd9/group__xfeatures2d.html') +
-    entry('ximgproc — Extended Image Processing', 'Расширенная обработка изображений: селективное размытие, детекция границ (структурированные леса), сегментация, фильтры. Дополняет imgproc для более сложных алгоритмов.', CV + 'd1/dd9/group__ximgproc.html') +
-    entry('xphoto — Additional photo processing', 'Дополнительные алгоритмы обработки фото: коррекция баланса белого, инпейнтинг, тонирование. Расширяет модуль photo.', CV + 'd1/dd9/group__xphoto.html') +
-    '<p class="ref-section-link"><a href="' + CV + 'index.html" target="_blank" rel="noopener noreferrer">OpenCV 4.x — полный индекс модулей (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="' + CV + 'd7/dbd/group__imgproc.html" target="_blank" rel="noopener noreferrer">Image Processing (imgproc) — официальная документация OpenCV</a></p>';
-
-  // ---- PyTorch (полный справочник по официальному сайту) ----
-  var PT = 'https://pytorch.org/docs/stable/';
-  var PT_G = PT + 'generated/';
-  var pytorchToc = [
-    { id: 'ref-pytorch-descent', title: 'Методы спуска: Batch, Stochastic, Mini-batch' },
-    { id: 'ref-pytorch-loss', title: 'Функции потерь (torch.nn)' },
-    { id: 'ref-pytorch-optim', title: 'Оптимизаторы (torch.optim)' },
-    { id: 'ref-pytorch-tensors', title: 'Тензоры и nn.Module' },
-    { id: 'ref-pytorch-activations', title: 'Функции активации: ReLU, SiLU, GELU' },
-    { id: 'ref-pytorch-training', title: 'Обучение и валидация' },
-    { id: 'ref-pytorch-data', title: 'Dataset, DataLoader, Transforms' },
-    { id: 'ref-pytorch-arch', title: 'Архитектуры: CNN, RNN, Transformer' },
-    { id: 'ref-pytorch-gpu', title: 'GPU, сохранение и загрузка' },
-    { id: 'ref-pytorch-tensor-ops', title: 'Операции с тензорами' },
-    { id: 'ref-pytorch-tricks', title: 'Полезные приёмы и паттерны' },
-    { id: 'ref-pytorch-map', title: 'Полная карта документации PyTorch' }
-  ];
-  var pytorchTheory =
-    refToc(pytorchToc) +
-    '<p class="ref-intro">Справочник покрывает <strong>полный каталог</strong> по официальной документации PyTorch: все функции потерь, все оптимизаторы, методы спуска (batch, stochastic, mini-batch). Для каждой команды — как в коде и ссылка на официальную страницу.</p>' +
-    '<p class="ref-section-link"><a href="' + PT + 'index.html" target="_blank" rel="noopener noreferrer">PyTorch Documentation — полный индекс (официальный сайт)</a></p>' +
-    '<p class="ref-section-link"><a href="' + PT + 'nn.html" target="_blank" rel="noopener noreferrer">torch.nn — полный каталог слоёв и loss (официально)</a></p>' +
-    '<p class="ref-section-link"><a href="' + PT + 'optim.html" target="_blank" rel="noopener noreferrer">torch.optim — все алгоритмы оптимизации (официально)</a></p>' +
-
-    '<h3 id="ref-pytorch-descent" class="ref-section">Методы спуска: Batch, Stochastic, Mini-batch</h3>' +
-    '<p class="ref-details">Градиентный спуск обновляет веса модели так, чтобы уменьшить функцию потерь. Разница между методами — по скольким примерам считается градиент за один шаг (step) оптимизатора.</p>' +
-    entry('# Batch gradient descent — градиент по ВСЕМ данным за один шаг\nfor epoch in range(epochs):\n    optimizer.zero_grad()\n    out = model(X_full)  # весь датасет\n    loss = criterion(out, y_full)\n    loss.backward()\n    optimizer.step()', 'Batch (полный батч): за один вызов optimizer.step() используется вся обучающая выборка. Градиент считается по всем примерам сразу — он стабильный, но один шаг очень тяжёлый по памяти и времени. Подходит только для маленьких датасетов. В коде: передаёте в model(X_full) весь X целиком.' +
-      '<br><br><strong>Когда использовать:</strong> маленькие данные (сотни–тысячи примеров), когда всё помещается в память. В глубоком обучении почти не используется.' +
-      '<br><strong>Минусы:</strong> не масштабируется; локальные минимумы застревают легче.', PT + 'optim.html') +
-    entry('# Stochastic gradient descent (SGD) — один пример за шаг\nfor epoch in range(epochs):\n    for i in range(len(X)):\n        optimizer.zero_grad()\n        out = model(X[i:i+1])  # один пример\n        loss = criterion(out, y[i:i+1])\n        loss.backward()\n        optimizer.step()', 'Stochastic (стохастический): один шаг = один пример. На каждой итерации считаете loss по одному объекту (X[i:i+1] даёт форму [1, ...]). Градиент очень шумный — это может помочь выходить из плоских минимумов, но обучение нестабильное. В чистом виде редко используют: слишком много шагов за эпоху и сильный шум.' +
-      '<br><br><strong>Когда использовать:</strong> онлайн-обучение, потоковые данные; иногда для мелких датасетов.' +
-      '<br><strong>Нюанс:</strong> X[i:i+1] важен — срез сохраняет размерность (1, features), а X[i] дала бы (features,) и сломала бы батч.', PT + 'generated/torch.optim.SGD.html') +
-    entry('# Mini-batch gradient descent — батч за шаг (стандарт в PyTorch)\nloader = DataLoader(dataset, batch_size=32, shuffle=True)\nfor epoch in range(epochs):\n    for x, y in loader:  # x, y — батчи по 32 примера\n        optimizer.zero_grad()\n        out = model(x)\n        loss = criterion(out, y)\n        loss.backward()\n        optimizer.step()', 'Mini-batch (мини-батч): один шаг = один батч из N примеров (типично 32, 64, 128). Баланс между стабильностью градиента и скоростью: градиент усредняется по батчу, шум меньше чем в SGD, память и время — меньше чем в batch. В PyTorch это стандарт: создаёте DataLoader с batch_size и shuffle=True, в цикле for x, y in loader получаете тензоры формы (batch_size, ...).' +
-      '<br><br><strong>Параметры DataLoader:</strong> batch_size — сколько примеров в батче; shuffle=True — перемешивать данные каждую эпоху (для обучения обязательно). num_workers — загрузка в фоне (0 = в основном процессе).' +
-      '<br><strong>Когда использовать:</strong> почти всегда в нейросетях; размер батча подбирают по памяти GPU и стабильности обучения.', PT + 'data.html') +
-
-    '<h3 id="ref-pytorch-loss" class="ref-section">Все функции потерь (torch.nn) — полный список</h3>' +
-    '<p class="ref-details">Вызов: <code>criterion = nn.XXXLoss()</code>, затем <code>loss = criterion(output, target)</code>. Почти у всех есть параметр <strong>reduction</strong>: "mean" (по умолчанию — усреднить по элементам), "sum" (сумма), "none" (вернуть тензор той же формы, без сжатия). После backward() градиенты идут в веса модели.</p>' +
-    entry('nn.L1Loss()', 'Mean Absolute Error (MAE): среднее от |output − target|. Используется в регрессии, когда выбросы не должны сильно влиять (в отличие от MSE). Вход и target — одна форма (например оба [N] или [N, 1]). Параметры: reduction="mean".' +
-      '<br><strong>Пример:</strong> предсказание числа (цена, возраст).', PT_G + 'torch.nn.L1Loss.html') +
-    entry('nn.MSELoss()', 'Mean Squared Error: среднее от (output − target)². Самый частый loss для регрессии. Сильно штрафует большие ошибки — чувствителен к выбросам. Вход и target — одна форма. Параметры: reduction="mean".' +
-      '<br><strong>Когда использовать:</strong> регрессия, когда ошибки распределены нормально и выбросов мало.', PT_G + 'torch.nn.MSELoss.html') +
-    entry('nn.CrossEntropyLoss()', 'Для многоклассовой классификации (один класс на объект). Вход — логиты модели, форма [N, C] (N — батч, C — число классов); target — индексы классов, форма [N], тип long, значения от 0 до C−1. Внутри применяется log_softmax к выходу и NLL. Не нужно вручную делать softmax перед передачей. Параметры: weight (веса классов), ignore_index, label_smoothing, reduction.' +
-      '<br><strong>Пример:</strong> классификация изображений (собака/кошка/птица).', PT_G + 'torch.nn.CrossEntropyLoss.html') +
-    entry('nn.CTCLoss()', 'Connectionist Temporal Classification — для задач, где выход — последовательность, а целевых меток меньше (например распознавание речи: аудио кадры → текст). Параметры: blank (индекс пустого символа), zero_infinity. Сложнее в использовании: нужны длины входов и целей.' +
-      '<br><strong>Когда использовать:</strong> speech-to-text, распознавание рукописного ввода.', PT_G + 'torch.nn.CTCLoss.html') +
-    entry('nn.NLLLoss()', 'Negative Log Likelihood: принимает логиты после log_softmax (не после обычного softmax). Target — индексы классов [N]. Часто используют вместе: выход модели → log_softmax → NLLLoss. CrossEntropyLoss по сути объединяет log_softmax + NLLLoss в одном классе.' +
-      '<br><strong>Когда использовать:</strong> если вы сами делаете log_softmax (например в кастомной голове).', PT_G + 'torch.nn.NLLLoss.html') +
-    entry('nn.PoissonNLLLoss()', 'NLL при предположении, что цель распределена по Пуассону. Параметры: log_input (True — вход уже логарифм), full (учитывать ли приближение Стирлинга). Редко используется в типичных задачах.' +
-      '<br><strong>Когда использовать:</strong> подсчёт событий (счётчики).', PT_G + 'torch.nn.PoissonNLLLoss.html') +
-    entry('nn.GaussianNLLLoss()', 'Регрессия с предсказанием не только среднего, но и дисперсии. Вход: предсказание и дисперсия (или лог-дисперсия); target — истинное значение. Полезно для оценки неопределённости.' +
-      '<br><strong>Когда использовать:</strong> когда нужна уверенность модели (uncertainty).', PT_G + 'torch.nn.GaussianNLLLoss.html') +
-    entry('nn.KLDivLoss()', 'Kullback–Leibler divergence между двумя распределениями. Вход — логарифмы вероятностей (логиты после log_softmax), target — вероятности. Reduction: "batchmean" для совместимости с формулой. Используется в VAE, дистилляции, когда нужно приблизить одно распределение к другому.' +
-      '<br><strong>Когда использовать:</strong> дистилляция моделей, VAE.', PT_G + 'torch.nn.KLDivLoss.html') +
-    entry('nn.BCELoss()', 'Binary Cross Entropy: бинарная классификация. Вход — вероятности (после sigmoid), форма [N, 1] или [N]; target — 0 или 1, та же форма. Значения входа должны быть в (0, 1), иначе градиенты нестабильны. Параметры: weight, reduction.' +
-      '<br><strong>Нюанс:</strong> чаще используют BCEWithLogitsLoss — он объединяет sigmoid и BCE и численно стабильнее.', PT_G + 'torch.nn.BCELoss.html') +
-    entry('nn.BCEWithLogitsLoss()', 'BCE + Sigmoid в одном классе. Вход — сырые логиты (без sigmoid), target — 0 или 1. Внутри применяется sigmoid; реализация устойчива к переполнению. Рекомендуется вместо ручного sigmoid + BCELoss. Параметры: pos_weight (для несбалансированных классов), reduction.' +
-      '<br><strong>Пример:</strong> бинарная классификация (да/нет, есть объект/нет).', PT_G + 'torch.nn.BCEWithLogitsLoss.html') +
-    entry('nn.MarginRankingLoss()', 'Ranking: на входе два тензора x1, x2 и метки target (1 или −1). Loss поощряет: если target=1, то x1 > x2; если −1, то x1 < x2. Используется в рекомендациях, ранжировании.' +
-      '<br><strong>Когда использовать:</strong> learning to rank, рекомендации.', PT_G + 'torch.nn.MarginRankingLoss.html') +
-    entry('nn.HingeEmbeddingLoss()', 'Для меток ±1: если target=1, loss = max(0, margin − x); если −1, loss = max(0, x). Параметр margin по умолчанию 1. Используется в метрическом обучении, эмбеддингах.' +
-      '<br><strong>Когда использовать:</strong> когда нужны эмбеддинги с большим отступом между классами.', PT_G + 'torch.nn.HingeEmbeddingLoss.html') +
-    entry('nn.MultiLabelMarginLoss()', 'Multi-label классификация с margin: у одного объекта может быть несколько правильных классов. Вход — 2D тензор, target — индексы правильных классов (не one-hot). Специфичный формат target; см. документацию.' +
-      '<br><strong>Когда использовать:</strong> несколько меток на объект (теги, категории).', PT_G + 'torch.nn.MultiLabelMarginLoss.html') +
-    entry('nn.HuberLoss()', 'Гибрид L2 и L1: при малой ошибке ведёт себя как квадрат (гладко), при большой — как модуль (устойчиво к выбросам). Параметр delta задаёт порог перехода. Регрессия. Хорош когда в данных есть выбросы.' +
-      '<br><strong>Когда использовать:</strong> регрессия с зашумлёнными или выбросными данными.', PT_G + 'torch.nn.HuberLoss.html') +
-    entry('nn.SmoothL1Loss()', 'Похож на Huber: при |error| < beta — квадратичная часть, иначе линейная. Регрессия, устойчивость к выбросам. Параметр beta (по умолчанию 1). Часто используется в детекции объектов (bounding box regression).' +
-      '<br><strong>Когда использовать:</strong> регрессия координат, боксов.', PT_G + 'torch.nn.SmoothL1Loss.html') +
-    entry('nn.SoftMarginLoss()', 'Двухклассовый логистический loss. Метки target: +1 или −1. Вход — один тензор (разность или оценка). Реже используется чем BCEWithLogitsLoss.' +
-      '<br><strong>Когда использовать:</strong> бинарная классификация с метками ±1.', PT_G + 'torch.nn.SoftMarginLoss.html') +
-    entry('nn.MultiLabelSoftMarginLoss()', 'Multi-label классификация: для каждого класса своя бинарная задача (one-vs-rest). Вход — логиты [N, C], target — бинарная матрица [N, C] (0 или 1). Параметры: weight, reduction.' +
-      '<br><strong>Когда использовать:</strong> несколько независимых меток на объект.', PT_G + 'torch.nn.MultiLabelSoftMarginLoss.html') +
-    entry('nn.CosineEmbeddingLoss()', 'Измеряет косинусное сходство между векторами x1 и x2. Target: 1 — векторы должны быть похожи, −1 — различаться. Параметр margin. Используется в эмбеддингах, сравнении пар.' +
-      '<br><strong>Когда использовать:</strong> сходство текстов/изображений, siamese сети.', PT_G + 'torch.nn.CosineEmbeddingLoss.html') +
-    entry('nn.MultiMarginLoss()', 'Multi-class hinge (margin) loss. Вход — сырые оценки [N, C], target — индексы классов [N]. Штрафует правильный класс, если его оценка не больше остальных на margin. Параметры: p (норма), margin, weight.' +
-      '<br><strong>Когда использовать:</strong> многоклассовая классификация с margin (альтернатива CrossEntropy).', PT_G + 'torch.nn.MultiMarginLoss.html') +
-    entry('nn.TripletMarginLoss()', 'Triplet loss: на входе anchor, positive (того же класса), negative (другого класса). Цель — чтобы расстояние(anchor, positive) + margin < distance(anchor, negative). Используется в face recognition, метрическом обучении. Параметры: margin, p (норма), swap.' +
-      '<br><strong>Когда использовать:</strong> эмбеддинги лиц, поиск похожих объектов.', PT_G + 'torch.nn.TripletMarginLoss.html') +
-    entry('nn.TripletMarginWithDistanceLoss()', 'Тот же triplet, но функцию расстояния можно задать своей (distance_function). По умолчанию — Lp. Гибкость для кастомных метрик.' +
-      '<br><strong>Когда использовать:</strong> когда нужно своё расстояние в triplet loss.', PT_G + 'torch.nn.TripletMarginWithDistanceLoss.html') +
-    '<p class="ref-section-link"><a href="' + PT + 'nn.html#loss-functions" target="_blank" rel="noopener noreferrer">Loss Functions — полный раздел на официальном сайте</a></p>' +
-
-    '<h3 id="ref-pytorch-optim" class="ref-section">Все оптимизаторы (torch.optim) — полный список</h3>' +
-    '<p class="ref-details">Создание: <code>optimizer = torch.optim.XXX(model.parameters(), lr=...)</code>. В цикле обучения каждый батч: <code>optimizer.zero_grad()</code> (обнулить старые градиенты), <code>loss.backward()</code> (посчитать новые), <code>optimizer.step()</code> (обновить веса). lr (learning rate) — скорость обучения; слишком большой — не сойдётся, слишком маленький — медленно.</p>' +
-    entry('torch.optim.SGD(params, lr, momentum=0, weight_decay=0)', 'Stochastic Gradient Descent: классическое правило обновления весов. Параметры: params (model.parameters()), lr (обязательный, типично 0.01–0.1), momentum (0–1 — сглаживание градиента, часто 0.9), weight_decay (L2-регуляризация). С momentum=0.9 очень часто используется для обучения свёрточных сетей; без momentum — базовый вариант, иногда нестабильный.' +
-      '<br><strong>Когда использовать:</strong> когда нужен простой и предсказуемый оптимизатор; для многих архитектур с momentum даёт хороший результат.', PT_G + 'torch.optim.SGD.html') +
-    entry('torch.optim.Adam(params, lr=1e-3, betas=(0.9, 0.999))', 'Adam: адаптивный learning rate для каждого параметра (момент первого и второго порядка). Параметры: lr (часто 1e-3), betas — коэффициенты для моментов, eps — для численной стабильности. Обычно хорошо работает "из коробки", не требует тонкой настройки lr. Минус: часто хуже обобщает чем SGD+momentum при долгом обучении.' +
-      '<br><strong>Когда использовать:</strong> по умолчанию для многих задач (NLP, GAN, быстрый прототип).', PT_G + 'torch.optim.Adam.html') +
-    entry('torch.optim.AdamW(params, lr=1e-3)', 'Adam с decoupled weight decay: weight decay применяется к весам отдельно от градиента (как в оригинальной статье), а не через L2 в градиенте. Параметры: lr, betas, eps, weight_decay. Рекомендуется вместо Adam + L2-регуляризации.' +
-      '<br><strong>Когда использовать:</strong> трансформеры, когда нужна сильная регуляризация весов.', PT_G + 'torch.optim.AdamW.html') +
-    entry('torch.optim.Adagrad(params, lr=1e-2)', 'Adagrad: уменьшает lr для параметров с большей историей градиентов. Параметры: lr, lr_decay, eps. Подходит для разрежённых данных (NLP); для плотных данных часто lr падает слишком сильно.' +
-      '<br><strong>Когда использовать:</strong> разрежённые градиенты, рекомендации.', PT_G + 'torch.optim.Adagrad.html') +
-    entry('torch.optim.Adadelta(params, lr=1.0, rho=0.9)', 'Adadelta: адаптивный lr без явного задания learning rate (используется скользящее среднее градиентов и обновлений). Параметры: rho, eps. Редко используется в глубоком обучении.' +
-      '<br><strong>Когда использовать:</strong> когда не хотите задавать lr вручную (но на практике lr всё равно подбирают).', PT_G + 'torch.optim.Adadelta.html') +
-    entry('torch.optim.RMSprop(params, lr=1e-2, alpha=0.99)', 'RMSprop: скользящее среднее квадратов градиентов; lr делится на корень из этого среднего. Параметры: lr, alpha (затухание), eps. Популярен в reinforcement learning; основа для Adam.' +
-      '<br><strong>Когда использовать:</strong> RL, RNN; иногда как замена Adam.', PT_G + 'torch.optim.RMSprop.html') +
-    entry('torch.optim.Rprop(params, lr=1e-2)', 'Rprop: обновление только по знаку градиента; размер шага адаптируется отдельно. Работает только с батчем (не мини-батчем). В PyTorch редко используется.' +
-      '<br><strong>Когда использовать:</strong> полный батч, маленькие сети.', PT_G + 'torch.optim.Rprop.html') +
-    entry('torch.optim.Adamax(params, lr=2e-3)', 'Adamax: вариант Adam на основе бесконечной нормы (max) вместо L2. Параметры: lr, betas, eps. Иногда более стабилен при очень длинных последовательностях.' +
-      '<br><strong>Когда использовать:</strong> длинные последовательности, когда Adam нестабилен.', PT_G + 'torch.optim.Adamax.html') +
-    entry('torch.optim.ASGD(params, lr=1e-2)', 'Averaged SGD: усредняет параметры за последние итерации (скользящее среднее). Параметры: lr, lambd, alpha. Может улучшить обобщение.' +
-      '<br><strong>Когда использовать:</strong> когда SGD сходится, но хочется более гладкого решения.', PT_G + 'torch.optim.ASGD.html') +
-    entry('torch.optim.LBFGS(params, lr=1)', 'L-BFGS: квази-Ньютоновский метод. Требует многократного пересчёта loss в одном step — вы передаёте closure: step(closure), где closure() считает loss и backward(). Память растёт с числом итераций. Подходит для маленьких батчей и маленьких моделей.' +
-      '<br><strong>Когда использовать:</strong> стиль-трансфер, малые задачи; не для больших нейросетей.', PT_G + 'torch.optim.LBFGS.html') +
-    entry('torch.optim.NAdam(params, lr=2e-3)', 'NAdam: Adam + Nesterov momentum (look-ahead). Параметры: lr, betas, eps. Часто чуть быстрее сходится чем Adam.' +
-      '<br><strong>Когда использовать:</strong> альтернатива Adam с Nesterov.', PT_G + 'torch.optim.NAdam.html') +
-    entry('torch.optim.RAdam(params, lr=1e-3)', 'Rectified Adam: корректирует дисперсию в начале обучения (warmup по сути встроен). Параметры: lr, betas, eps. Уменьшает необходимость в ручном warmup.' +
-      '<br><strong>Когда использовать:</strong> когда не хотите настраивать warmup вручную.', PT_G + 'torch.optim.RAdam.html') +
-    entry('torch.optim.SparseAdam(params, lr=1e-3)', 'Adam для разрежённых градиентов: обновляет только те параметры, у которых градиент ненулевой. Экономит память и время при очень разрежённых обновлениях.' +
-      '<br><strong>Когда использовать:</strong> эмбеддинги с огромным словарём, разрежённые обновления.', PT_G + 'torch.optim.SparseAdam.html') +
-    entry('torch.optim.Adafactor(params)', 'Adafactor: адаптивный метод с меньшим числом гиперпараметров и меньшим потреблением памяти (моменты хранятся в факторизованном виде). Подходит для очень больших моделей.' +
-      '<br><strong>Когда использовать:</strong> большие трансформеры, нехватка памяти.', PT_G + 'torch.optim.Adafactor.html') +
-    entry('torch.optim.Muon(params, lr=1e-3)', 'Muon: новый оптимизатор из PyTorch (на основе теории динамики). Параметры: lr, momentum и др. Экспериментальный; см. актуальную документацию.' +
-      '<br><strong>Когда использовать:</strong> эксперименты, сравнение с Adam/SGD.', PT_G + 'torch.optim.Muon.html') +
-    '<p class="ref-section-link"><a href="' + PT + 'optim.html#algorithms" target="_blank" rel="noopener noreferrer">Algorithms — полный список оптимизаторов (официально)</a></p>' +
-
-    '<h3 id="ref-pytorch-tensors" class="ref-section">Тензоры и nn.Module (подробно)</h3>' +
-    entry('import torch\nx = torch.tensor([1, 2, 3])\nx.shape  # размерности\nx.to("cuda")  # на GPU', 'Тензоры — многомерные массивы PyTorch (аналог ndarray в NumPy, но с поддержкой авто-градиента). torch.tensor(data) создаёт тензор из списка/массива; dtype и device задаются опционально. Атрибуты: .shape — размеры по осям; .dtype — тип; .device — cpu или cuda. Метод .to("cuda") или .to(device) переносит тензор на GPU; для обучения модель и данные должны быть на одном device. Тензоры участвуют в графе вычислений — при вызове .backward() градиенты считаются по всем операциям.' +
-      '<br><strong>Нюанс:</strong> создание тензора из списка копирует данные; из NumPy — torch.from_numpy(arr) делит память (без копии).', PT + 'tensors.html') +
-    entry('class Net(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.fc = nn.Linear(10, 5)\n    def forward(self, x):\n        return self.fc(x)', 'Любая модель наследуется от nn.Module. В __init__ создаются слои (они автоматически регистрируются и их параметры попадут в model.parameters()). forward(x) — прямой проход: вы описываете, как из входа x получить выход. Вызов model(x) внутри вызывает forward(x). Не вызывайте forward вручную — только model(x). Параметры модели: model.parameters() передаётся в оптимизатор.' +
-      '<br><strong>Нюанс:</strong> в forward только прямой проход, без side effects; обратный проход делается через loss.backward().', PT_G + 'torch.nn.Module.html') +
-    entry('nn.Linear(in_features, out_features)\nnn.Conv2d(in_channels, out_channels, kernel_size)\nnn.ReLU()', 'nn.Linear(in_f, out_f): полносвязный слой, выход = x @ W + b; in_f/out_f — размер входа и выхода. nn.Conv2d(in_c, out_c, k): свёртка 2D; in_c/out_c — число каналов, k — размер ядра (число или (h,w)). nn.ReLU(): активация max(0, x), без параметров. Другие слои: nn.BatchNorm2d, nn.MaxPool2d, nn.Dropout. Полный список — в документации torch.nn.' +
-      '<br><strong>Пример:</strong> после свёрток форма (N, C, H, W); перед Linear нужно flatten: x.view(N, -1).', PT + 'nn.html') +
-    entry('optimizer.zero_grad()  # обнулить градиенты\nloss.backward()          # посчитать градиенты\noptimizer.step()        # обновить веса', 'Три шага на каждый батч. zero_grad(): градиенты в PyTorch накапливаются (суммируются), поэтому перед новым backward их обнуляют — иначе градиенты добавятся к старым. loss.backward(): по графу вычислений считаются градиенты loss по всем параметрам (requires_grad=True). step(): оптимизатор по заложенному правилу (SGD, Adam и т.д.) обновляет веса, используя накопленные градиенты. Порядок обязателен: zero_grad → backward → step.' +
-      '<br><strong>Нюанс:</strong> если забыть zero_grad(), градиенты будут расти от батча к батчу и обучение "взорвётся".', PT + 'optim.html') +
-    entry('from torch.utils.data import DataLoader\nloader = DataLoader(dataset, batch_size=32, shuffle=True, num_workers=0)', 'DataLoader оборачивает Dataset и отдаёт батчи. dataset — объект с __len__ и __getitem__(idx), возвращающий один пример (тензоры x, y). batch_size — сколько примеров в одном батче (типично 32, 64, 128). shuffle=True — перемешивать индексы каждую эпоху (для обучения обязательно). num_workers — число процессов загрузки (0 = в основном процессе; больше 0 — фоновые воркеры). Каждая итерация for x, y in loader даёт тензоры формы (batch_size, ...).' +
-      '<br><strong>Когда использовать:</strong> всегда при обучении на мини-батчах; без DataLoader пришлось бы вручную нарезать батчи.', PT + 'data.html') +
-
-    '<h3 id="ref-pytorch-activations" class="ref-section">Функции активации: ReLU, SiLU, GELU...</h3>' +
-    entry('import torch\nimport torch.nn as nn\nx = torch.randn(2)\nprint("ReLU:", nn.ReLU()(x))\nprint("LeakyReLU:", nn.LeakyReLU(0.1)(x))\nprint("ELU:", nn.ELU()(x))', 'Базовые активации. ReLU(x) = max(0, x) — стандартная, но страдает от "умирающих" нейронов. LeakyReLU — пропускает небольшой градиент для x<0. ELU — сглаживает излом в нуле (улучшает сходимость, но чуть медленнее вычисляется).', PT + 'nn.html#non-linear-activations-weighted-sum-nonlinearity', true) +
-    entry('import torch\nimport torch.nn as nn\nx = torch.randn(2)\nprint("SiLU (Swish):", nn.SiLU()(x))\nprint("GELU:", nn.GELU()(x))\nprint("Mish:", nn.Mish()(x))', 'Современные гладкие активации (стандарт для трансформеров и глубоких CNN). SiLU (Swish): x * sigmoid(x), используется в YOLOv5/v8, EfficientNet. GELU: x * Phi(x), стандарт в BERT, GPT, ViT. Mish: x * tanh(softplus(x)), показывает отличные результаты в комп. зрении.', PT + 'nn.html#non-linear-activations-weighted-sum-nonlinearity', true) +
-    entry('import torch\nimport torch.nn as nn\nx = torch.randn(1, 3)\nprint("Sigmoid:", nn.Sigmoid()(x))\nprint("Tanh:", nn.Tanh()(x))\nprint("Softmax:", nn.Softmax(dim=1)(x))', 'Ограничивающие активации. Sigmoid -> [0, 1] — для бинарной классификации (выходного слоя) или шлюзов (LSTM). Tanh -> [-1, 1] — центрирует данные, лучше сигмоиды для скрытых слоев. Softmax -> сумма=1 (распределение вероятностей по классам).', PT + 'nn.html#non-linear-activations-weighted-sum-nonlinearity', true) +
-    '<h3 id="ref-pytorch-training" class="ref-section">Обучение и валидация</h3>' +
-    entry('import torch\nimport torch.nn as nn\n# model.train()  # Включает Dropout и BatchNorm\n# for X_batch, y_batch in train_loader:\n#     optimizer.zero_grad()       # 1. Обнуляем градиенты\n#     y_pred = model(X_batch)     # 2. Прямой проход (forward pass)\n#     loss = criterion(y_pred, y_batch) # 3. Считаем ошибку\n#     loss.backward()             # 4. Обратный проход (вычисляем градиенты)\n#     optimizer.step()            # 5. Обновляем веса\nprint("training: zero_grad, forward, backward, step")', 'Стандартный цикл обучения в PyTorch. Обязательно model.train() перед эпохой (важно для Dropout/BatchNorm). Сначала zero_grad(), иначе градиенты будут накапливаться с предыдущего шага.', PT + 'optim.html', true) +
-    entry('import torch\n# model.eval()   # Отключает Dropout, замораживает статистику BatchNorm\n# val_loss, val_acc = 0, 0\n# with torch.no_grad(): # Отключает вычисление градиентов (экономит память и время)\n#     for X_batch, y_batch in val_loader:\n#         y_pred = model(X_batch)\n#         loss = criterion(y_pred, y_batch)\n#         val_loss += loss.item()\n#         val_acc += (y_pred.argmax(dim=1) == y_batch).sum().item()\nprint("validation: model.eval(), torch.no_grad()")', 'Стандартный цикл валидации или инференса. Обязательно torch.no_grad() — чтобы не тратить память на сохранение вычислительного графа. model.eval() переводит слои в режим тестирования.', PT + 'autograd.html', true) +
-    '<h3 id="ref-pytorch-data" class="ref-section">Dataset, DataLoader, Transforms</h3>' +
-    entry('import torch\nfrom torch.utils.data import Dataset\nclass CustomDataset(Dataset):\n    def __init__(self, data, labels): # загрузка путей/данных\n        self.data = data; self.labels = labels\n    def __len__(self): return len(self.data)  # длина датасета\n    def __getitem__(self, idx):       # как получить 1 элемент\n        return self.data[idx], self.labels[idx]\nprint("Dataset: __init__, __len__, __getitem__")', 'Свой класс Dataset. Нужно реализовать __len__ (сколько всего элементов) и __getitem__ (как получить элемент по индексу). Можно в __getitem__ читать картинки с диска, чтобы не грузить всё в ОЗУ.', PT + 'data.html', true) +
-    entry('import torch\nfrom torch.utils.data import DataLoader, TensorDataset\nX = torch.randn(100, 10); y = torch.randint(0, 2, (100,))\ndataset = TensorDataset(X, y)\nloader = DataLoader(dataset, batch_size=32, shuffle=True, num_workers=2)\n# for batch_x, batch_y in loader: ...\nprint("DataLoader: batch_size, shuffle, num_workers")', 'DataLoader — оборачивает Dataset и разбивает на батчи (куски данных). shuffle=True — перемешивание (для train). num_workers — загрузка данных в несколько потоков (параллельно).', PT + 'data.html', true) +
-    entry('import torchvision.transforms as T\n# transform = T.Compose([\n#     T.Resize((224, 224)),       # Изменение размера\n#     T.RandomHorizontalFlip(),   # Аугментация (вероятность 0.5)\n#     T.ToTensor(),               # Пиксели в тензор [0..1] (C, H, W)\n#     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])\n# ])\nprint("Transforms: Resize, ToTensor, Normalize, Flip, Crop")', 'Предобработка картинок (torchvision). Аугментации (Flip, Crop, Rotation) только для train! ToTensor конвертирует PIL Image/numpy (H, W, C) [0..255] в тензор (C, H, W) [0..1]. Normalize вычитает среднее и делит на std.', PT + 'data.html', true) +
-    '<h3 id="ref-pytorch-arch" class="ref-section">Архитектуры: CNN, RNN, Transformer, Предобученные</h3>' +
-    entry('import torch\nimport torch.nn as nn\nclass SimpleCNN(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 16, 3, padding=1) # 1 канал (ч/б) -> 16\n        self.pool = nn.MaxPool2d(2, 2)\n        self.fc = nn.Linear(16 * 14 * 14, 10)\n    def forward(self, x):\n        x = self.pool(torch.relu(self.conv1(x)))\n        return self.fc(x.view(x.size(0), -1)) # flatten', 'Простая свёрточная сеть (CNN). Conv2d(входы, выходы, ядро). MaxPool2d(2,2) уменьшает картинку в 2 раза по осям H,W. Перед Linear нужно сплющить (flatten) тензор с помощью .view(B, -1) или nn.Flatten.', PT + 'nn.html', true) +
-    entry('import torch\nimport torch.nn as nn\n# LSTM для последовательностей (текст, временные ряды)\nrnn = nn.LSTM(input_size=10, hidden_size=20, num_layers=2, batch_first=True)\n# input: (batch, seq_len, features)\nx = torch.randn(3, 5, 10)\noutput, (hn, cn) = rnn(x)\nprint("LSTM output:", output.shape) # (3, 5, 20)', 'Рекуррентные сети (RNN/GRU/LSTM). input_size — размер одного слова/шага. hidden_size — скрытое состояние. batch_first=True означает, что батч идёт первой осью (по умолчанию он второй!).', PT + 'nn.html', true) +
-    entry('import torch\nimport torch.nn as nn\n# Transformer для обработки последовательностей\nencoder_layer = nn.TransformerEncoderLayer(d_model=512, nhead=8)\nencoder = nn.TransformerEncoder(encoder_layer, num_layers=6)\n# input: (seq_len, batch, d_model)\nsrc = torch.rand(10, 32, 512)\nout = encoder(src)\nprint("TransformerEncoder out:", out.shape)', 'Базовый трансформер (как в BERT). d_model — размер эмбеддинга. nhead — кол-во голов внимания. Работает с последовательностями параллельно (без рекуррентности), но требует Positional Encoding.', PT + 'nn.html', true) +
-    entry('import torch\nimport torch.nn as nn\nimport torchvision.models as models\n# --- Предобученные модели + Fine-tuning ---\n# Установка весов ResNet18:\nweights = models.ResNet18_Weights.DEFAULT\nmodel = models.resnet18(weights=weights)\n# Заменяем последний слой под нашу задачу (на 10 классов)\nnum_ftrs = model.fc.in_features\nmodel.fc = nn.Linear(num_ftrs, 10)\nprint("models.resnet18(weights=DEFAULT), fine-tuning")', 'Использование предобученных сетей через torchvision. Загружаем веса ImageNet, замораживаем слои (при необходимости), меняем последний Linear/classifier слой под кол-во классов в датасете.', PT + 'hub.html', true) +
-    '<h3 id="ref-pytorch-gpu" class="ref-section">GPU, сохранение и загрузка</h3>' +
-    entry('import torch\n# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")\n# model.to(device)\n# Для каждого батча: X, y = X.to(device), y.to(device)\nprint("CUDA (GPU): to(device)")', 'Перенос вычислений на видеокарту. И модель, и данные должны быть на одном устройстве. is_available() проверяет наличие драйверов NVIDIA (CUDA).', PT + 'tensor_attributes.html#torch.torch.device', true) +
-    entry('import torch\n# torch.save(model.state_dict(), "model.pth")\n# \n# Восстановление:\n# model = MyModel()\n# model.load_state_dict(torch.load("model.pth"))\n# model.eval()\nprint("save/load: state_dict(), model.pth")', 'Сохранение только весов (state_dict_). Не сохраняйте саму модель (torch.save(model)), так как это привяжет сохранение к структуре директорий и импортам. Перед инференсом обязательно model.eval().', PT + 'notes/serialization.html', true) +
-    '<h3 id="ref-pytorch-tensor-ops" class="ref-section">Операции с тензорами</h3>' +
-    entry('import torch\na = torch.tensor([[1,2],[3,4]])\nb = torch.tensor([[5,6],[7,8]])\nprint("cat dim=0:", torch.cat([a,b], dim=0).shape)\nprint("cat dim=1:", torch.cat([a,b], dim=1).shape)\nprint("stack:", torch.stack([a,b]).shape)', 'torch.cat — конкатенация по существующей оси. torch.stack — создаёт новую ось. cat по dim=0 — по строкам (как np.vstack). cat по dim=1 — по столбцам. stack — добавляет измерение.', PT_G + 'torch.cat.html', true) +
-    entry('import torch\na = torch.tensor([1,2,3,4,5,6])\nprint("view:", a.view(2,3).shape)\nprint("reshape:", a.reshape(3,2).shape)\nprint("unsqueeze:", a.unsqueeze(0).shape)\nprint("squeeze:", a.unsqueeze(0).squeeze(0).shape)', 'view — изменение формы (требует непрерывную память). reshape — как view, но может копировать. unsqueeze(dim) — добавить ось. squeeze(dim) — убрать ось размера 1. permute — переставить оси. transpose — обменять 2 оси.', PT_G + 'torch.Tensor.view.html', true) +
-    entry('import torch\na = torch.randn(3, 3)\nprint("max:", a.max())\nprint("argmax:", a.argmax())\nprint("topk:", a.flatten().topk(3))\nprint("clamp:", torch.clamp(a, min=-0.5, max=0.5))', 'max/min — максимум/минимум. argmax/argmin — индекс. topk(k) — k наибольших. clamp(min, max) — обрезка (как np.clip). abs, ceil, floor, round — привычные математические.', PT_G + 'torch.max.html', true) +
-    entry('import torch\na = torch.tensor([1.0, 2.0, 3.0])\nb = torch.tensor([4.0, 5.0, 6.0])\nprint("dot:", torch.dot(a, b))\nA = torch.randn(2, 3)\nB = torch.randn(3, 4)\nprint("matmul:", torch.matmul(A, B).shape)\nprint("@ operator:", (A @ B).shape)', 'dot — скалярное произведение (1D). matmul / @ — матричное умножение (как np.dot). mm — строго 2D×2D. bmm — батч матричное (3D). einsum — обобщённая запись Эйнштейна.', PT_G + 'torch.matmul.html', true) +
-    entry('import torch\nprint("zeros:", torch.zeros(2, 3).shape)\nprint("ones:", torch.ones(2, 3).shape)\nprint("randn:", torch.randn(2, 3).shape)\nprint("arange:", torch.arange(0, 10, 2))\nprint("linspace:", torch.linspace(0, 1, 5))\nprint("eye:", torch.eye(3).shape)', 'Создание тензоров: zeros, ones, randn (нормальное), rand (равномерное [0,1]), arange, linspace, eye (единичная матрица), full(size, val), empty (без инициализации). _like — как другой тензор (zeros_like, randn_like).', PT_G + 'torch.zeros.html', true) +
-    '<h3 id="ref-pytorch-tricks" class="ref-section">Полезные приёмы и паттерны</h3>' +
-    entry('import torch\nimport torch.nn as nn\n\n# --- Инициализация весов ---\ndef init_weights(m):\n    if isinstance(m, nn.Linear):\n        nn.init.xavier_uniform_(m.weight)\n        nn.init.zeros_(m.bias)\n    elif isinstance(m, nn.Conv2d):\n        nn.init.kaiming_normal_(m.weight, mode="fan_out")\n\n# model.apply(init_weights)\nprint("xavier_uniform_, kaiming_normal_, zeros_")\nprint("model.apply(fn) — рекурсивно ко всем модулям")', 'Инициализация весов: xavier_uniform_ — для tanh/sigmoid. kaiming_normal_ — для ReLU. zeros_ — для bias. model.apply(fn) — применяет функцию рекурсивно ко всем подмодулям. Правильная инициализация ускоряет обучение.', PT + 'nn.init.html', true) +
-    entry('import torch\nimport torch.nn as nn\n\n# --- Mixed Precision (ускорение на GPU) ---\n# scaler = torch.cuda.amp.GradScaler()\n# for X, y in loader:\n#     with torch.cuda.amp.autocast():\n#         output = model(X)\n#         loss = criterion(output, y)\n#     scaler.scale(loss).backward()\n#     scaler.step(optimizer)\n#     scaler.update()\n#     optimizer.zero_grad()\nprint("Mixed Precision: autocast + GradScaler")\nprint("FP16 для forward, FP32 для backward")', 'Mixed Precision Training — FP16 для прямого прохода (быстрее на GPU), FP32 для градиентов (точнее). autocast — автоматически выбирает точность. GradScaler — масштабирует loss для предотвращения underflow. Ускорение 2-3× на NVIDIA Tensor Cores.', PT + 'amp.html', true) +
-    entry('import torch\nimport torch.nn as nn\n\n# --- Замораживание слоёв ---\n# for name, param in model.named_parameters():\n#     if "layer4" not in name:\n#         param.requires_grad = False\n#\n# # Проверить что заморожено:\n# for name, param in model.named_parameters():\n#     print(name, param.requires_grad)\n#\n# # В optimizer только обучаемые:\n# optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=1e-4)\nprint("requires_grad = False -> заморожен")\nprint("filter(requires_grad) в optimizer")', 'Замораживание параметров: requires_grad = False — параметр не обновляется. named_parameters() — итерация с именами. Передавайте в optimizer только обучаемые. Для fine-tuning: заморозить всё кроме последних слоёв.', PT + 'autograd.html', true) +
-    entry('import torch\nimport torch.nn as nn\n\n# --- Early Stopping (ранняя остановка) ---\n# best_loss = float("inf")\n# patience, counter = 5, 0\n# for epoch in range(1000):\n#     val_loss = validate()\n#     if val_loss < best_loss:\n#         best_loss = val_loss\n#         counter = 0\n#         torch.save(model.state_dict(), "best_model.pkg")\n#     else:\n#         counter += 1\n#         if counter >= patience:\n#             print("Early stopping at epoch", epoch)\n#             break\nprint("Early Stopping: patience, best_loss, save best")', 'Early Stopping — останавливаем обучение если val_loss не улучшается patience эпох. Сохраняем лучшую модель. Предотвращает переобучение. В sklearn — через callbacks или вручную. В PyTorch — реализуется вручную (нет встроенного).', PT + 'nn.html', true) +
-    entry('import torch\nimport torch.nn as nn\n\n# --- nn.Sequential vs nn.ModuleList ---\n# Sequential — вызывает по порядку:\nseq = nn.Sequential(\n    nn.Linear(10, 20),\n    nn.ReLU(),\n    nn.Linear(20, 5)\n)\nprint("Sequential:", seq)\n\n# ModuleList — ручной forward:\n# class Net(nn.Module):\n#     def __init__(self):\n#         super().__init__()\n#         self.layers = nn.ModuleList([nn.Linear(10, 10) for _ in range(3)])\n#     def forward(self, x):\n#         for layer in self.layers:\n#             x = F.relu(layer(x))\n#         return x\nprint("ModuleList: ручное управление в forward")', 'nn.Sequential — контейнер, вызывает слои по порядку. Для простых сетей. nn.ModuleList — список модулей (регистрирует параметры), но forward пишете сами. Для сложных архитектур (skip connections, разветвления). nn.ModuleDict — по именам.', PT + 'nn.html#containers', true) +
-    '<h3 id="ref-pytorch-map" class="ref-section">Полная карта официальной документации PyTorch (подробно)</h3>' +
-    '<p class="ref-details">Ниже — все основные разделы официальной документации PyTorch с подробным описанием: что входит в модуль, когда это нужно использовать и на что обратить внимание новичку. Ссылки ведут на соответствующие страницы на pytorch.org/docs.</p>' +
-
-    entry('torch.nn', 'Модуль нейронных сетей: классы слоёв (Linear, Conv2d, LSTM, Transformer и т.д.), функции потерь (MSELoss, CrossEntropyLoss и др.), контейнеры (ModuleList, Sequential). Вы создаёте модель из nn.Module и вложенных nn-модулей; у каждого слоя есть параметры (weights, bias), которые обучаются через backward. Здесь же: нормализация (BatchNorm, LayerNorm), пулинг (MaxPool2d, AdaptiveAvgPool2d), дропаут, эмбеддинги. Это основной модуль для построения архитектуры модели. Документация по каждому классу содержит сигнатуры, параметры и примеры.', PT + 'nn.html') +
-    entry('torch.nn.functional (F)', 'Функциональный аналог torch.nn: те же операции, но как функции, без хранения состояния. Например F.relu(x), F.conv2d(x, weight), F.cross_entropy(logits, target). Удобно для разовых вызовов, кастомных forward (когда не нужен отдельный слой с параметрами) и когда параметры передаёте вручную. Не путать: nn.ReLU() — слой с параметрами (их нет у ReLU); F.relu() — просто функция. В forward часто пишут F.relu(self.fc(x)) вместо создания nn.ReLU() в __init__. Полный список функций: активации, свёртки, пулинг, loss, утилиты (pad, interpolate и т.д.).', PT + 'nn.functional.html') +
-    entry('torch.Tensor', 'Класс тензора — многомерный массив с поддержкой autograd. Создание: torch.tensor(data), torch.zeros(), torch.ones(), torch.randn(). Атрибуты: .shape, .dtype, .device, .requires_grad. Методы: .backward(), .item(), .numpy(), .to(device), .view(), .reshape(), .detach(). Тензор участвует в графе вычислений; при .backward() градиенты распространяются по графу. Документация Tensor описывает все операции и методы. Для новичка важно: тензоры бывают на CPU и CUDA; данные и модель должны быть на одном device; .detach() отключает градиент для части графа.', PT + 'tensors.html') +
-    entry('Tensor Attributes / Tensor Views', 'Атрибуты тензора: shape, stride, dtype, device, requires_grad, grad, is_leaf, grad_fn. Shape — размеры по осям; stride — шаги в памяти при движении по индексам. Views (виды) — тензоры, разделяющие память с исходным: view(), reshape() (иногда копия), transpose(), expand(), narrow(). Изменение view меняет исходный тензор. Для копии используйте .clone(). Документация по атрибутам и view-операциям помогает отлаживать форму и избегать лишних копий.', PT + 'tensor_view.html') +
-    entry('torch.amp (Automatic Mixed Precision)', 'Смешанная точность: часть вычислений в float16 (половинная точность) для ускорения на GPU, критичные участки — в float32. Используется autocast (контекст, в котором операции автоматически выбирают dtype) и GradScaler (масштабирование градиентов, чтобы не терять малые значения при float16). Значительно ускоряет обучение на современных GPU (Volta, Ampere и новее) и уменьшает память. В коде: with torch.amp.autocast(device_type="cuda"): out = model(x); scaler.scale(loss).backward(); scaler.step(optimizer). Подробно: когда включать, какие слои исключать, настройка scaler.', PT + 'amp.html') +
-    entry('torch.autograd', 'Автоматическое дифференцирование: механизм, который строит граф операций и по вызову .backward() считает градиенты. Функции: torch.autograd.backward(loss), torch.autograd.grad(outputs, inputs) — градиенты без вызова backward на loss. Контексты: torch.no_grad() — отключить запись графа (инференс, экономим память); torch.inference_mode() — ещё быстрее. Переменная requires_grad=True включается у параметров модели и у тензоров, от которых нужен градиент. Документация объясняет граф, детекцию градиентов и тонкости (retain_graph, create_graph для вторых производных).', PT + 'autograd.html') +
-    entry('torch.library', 'Низкоуровневый API для регистрации пользовательских операторов (операций) в C++ и привязки их к PyTorch. Нужен для кастомных ядер, интеграции с другими библиотеками или оптимизации под железо. Новичку обычно не требуется; используется при расширении PyTorch или написании своих CUDA-операций.', PT + 'library.html') +
-    entry('torch.accelerator', 'Унифицированный API для выбора устройства (CPU, CUDA, MPS и т.д.): определение доступного устройства, перенос тензоров и моделей. Упрощает код, который должен работать на разных бэкендах без явных if cuda else cpu.', PT + 'accelerator.html') +
-    entry('torch.cpu / torch.cuda / torch.mps / torch.xpu / torch.mtia', 'Бэкенды устройств. torch.cpu — операции на процессоре. torch.cuda — NVIDIA GPU: перенос тензоров и моделей на GPU, синхронизация (torch.cuda.synchronize()), управление памятью (empty_cache(), memory_allocated()). torch.mps — Apple Silicon (M1/M2) GPU. torch.xpu — Intel GPU. torch.mtia — Meta Training Inference Accelerator. Обычно используют device = torch.device("cuda" if torch.cuda.is_available() else "cpu") и .to(device). Документация по каждому бэкенду: специфичные функции, лимиты, лучшие практики.', PT + 'cuda.html') +
-    entry('torch.cuda.memory / torch.mtia.memory', 'Управление памятью GPU: память выделяется под тензоры автоматически; при нехватке — OOM. Функции: torch.cuda.empty_cache() — освободить кэш неиспользуемой памяти; memory_allocated(), max_memory_allocated() — статистика; set_per_process_memory_fraction() — лимит. Полезно при отладке OOM и при многопроцессном обучении. torch.mtia.memory — аналогично для MTIA.', PT + 'cuda.html') +
-    entry('Meta device', '«Мета»-устройство: тензоры без реальных данных, только форма и dtype. Нужно для быстрой проверки формы модели и подсчёта параметров без выделения памяти на GPU/CPU. Используется в больших моделях и при распределённой инициализации.', PT + 'meta.html') +
-    entry('torch.backends', 'Бэкенды для низкоуровневых библиотек: cuDNN (torch.backends.cudnn), CUDA (cuda), MPS, MKL и т.д. Настройки: cudnn.benchmark = True — авто-подбор быстрых алгоритмов свёртки (рекомендуется при фиксированном размере входа); cudnn.deterministic — воспроизводимость в ущерб скорости. Меняют глобальное поведение PyTorch на выбранном устройстве.', PT + 'backends.html') +
-    entry('torch.export', 'Экспорт модели в формат вне PyTorch: ONNX, TorchScript, другие графы. export() строит граф из модели и примера входа; затем граф можно сохранить и запускать без Python (деплой на сервер, мобильные устройства). Связано с torch.onnx и torch.jit; документация описывает ограничения и поддерживаемые конструкции.', PT + 'export.html') +
-    entry('torch.distributed', 'Распределённое обучение на нескольких GPU или узлах. Основные компоненты: инициализация (init_process_group), обёртка модели (DistributedDataParallel — DDP), распределённый DataLoader (DistributedSampler). Каждый процесс работает со своей частью данных; градиенты синхронизируются при backward. Подмодули: tensor (distributed тензоры), algorithms (например join для неравномерных данных), elastic (перезапуск при падении узлов), fsdp (полное шардирование параметров для очень больших моделей), checkpoint, pipelining. Нужно при обучении на кластере или многопроцессном обучении на одной машине.', PT + 'distributed.html') +
-    entry('torch.distributed.fsdp / fully_shard', 'FSDP (Fully Sharded Data Parallel): параметры модели разбиваются между процессами; каждый процесс хранит только свою часть. Позволяет обучать модели, не помещающиеся в память одного GPU. Альтернатива классическому DDP при огромном числе параметров. Требует понимания распределённого обучения.', PT + 'fsdp.html') +
-    entry('torch.distributed.tensor.parallel / optim / checkpoint / pipelining', 'Tensor parallel — разбиение вычислений слоёв между устройствами (например большая матрица умножается по частям). distributed.optim — оптимизаторы для распределённого сценария. checkpoint — сохранение/загрузка распределённого состояния. pipelining — pipeline parallelism: слои модели на разных устройствах, батчи проходят по конвейеру. Используется в очень больших моделях (сотни миллиардов параметров).', PT + 'distributed.html') +
-    entry('torch.distributions', 'Распределения вероятностей: Normal, Bernoulli, Categorical, Uniform, MultivariateNormal и многие другие. Методы: .sample(), .log_prob(x), .entropy(). Нужны для VAE, reinforcement learning (политики), байесовских моделей и любого кода, где явно работают с распределениями. Интеграция с autograd: градиенты по параметрам распределения.', PT + 'distributions.html') +
-    entry('torch.compiler', 'Компилятор PyTorch 2: torch.compile(model) — JIT-компиляция модели в оптимизированный граф (TorchDynamo + индуктор). Значительно ускоряет обучение и инференс без изменения кода модели. Параметры: mode ("default", "reduce-overhead", "max-autotune"), backend. Рекомендуется включать для новых проектов; некоторые конструкции пока не поддерживаются — смотреть предупреждения.', PT + 'compiler.html') +
-    entry('torch.fft', 'Быстрое преобразование Фурье: fft.fft(), fft.ifft(), fft.rfft() (для вещественных сигналов), fft.fft2() для 2D (изображения). Используется в обработке сигналов, спектральном анализе, некоторых слоях в нейросетях. Возвращает комплексные тензоры; для вещественного входа rfft экономит память.', PT + 'fft.html') +
-    entry('torch.func', 'Функциональные трансформации: vmap (векторизация по дополнительному измерению), grad, jacrev/jacfwd (якобианы), hessian, checkpoint (экономия памяти). Удобно для кастомной логики с градиентами без явного цикла по батчу или для вторых производных. Замена части устаревшего torch.autograd.functional.', PT + 'func.html') +
-    entry('torch.futures', 'Асинхронные будущие результаты (Future): отложенное выполнение и получение результата позже. Используется внутри распределённого обучения и при асинхронных операциях. Новичку редко нужен.', PT + 'future.html') +
-    entry('torch.fx', 'Framework для трансформации графов моделей: трассировка nn.Module в граф (symbolic trace), замена/вставка узлов, вывод оптимизированного кода. Нужен для квантизации, кастомных компиляторов, анализа графа. Продвинутый инструмент; обычно не требуется на старте.', PT + 'fx.html') +
-    entry('torch.hub', 'Загрузка предобученных моделей и скриптов с репозитория (GitHub). torch.hub.load("pytorch/vision", "resnet18", pretrained=True) — пример. Удобно для воспроизведения чужих моделей и быстрого прототипирования. Документация: список моделей, кэш, свои репозитории.', PT + 'hub.html') +
-    entry('torch.jit', 'TorchScript: компиляция моделей в граф, независимый от Python, для деплоя (C++, мобильные устройства) и оптимизации. trace — запись графа по примеру входа; script — разбор кода с аннотациями. Ограничения: не весь Python поддерживается. Используется при экспорте в production.', PT + 'jit.html') +
-    entry('torch.linalg', 'Линейная алгебра: решения систем (solve, lstsq), разложения (cholesky, svd, qr), нормы (norm), определитель, собственные значения. Аналог numpy.linalg с поддержкой GPU и autograd. Используется в моделях с матричными операциями и в научных расчётах.', PT + 'linalg.html') +
-    entry('torch.monitor', 'Мониторинг событий обучения (логирование, метрики) через подписки. Для интеграции с внешними системами мониторинга.', PT + 'monitor.html') +
-    entry('torch.signal', 'Обработка сигналов: оконные функции, свёртки для сигналов, спектрограммы. Дополнение к torch.fft для задач аудио и одномерных сигналов.', PT + 'signal.html') +
-    entry('torch.special', 'Специальные математические функции: гамма, бета, эрфи, логическая сумма (logsumexp) и т.д. Нужны в вероятностных моделях и некоторых формулах потерь.', PT + 'special.html') +
-    entry('torch.overrides', 'Переопределение поведения встроенных функций PyTorch для своих типов тензоров (кастомные классы с __torch_function__). Продвинутое использование при разработке библиотек поверх PyTorch.', PT + 'overrides.html') +
-    entry('torch.nativert', 'Нативный рантайм для скомпилированных моделей (деплой без Python). Специфичная тема деплоя.', PT + 'nativert.html') +
-    entry('torch.package', 'Упаковка модели и зависимостей в один файл для переноса и деплоя. Альтернатива/дополнение к torch.save и TorchScript.', PT + 'package.html') +
-    entry('torch.profiler', 'Профилирование: замер времени выполнения операций, использование памяти, узкие места. Контекст torch.profiler.profile() с schedule и on_trace_ready; экспорт в Chrome trace. Необходим при оптимизации скорости и памяти.', PT + 'profiler.html') +
-    entry('torch.nn.init', 'Инициализация весов слоёв: init.xavier_uniform_(), init.kaiming_normal_(), init.orthogonal_() и др. Применяются к параметрам модели после создания; влияют на сходимость. По умолчанию многие слои уже имеют разумную инициализацию; кастомная нужна для нестандартных архитектур.', PT + 'nn.init.html') +
-    entry('torch.nn.attention', 'Слои и утилиты для механизма внимания (attention): scaled dot-product, multihead и т.д. Используется в трансформерах. В документации — форматы входа/выхода и параметры (num_heads, dropout).', PT + 'nn.attention.html') +
-    entry('torch.onnx', 'Экспорт модели в формат ONNX для запуска в других фреймворках (ONNX Runtime, TensorRT и т.д.). torch.onnx.export(model, example_input, "model.onnx") — базовый вызов. Нужны при деплое вне PyTorch; некоторые операции требуют обходных путей или неподдерживаются.', PT + 'onnx.html') +
-    entry('Complex Numbers', 'Поддержка комплексных тензоров (dtype complex64, complex128): арифметика, fft, linalg. Нужно в физике, обработке сигналов и части моделей.', PT + 'complex_numbers.html') +
-    entry('DDP Communication Hooks', 'Хуки для кастомной логики синхронизации градиентов в DistributedDataParallel (сжатие, асинхронность и т.д.). Для продвинутой настройки распределённого обучения.', PT + 'ddp.html') +
-    entry('Quantization', 'Квантизация весов и активаций (int8, float16 и др.) для ускорения и уменьшения размера модели на CPU/GPU. Динамическая, статическая и QAT (quantization-aware training). Важно для деплоя на edge и серверах; требует калибровки или дообучения.', PT + 'quantization.html') +
-    entry('Distributed RPC Framework', 'Удалённый вызов процедур (RPC) между процессами: запуск функций на других узлах, передача тензоров. Используется в сложных распределённых сценариях (например части модели на разных машинах).', PT + 'rpc.html') +
-    entry('torch.random', 'Генерация случайных чисел: torch.manual_seed(), torch.randn(), torch.randint() и т.д.; генераторы для воспроизводимости (torch.Generator). Документация по всем случайным функциям и лучшим практикам (установка seed на каждом процессе при DDP).', PT + 'random.html') +
-    entry('torch.masked', 'Операции с масками: masked tensor (тензор с маской пропущенных/невалидных элементов). Для неравномерных последовательностей и пропусков без заполнения нулями.', PT + 'masked.html') +
-    entry('torch.nested', 'Вложенные тензоры (nested tensor): последовательности переменной длины в одном тензоре без паддинга. Экономия памяти и упрощение кода для NLP и аудио.', PT + 'nested.html') +
-    entry('torch.Size', 'Класс размера тензора: результат .shape, поддерживает индексацию и арифметику (например size[0] * size[1]). Используется при проверке форм и динамическом построении слоёв.', PT + 'tensors.html') +
-    entry('torch.sparse', 'Разрежённые тензоры: хранение только ненулевых элементов. Экономия памяти для графов, эмбеддингов с очень большим числом нулей. Операции: sparse_coo_tensor(), to_dense(); не все операции поддерживают sparse.', PT + 'sparse.html') +
-    entry('torch.Storage', 'Низкоуровневое хранилище данных тензора (1D непрерывный буфер). Обычно не используется напрямую; нужно при работе с .data_ptr() или при написании своих расширений.', PT + 'storage.html') +
-    entry('torch.testing', 'Утилиты для тестирования: сравнение тензоров (assert_close), проверка градиентов. Удобно в unit-тестах моделей и слоёв.', PT + 'testing.html') +
-    entry('torch.utils.data', 'Dataset, DataLoader, Sampler и подклассы. Dataset — абстракция датасета (__len__, __getitem__); DataLoader — батчи, shuffle, num_workers; IterableDataset для потоковых данных. Документация по кастомным датасетам, коллайтам (обработка батча) и многопроцессной загрузке.', PT + 'data.html') +
-    entry('torch.utils.checkpoint', 'Gradient checkpointing: пересчёт активаций при backward вместо хранения. Сильно экономит память при обучении глубоких сетей; время обучения увеличивается. Используется когда модель не влезает в GPU.', PT + 'checkpoint.html') +
-    entry('torch.utils.tensorboard', 'Интеграция с TensorBoard: логирование скаляров, графиков, изображений, гистограмм весов. Writer.add_scalar(), add_histogram() и т.д. Стандартный способ визуализации обучения.', PT + 'tensorboard.html') +
-    entry('torch.utils.benchmark / collect_env / flop_counter / cpp_extension / deterministic', 'benchmark — точный замер времени операций (Timer); collect_env — вывод информации о системе и версиях для отчётов об ошибках; flop_counter — подсчёт FLOP; cpp_extension — компиляция своих C++/CUDA расширений; deterministic — включение детерминированных алгоритмов для воспроизводимости. Утилиты для отладки, бенчмарков и расширения PyTorch.', PT + 'utils.html') +
-    entry('Named Tensors', 'Тензоры с именованными осями: например tensor("batch", "channel", "height", "width"). Удобно для читаемости и уменьшения ошибок с порядком размерностей. Поддержка в операциях и постепенное расширение покрытия.', PT + 'named_tensor.html') +
-    entry('Type Info / torch.__config__ / Environment Variables', 'Type Info — аннотации типов для статической проверки. __config__ — информация о сборке PyTorch. Переменные окружения управляют поведением (CUDA_VISIBLE_DEVICES, TORCH_*, и т.д.). Документация по конфигурации и отладке окружения.', PT + 'index.html') +
-    '<p class="ref-section-link"><a href="' + PT + 'index.html" target="_blank" rel="noopener noreferrer">PyTorch Documentation — полный индекс (официальный сайт)</a></p>';
-
-  // Экспорт в глобальный REFERENCES
-  window.REFERENCES = [
-    { id: 'numpy-reference', title: 'NumPy — полный справочник команд', shortDesc: 'Все основные функции: как в коде, детали, ссылки на официальную документацию', theory: numpyTheory },
-    { id: 'pandas-reference', title: 'Pandas — полный справочник команд', shortDesc: 'DataFrame, Series: загрузка, выборка, очистка, группировка; код и официальные ссылки', theory: pandasTheory },
-    { id: 'sklearn-reference', title: 'scikit-learn — полный справочник команд', shortDesc: 'Модели, препроцессинг, разбиение, метрики; код и официальные ссылки', theory: sklearnTheory },
-    { id: 'opencv-reference', title: 'OpenCV (cv2) — полный справочник: работа с изображениями', shortDesc: 'Загрузка, фильтры, контуры, рисование; код и официальные ссылки', theory: opencvTheory },
-    { id: 'pytorch-reference', title: 'PyTorch — полный справочник команд', shortDesc: 'Тензоры, nn.Module, оптимизаторы, loss; код и официальная документация', theory: pytorchTheory }
-  ];
-})();
+];

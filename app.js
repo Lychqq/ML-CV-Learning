@@ -42,7 +42,8 @@
   });
 
   function renderTopicCards() {
-    var cardsHtml = LESSONS.map(function (l) {
+    var cardsHtml = '<h3 class="topic-section-title">Уроки</h3>';
+    cardsHtml += LESSONS.map(function (l) {
       return (
         '<div class="topic-card" data-lesson-id="' + l.id + '">' +
         '<h3>' + escapeHtml(l.title) + '</h3>' +
@@ -50,16 +51,24 @@
         '</div>'
       );
     }).join('');
+
     if (typeof REFERENCES !== 'undefined' && REFERENCES.length) {
-      cardsHtml += '<h3 class="topic-section-title">Справочники команд</h3>';
-      cardsHtml += REFERENCES.map(function (r) {
-        return (
-          '<div class="topic-card topic-card-ref" data-ref-id="' + r.id + '">' +
-          '<h3>' + escapeHtml(r.title) + '</h3>' +
-          '<p>' + escapeHtml(r.shortDesc) + '</p>' +
+      cardsHtml += '<h3 class="topic-section-title">Справочники библиотек</h3>';
+
+      var libs = {};
+      REFERENCES.forEach(function(r) {
+        if (!libs[r.library]) libs[r.library] = 0;
+        libs[r.library]++;
+      });
+
+      Object.keys(libs).forEach(function(lib) {
+        cardsHtml += (
+          '<div class="topic-card topic-card-ref-lib" data-lib="' + escapeHtml(lib) + '">' +
+          '<h3>' + escapeHtml(lib) + '</h3>' +
+          '<p>Справочник команд (' + libs[lib] + ' статей)</p>' +
           '</div>'
         );
-      }).join('');
+      });
     }
     topicCards.innerHTML = cardsHtml;
     topicCards.querySelectorAll('.topic-card[data-lesson-id]').forEach(function (card) {
@@ -69,11 +78,10 @@
         openLesson(card.dataset.lessonId);
       });
     });
-    topicCards.querySelectorAll('.topic-card-ref').forEach(function (card) {
+    topicCards.querySelectorAll('.topic-card-ref-lib').forEach(function (card) {
       card.addEventListener('click', function () {
         showView('references');
         renderReferencesList();
-        openReference(card.dataset.refId);
       });
     });
   }
@@ -102,20 +110,31 @@
 
   function renderReferencesList() {
     if (typeof REFERENCES === 'undefined' || !referencesList) return;
-    referencesList.innerHTML = REFERENCES.map(function (r) {
-      return (
-        '<div class="lesson-item ref-item" data-ref-id="' +
-        r.id +
-        '">' +
-        '<h3>' +
-        escapeHtml(r.title) +
-        '</h3>' +
-        '<span>' +
-        escapeHtml(r.shortDesc) +
-        '</span>' +
-        '</div>'
-      );
-    }).join('');
+
+    // Group references by library
+    var libs = {};
+    REFERENCES.forEach(function(r) {
+      if (!libs[r.library]) libs[r.library] = [];
+      libs[r.library].push(r);
+    });
+
+    var html = '';
+    Object.keys(libs).forEach(function(libName) {
+      html += '<div class="library-section">';
+      html += '<h2 class="library-title" style="margin-top: 2rem; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; color: #94a3b8;">' + escapeHtml(libName) + '</h2>';
+      html += '<div class="library-items" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">';
+
+      libs[libName].forEach(function(r) {
+        html += '<div class="lesson-item ref-item" data-ref-id="' + r.id + '" style="margin-bottom: 0;">';
+        html += '<h3 style="margin-top:0; color: #60a5fa;">' + escapeHtml(r.title) + '</h3>';
+        html += '<span style="font-size: 0.9rem; color: #cbd5e1;">' + escapeHtml(r.shortDesc) + '</span>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    });
+
+    referencesList.innerHTML = html;
+
     referencesList.querySelectorAll('.ref-item').forEach(function (item) {
       item.addEventListener('click', function () {
         openReference(item.dataset.refId);
@@ -131,198 +150,34 @@
     const ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === id; });
     if (!ref) return;
 
-    // Populate sidebar with Table of Contents
+    // Remove sidebar for individual function references
     const sidebar = document.getElementById('lesson-sidebar');
     if (sidebar) {
-      const headings = Array.from(new DOMParser().parseFromString(ref.theory, 'text/html').querySelectorAll('h3, h4'));
-      if (headings.length > 0) {
-        let tocHtml = '<h3>Содержание</h3><ul>';
-        headings.forEach(function(h, index) {
-          const idStr = 'ref-heading-' + index;
-          // Note: we can't easily modify the parsed HTML back into ref.theory string safely without regex
-          // We'll inject IDs during rendering below
-          tocHtml += '<li><a href="#' + idStr + '">' + escapeHtml(h.textContent) + '</a></li>';
-        });
-        tocHtml += '</ul>';
-        sidebar.innerHTML = tocHtml;
-        sidebar.style.display = 'block';
-      } else {
-        sidebar.innerHTML = '';
-        sidebar.style.display = 'none';
-      }
+      sidebar.innerHTML = '';
+      sidebar.style.display = 'none';
     }
 
-    // Inject IDs into headings for TOC linking
-    let modifiedTheory = ref.theory;
-    let headingIndex = 0;
-    modifiedTheory = modifiedTheory.replace(/<(h[34])(.*?)>/g, function(match, tag, rest) {
-      if (rest.includes('id=')) return match;
-      return '<' + tag + ' id="ref-heading-' + (headingIndex++) + '"' + rest + '>';
-    });
+    lessonContent.innerHTML = '<h2>' + escapeHtml(ref.title) + ' <span style="font-size: 0.6em; color: #94a3b8; font-weight: normal;">(' + escapeHtml(ref.library) + ')</span></h2>' + ref.theory;
 
-    let html = '<h2>' + escapeHtml(ref.title) + '</h2>';
-    html += '<div class="lesson-theory reference-content">' + modifiedTheory.trim() + '</div>';
-    lessonContent.innerHTML = html;
-
-    // Setup smooth scroll for sidebar links
-    if (sidebar) {
-      sidebar.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const targetEl = document.getElementById(targetId);
-          if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
-      });
-    }
-
-    if (typeof window.initRefRunButtons === 'function') window.initRefRunButtons(lessonContent);
-    document.getElementById('back-from-lesson').textContent = '← Назад к справочникам';
-
-    // Re-trigger MathJax rendering if it's available
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([lessonContent]).catch(function (err) {
-        console.error('MathJax typeset failed: ' + err.message);
-      });
-    }
-  }
-
-  function openLesson(id) {
-    currentLessonId = id;
-    window.currentLessonForAI = id;
-    var ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === id; });
-    if (ref) {
-      openReference(id);
-      return;
-    }
-    currentIsReference = false;
-    showView('lesson');
-    document.getElementById('back-from-lesson').textContent = '← Назад к урокам';
-    const lesson = LESSONS.find(function (l) {
-      return l.id === id;
-    });
-    if (!lesson) return;
-
-    let html = '<h2>' + escapeHtml(lesson.title) + '</h2>';
-    html += '<div class="lesson-theory">' + lesson.theory.trim() + '</div>';
-
-    fillInInputs = [];
-    let fillIndex = 0;
-
-    (lesson.codeBlocks || []).forEach(function (block) {
-      html += '<div class="code-block">';
-      block.lines.forEach(function (line) {
-        if (line.type === 'text') {
-          html += '<div class="code-line">' + escapeHtml(line.content) + '</div>';
-        } else if (line.type === 'hint') {
-          html +=
-            '<div class="code-line"><span class="hint-trigger" title="' +
-            escapeAttr(line.hint) +
-            '">' +
-            escapeHtml(line.content) +
-            '</span></div>';
-        } else if (line.type === 'fill') {
-          const inputId = 'fill-' + fillIndex;
-          fillInInputs.push({
-            id: inputId,
-            correct: normalizeAnswer(line.correct),
-          });
-          html +=
-            '<div class="code-line">' +
-            escapeHtml(line.content) +
-            '<input type="text" class="fill-in" id="' +
-            inputId +
-            '" placeholder="' +
-            escapeAttr(line.placeholder || '???') +
-            '" data-correct="' +
-            escapeAttr(line.correct) +
-            '">' +
-            '</div>';
-          fillIndex++;
+    // Render code blocks
+    if (ref.codeBlocks && ref.codeBlocks.length > 0) {
+      ref.codeBlocks.forEach(function (block) {
+        const container = document.getElementById('code-block-' + block.id);
+        if (container) {
+          container.innerHTML = '';
+          renderCodeBlock(block, container);
         }
       });
-      html += '</div>';
-    });
+    }
 
-    html +=
-      '<div class="check-section">' +
-      '<button type="button" class="check-btn" id="check-answers">Проверить ответы</button>' +
-      '<div class="check-result" id="check-result" style="display:none"></div>' +
-      '</div>';
-
-    lessonContent.innerHTML = html;
-
-    lessonContent.querySelectorAll('.hint-trigger').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        showTooltip(e.target, e.target.getAttribute('title'));
+    if (window.MathJax) {
+      window.MathJax.typesetPromise([lessonContent]).catch(function (err) {
+        console.error('MathJax error:', err);
       });
-    });
-
-    document.getElementById('check-answers').addEventListener('click', checkAnswers);
-  }
-
-  function normalizeAnswer(s) {
-    if (!s) return '';
-    return s
-      .trim()
-      .replace(/\s+/g, ' ')
-      .replace(/\s*\(\s*\)\s*$/, '')
-      .toLowerCase();
-  }
-
-  function checkAnswers() {
-    const resultEl = document.getElementById('check-result');
-    let allOk = true;
-    fillInInputs.forEach(function (f) {
-      const input = document.getElementById(f.id);
-      if (!input) return;
-      const value = normalizeAnswer(input.value);
-      const ok = value === f.correct;
-      input.classList.remove('correct', 'wrong');
-      input.classList.add(ok ? 'correct' : 'wrong');
-      if (!ok) allOk = false;
-    });
-    resultEl.style.display = 'block';
-    resultEl.className = 'check-result ' + (allOk ? 'success' : 'fail');
-    resultEl.textContent = allOk
-      ? 'Всё верно! Можешь переходить к следующему уроку.'
-      : 'Есть ошибки. Посмотри подсказки (подчёркнутые пунктиром) и исправь ввод.';
-  }
-
-  let tooltipEl = null;
-  function showTooltip(anchor, text) {
-    if (tooltipEl) {
-      tooltipEl.remove();
-      tooltipEl = null;
     }
-    if (!text) return;
-    tooltipEl = document.createElement('div');
-    tooltipEl.className = 'tooltip';
-    tooltipEl.textContent = text;
-    document.body.appendChild(tooltipEl);
-    const rect = anchor.getBoundingClientRect();
-    tooltipEl.style.left = rect.left + 'px';
-    tooltipEl.style.top = rect.bottom + 6 + 'px';
-    setTimeout(function () {
-      if (tooltipEl) {
-        tooltipEl.remove();
-        tooltipEl = null;
-      }
-    }, 5000);
-  }
 
-  backFromLesson.addEventListener('click', function () {
-    window.currentLessonForAI = null;
-    if (currentIsReference) {
-      showView('references');
-      renderReferencesList();
-    } else {
-      showView('lessons');
-      renderLessonsList();
-    }
-  });
+    window.scrollTo(0, 0);
+  }
 
   function renderSandbox() {
     const d = SANDBOX_DEFAULTS;
