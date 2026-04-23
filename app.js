@@ -1,3 +1,31 @@
+
+/* Inject responsive styling dynamically to avoid changing styles.css */
+const style = document.createElement('style');
+style.innerHTML = `
+  @media (max-width: 768px) {
+    #view-references > div {
+      flex-direction: column !important;
+    }
+    .ref-sidebar {
+      width: 100% !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .ref-sidebar ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .ref-sidebar li {
+      margin-bottom: 0 !important;
+      flex: 1 1 calc(50% - 0.5rem);
+    }
+    .ref-lib-btn {
+      text-align: center !important;
+    }
+  }
+`;
+document.head.appendChild(style);
 (function () {
   const main = document.querySelector('.main');
   const views = {
@@ -42,8 +70,7 @@
   });
 
   function renderTopicCards() {
-    var cardsHtml = '<h3 class="topic-section-title">Уроки</h3>';
-    cardsHtml += LESSONS.map(function (l) {
+    var cardsHtml = LESSONS.map(function (l) {
       return (
         '<div class="topic-card" data-lesson-id="' + l.id + '">' +
         '<h3>' + escapeHtml(l.title) + '</h3>' +
@@ -52,36 +79,12 @@
       );
     }).join('');
 
-    if (typeof REFERENCES !== 'undefined' && REFERENCES.length) {
-      cardsHtml += '<h3 class="topic-section-title">Справочники библиотек</h3>';
-
-      var libs = {};
-      REFERENCES.forEach(function(r) {
-        if (!libs[r.library]) libs[r.library] = 0;
-        libs[r.library]++;
-      });
-
-      Object.keys(libs).forEach(function(lib) {
-        cardsHtml += (
-          '<div class="topic-card topic-card-ref-lib" data-lib="' + escapeHtml(lib) + '">' +
-          '<h3>' + escapeHtml(lib) + '</h3>' +
-          '<p>Справочник команд (' + libs[lib] + ' статей)</p>' +
-          '</div>'
-        );
-      });
-    }
     topicCards.innerHTML = cardsHtml;
     topicCards.querySelectorAll('.topic-card[data-lesson-id]').forEach(function (card) {
       card.addEventListener('click', function () {
         showView('lessons');
         renderLessonsList();
         openLesson(card.dataset.lessonId);
-      });
-    });
-    topicCards.querySelectorAll('.topic-card-ref-lib').forEach(function (card) {
-      card.addEventListener('click', function () {
-        showView('references');
-        renderReferencesList();
       });
     });
   }
@@ -118,28 +121,62 @@
       libs[r.library].push(r);
     });
 
-    var html = '';
-    Object.keys(libs).forEach(function(libName) {
-      html += '<div class="library-section">';
-      html += '<h2 class="library-title" style="margin-top: 2rem; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; color: #94a3b8;">' + escapeHtml(libName) + '</h2>';
-      html += '<div class="library-items" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">';
+    // Create a 2-column layout for the references view
+    let html = '<div style="display: flex; gap: 2rem;">';
 
-      libs[libName].forEach(function(r) {
-        html += '<div class="lesson-item ref-item" data-ref-id="' + r.id + '" style="margin-bottom: 0;">';
-        html += '<h3 style="margin-top:0; color: #60a5fa;">' + escapeHtml(r.title) + '</h3>';
-        html += '<span style="font-size: 0.9rem; color: #cbd5e1;">' + escapeHtml(r.shortDesc) + '</span>';
-        html += '</div>';
-      });
-      html += '</div></div>';
+    // LEFT SIDEBAR (Menu for libraries)
+    html += '<div style="width: 250px; flex-shrink: 0;" class="ref-sidebar">';
+    html += '<h3 style="margin-top: 0;">Библиотеки</h3>';
+    html += '<ul style="list-style: none; padding: 0;">';
+    Object.keys(libs).forEach(function(libName) {
+      html += '<li style="margin-bottom: 0.5rem;"><button class="ref-lib-btn" data-lib="' + escapeHtml(libName) + '" style="width: 100%; text-align: left; background: #334155; border: none; padding: 0.75rem 1rem; border-radius: 6px; color: white; cursor: pointer; transition: background 0.2s;">' + escapeHtml(libName) + ' (' + libs[libName].length + ')</button></li>';
     });
+    html += '</ul></div>';
+
+    // RIGHT CONTENT (List of functions for selected library)
+    html += '<div id="ref-content-area" style="flex-grow: 1;">';
+    html += '<p style="color: #94a3b8;">Выберите библиотеку в меню слева.</p>';
+    html += '</div></div>';
 
     referencesList.innerHTML = html;
 
-    referencesList.querySelectorAll('.ref-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        openReference(item.dataset.refId);
+    // Logic to render functions when clicking a library
+    const renderFuncsForLib = function(libName) {
+      const area = document.getElementById('ref-content-area');
+      let funcsHtml = '<h2 style="margin-top: 0; color: #60a5fa; border-bottom: 1px solid #334155; padding-bottom: 0.5rem;">' + escapeHtml(libName) + '</h2>';
+      funcsHtml += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">';
+
+      libs[libName].forEach(function(r) {
+        funcsHtml += '<div class="lesson-item ref-item" data-ref-id="' + r.id + '" style="margin-bottom: 0;">';
+        funcsHtml += '<h3 style="margin-top:0; color: #e2e8f0; font-size: 1.1rem; word-break: break-all;">' + escapeHtml(r.title) + '</h3>';
+        funcsHtml += '<span style="font-size: 0.9rem; color: #94a3b8; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + escapeHtml(r.shortDesc) + '</span>';
+        funcsHtml += '</div>';
+      });
+      funcsHtml += '</div>';
+      area.innerHTML = funcsHtml;
+
+      // Bind clicks to individual functions
+      area.querySelectorAll('.ref-item').forEach(function (item) {
+        item.addEventListener('click', function () {
+          openReference(item.dataset.refId);
+        });
+      });
+    };
+
+    // Bind clicks to library sidebar buttons
+    referencesList.querySelectorAll('.ref-lib-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        referencesList.querySelectorAll('.ref-lib-btn').forEach(b => b.style.background = '#334155');
+        btn.style.background = '#60a5fa'; // Active color
+        renderFuncsForLib(btn.dataset.lib);
       });
     });
+
+    // Default open the first library (NumPy)
+    if (Object.keys(libs).length > 0) {
+      const firstLibBtn = referencesList.querySelector('.ref-lib-btn');
+      if(firstLibBtn) firstLibBtn.click();
+    }
   }
 
   function openReference(id) {
