@@ -1,7 +1,7 @@
 const fs = require('fs');
 const acorn = require('acorn');
 try {
-    const code = fs.readFileSync('c:/Users/Lenovo/Desktop/ML-CV-Learning/references.js', 'utf8');
+    const code = fs.readFileSync('./references.js', 'utf8');
     acorn.parse(code, {ecmaVersion: 2020});
     console.log('Syntax OK');
 } catch (e) {
