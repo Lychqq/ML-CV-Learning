@@ -6,6 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ML и Computer Vision — Интерактивное обучение</title>
   <link rel="stylesheet" href="styles.css">
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
 </head>
 
 <body>
@@ -49,7 +58,10 @@
     <!-- Конкретный урок или справочник -->
     <section id="view-lesson" class="view">
       <button class="back-btn" id="back-from-lesson">← Назад</button>
-      <div class="lesson-content" id="lesson-content"></div>
+      <div class="lesson-layout">
+        <aside class="lesson-sidebar" id="lesson-sidebar"></aside>
+        <div class="lesson-content" id="lesson-content"></div>
+      </div>
     </section>
 
     <!-- Флеш-карточки -->

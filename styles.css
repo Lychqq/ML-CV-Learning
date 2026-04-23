@@ -311,6 +311,60 @@ body {
 }
 .back-btn:hover { border-color: var(--accent); color: var(--accent); }
 
+/* Конкретный урок / Справочник */
+.lesson-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  position: relative;
+}
+
+.lesson-sidebar {
+  flex: 0 0 250px;
+  position: sticky;
+  top: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  display: none;
+}
+
+.lesson-sidebar h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.lesson-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.lesson-sidebar li {
+  margin-bottom: 0.5rem;
+}
+
+.lesson-sidebar a {
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.lesson-sidebar a:hover {
+  color: var(--accent);
+}
+
+.lesson-content {
+  flex: 1;
+  min-width: 0;
+}
+
 .lesson-content h2 { margin-top: 0; }
 .lesson-theory {
   background: var(--surface);

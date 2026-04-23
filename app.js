@@ -130,11 +130,63 @@
     showView('lesson');
     const ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === id; });
     if (!ref) return;
+
+    // Populate sidebar with Table of Contents
+    const sidebar = document.getElementById('lesson-sidebar');
+    if (sidebar) {
+      const headings = Array.from(new DOMParser().parseFromString(ref.theory, 'text/html').querySelectorAll('h3, h4'));
+      if (headings.length > 0) {
+        let tocHtml = '<h3>Содержание</h3><ul>';
+        headings.forEach(function(h, index) {
+          const idStr = 'ref-heading-' + index;
+          // Note: we can't easily modify the parsed HTML back into ref.theory string safely without regex
+          // We'll inject IDs during rendering below
+          tocHtml += '<li><a href="#' + idStr + '">' + escapeHtml(h.textContent) + '</a></li>';
+        });
+        tocHtml += '</ul>';
+        sidebar.innerHTML = tocHtml;
+        sidebar.style.display = 'block';
+      } else {
+        sidebar.innerHTML = '';
+        sidebar.style.display = 'none';
+      }
+    }
+
+    // Inject IDs into headings for TOC linking
+    let modifiedTheory = ref.theory;
+    let headingIndex = 0;
+    modifiedTheory = modifiedTheory.replace(/<(h[34])(.*?)>/g, function(match, tag, rest) {
+      if (rest.includes('id=')) return match;
+      return '<' + tag + ' id="ref-heading-' + (headingIndex++) + '"' + rest + '>';
+    });
+
     let html = '<h2>' + escapeHtml(ref.title) + '</h2>';
-    html += '<div class="lesson-theory reference-content">' + ref.theory.trim() + '</div>';
+    html += '<div class="lesson-theory reference-content">' + modifiedTheory.trim() + '</div>';
     lessonContent.innerHTML = html;
+
+    // Setup smooth scroll for sidebar links
+    if (sidebar) {
+      sidebar.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').substring(1);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    }
+
     if (typeof window.initRefRunButtons === 'function') window.initRefRunButtons(lessonContent);
     document.getElementById('back-from-lesson').textContent = '← Назад к справочникам';
+
+    // Re-trigger MathJax rendering if it's available
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([lessonContent]).catch(function (err) {
+        console.error('MathJax typeset failed: ' + err.message);
+      });
+    }
   }
 
   function openLesson(id) {
