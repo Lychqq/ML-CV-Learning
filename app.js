@@ -1,4 +1,30 @@
 
+/* Responsive Master-Detail layout for mobile */
+const style2 = document.createElement('style');
+style2.innerHTML = `
+  @media (max-width: 768px) {
+    #view-references > div {
+      flex-direction: column !important;
+      height: auto !important;
+    }
+    .ref-sidebar {
+      width: 100% !important;
+      height: auto !important;
+      border-right: none !important;
+      padding-right: 0 !important;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      max-height: 40vh;
+    }
+    #ref-detail-area {
+      height: auto !important;
+      padding-left: 0 !important;
+    }
+  }
+`;
+document.head.appendChild(style2);
+
 /* Inject responsive styling dynamically to avoid changing styles.css */
 const style = document.createElement('style');
 style.innerHTML = `
@@ -121,62 +147,106 @@ document.head.appendChild(style);
       libs[r.library].push(r);
     });
 
-    // Create a 2-column layout for the references view
-    let html = '<div style="display: flex; gap: 2rem;">';
+    // Create Master-Detail layout
+    let html = '<div style="display: flex; gap: 2rem; align-items: flex-start; height: calc(100vh - 150px);">';
 
-    // LEFT SIDEBAR (Menu for libraries)
-    html += '<div style="width: 250px; flex-shrink: 0;" class="ref-sidebar">';
-    html += '<h3 style="margin-top: 0;">Библиотеки</h3>';
-    html += '<ul style="list-style: none; padding: 0;">';
+    // LEFT SIDEBAR (Menu for libraries and their functions)
+    html += '<div class="ref-sidebar" style="width: 320px; flex-shrink: 0; overflow-y: auto; height: 100%; border-right: 1px solid #334155; padding-right: 1rem;">';
+    html += '<h3 style="margin-top: 0; color: #e2e8f0; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem;">Справочник команд</h3>';
+
     Object.keys(libs).forEach(function(libName) {
-      html += '<li style="margin-bottom: 0.5rem;"><button class="ref-lib-btn" data-lib="' + escapeHtml(libName) + '" style="width: 100%; text-align: left; background: #334155; border: none; padding: 0.75rem 1rem; border-radius: 6px; color: white; cursor: pointer; transition: background 0.2s;">' + escapeHtml(libName) + ' (' + libs[libName].length + ')</button></li>';
-    });
-    html += '</ul></div>';
+      html += '<div class="ref-lib-section" style="margin-bottom: 0.5rem;">';
+      html += '<button class="ref-lib-btn" data-lib="' + escapeHtml(libName) + '" style="width: 100%; text-align: left; background: #1e293b; border: 1px solid #334155; padding: 0.75rem 1rem; border-radius: 6px; color: white; cursor: pointer; transition: background 0.2s; font-weight: bold; display: flex; justify-content: space-between;">';
+      html += '<span>' + escapeHtml(libName) + '</span><span class="chevron">▼</span></button>';
 
-    // RIGHT CONTENT (List of functions for selected library)
-    html += '<div id="ref-content-area" style="flex-grow: 1;">';
-    html += '<p style="color: #94a3b8;">Выберите библиотеку в меню слева.</p>';
+      // List of functions (hidden by default)
+      html += '<ul class="ref-func-list" id="ref-list-' + escapeHtml(libName).replace(/[^a-zA-Z]/g, '') + '" style="list-style: none; padding: 0.5rem 0 0 0.5rem; margin: 0; display: none;">';
+      libs[libName].forEach(function(r) {
+        html += '<li style="margin-bottom: 0.2rem;">';
+        html += '<button class="ref-func-item" data-ref-id="' + r.id + '" style="width: 100%; text-align: left; background: transparent; border: none; padding: 0.5rem 0.5rem; border-radius: 4px; color: #94a3b8; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + escapeHtml(r.title) + '</button>';
+        html += '</li>';
+      });
+      html += '</ul>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // RIGHT CONTENT (Detail view)
+    html += '<div id="ref-detail-area" style="flex-grow: 1; overflow-y: auto; height: 100%; padding-left: 1rem;">';
+    html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #64748b; text-align: center;">';
+    html += '<svg style="width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
+    html += '<h3>Выберите команду слева</h3><p>Нажмите на категорию библиотеки, чтобы раскрыть список функций и методов, затем выберите нужную для просмотра деталей и примеров кода.</p>';
+    html += '</div>';
     html += '</div></div>';
 
     referencesList.innerHTML = html;
 
-    // Logic to render functions when clicking a library
-    const renderFuncsForLib = function(libName) {
-      const area = document.getElementById('ref-content-area');
-      let funcsHtml = '<h2 style="margin-top: 0; color: #60a5fa; border-bottom: 1px solid #334155; padding-bottom: 0.5rem;">' + escapeHtml(libName) + '</h2>';
-      funcsHtml += '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">';
+    // Logic to render function details directly into the right area (no view switching)
+    const renderFuncDetail = function(refId) {
+      const area = document.getElementById('ref-detail-area');
+      const ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === refId; });
+      if (!ref) return;
 
-      libs[libName].forEach(function(r) {
-        funcsHtml += '<div class="lesson-item ref-item" data-ref-id="' + r.id + '" style="margin-bottom: 0;">';
-        funcsHtml += '<h3 style="margin-top:0; color: #e2e8f0; font-size: 1.1rem; word-break: break-all;">' + escapeHtml(r.title) + '</h3>';
-        funcsHtml += '<span style="font-size: 0.9rem; color: #94a3b8; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + escapeHtml(r.shortDesc) + '</span>';
-        funcsHtml += '</div>';
-      });
-      funcsHtml += '</div>';
-      area.innerHTML = funcsHtml;
+      let content = '<h2 style="margin-top: 0; margin-bottom: 5px; font-size: 2rem;">' + escapeHtml(ref.title) + ' <span style="font-size: 0.5em; color: #64748b; font-weight: normal; vertical-align: middle; background: #1e293b; padding: 2px 8px; border-radius: 12px;">' + escapeHtml(ref.library) + '</span></h2>';
+      content += '<p style="color: #94a3b8; font-style: italic; margin-bottom: 30px;">' + escapeHtml(ref.shortDesc) + '</p>';
+      content += ref.theory;
 
-      // Bind clicks to individual functions
-      area.querySelectorAll('.ref-item').forEach(function (item) {
-        item.addEventListener('click', function () {
-          openReference(item.dataset.refId);
+      area.innerHTML = content;
+      area.scrollTo(0, 0);
+
+      // Render code blocks
+      if (ref.codeBlocks && ref.codeBlocks.length > 0) {
+        ref.codeBlocks.forEach(function (block) {
+          const container = document.getElementById('code-block-' + block.id);
+          if (container) {
+            container.innerHTML = '';
+            renderCodeBlock(block, container);
+          }
         });
-      });
+      }
+      if (window.MathJax) {
+        window.MathJax.typesetPromise([area]).catch(console.error);
+      }
     };
 
-    // Bind clicks to library sidebar buttons
+    // Bind Accordion Clicks
     referencesList.querySelectorAll('.ref-lib-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        referencesList.querySelectorAll('.ref-lib-btn').forEach(b => b.style.background = '#334155');
-        btn.style.background = '#60a5fa'; // Active color
-        renderFuncsForLib(btn.dataset.lib);
+        const list = btn.nextElementSibling;
+        const chevron = btn.querySelector('.chevron');
+        if (list.style.display === 'none') {
+          list.style.display = 'block';
+          btn.style.background = '#334155';
+          chevron.textContent = '▲';
+        } else {
+          list.style.display = 'none';
+          btn.style.background = '#1e293b';
+          chevron.textContent = '▼';
+        }
       });
     });
 
-    // Default open the first library (NumPy)
-    if (Object.keys(libs).length > 0) {
-      const firstLibBtn = referencesList.querySelector('.ref-lib-btn');
-      if(firstLibBtn) firstLibBtn.click();
-    }
+    // Bind Function Clicks
+    referencesList.querySelectorAll('.ref-func-item').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        referencesList.querySelectorAll('.ref-func-item').forEach(b => {
+            b.style.color = '#94a3b8';
+            b.style.background = 'transparent';
+        });
+        btn.style.color = '#ffffff';
+        btn.style.background = '#2563eb';
+        renderFuncDetail(btn.dataset.refId);
+
+        // On mobile, optionally scroll to content
+        if (window.innerWidth <= 768) {
+           document.getElementById('ref-detail-area').scrollIntoView({behavior: 'smooth'});
+        }
+      });
+    });
+
+    // Open first library accordion by default
+    const firstLibBtn = referencesList.querySelector('.ref-lib-btn');
+    if(firstLibBtn) firstLibBtn.click();
   }
 
   function openReference(id) {
