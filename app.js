@@ -137,7 +137,28 @@ document.head.appendChild(style);
     });
   }
 
+
+  // Render a code block for references (plain code, runnable via pyodide)
+  function renderCodeBlock(block, container) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ref-entry'; // runcode.js expects this
+    wrapper.style.marginBottom = '2rem';
+
+    wrapper.innerHTML = `
+      <pre class="ref-code" style="background: #1e293b; padding: 1rem; border-radius: 6px; overflow-x: auto; color: #e2e8f0; font-family: monospace;"><code>${escapeHtml(block.initialCode)}</code></pre>
+      <button class="ref-run-btn" style="margin-top: 0.5rem; background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold;">▶ Запустить код</button>
+      <div class="ref-output" style="display: none; background: #0f172a; color: #a7f3d0; padding: 1rem; border-radius: 6px; margin-top: 0.5rem; font-family: monospace; white-space: pre-wrap;"></div>
+    `;
+
+    container.appendChild(wrapper);
+
+    if (window.initRefRunButtons) {
+      window.initRefRunButtons(wrapper);
+    }
+  }
+
   function renderReferencesList() {
+
     if (typeof REFERENCES === 'undefined' || !referencesList) return;
 
     // Group references by library
