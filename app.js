@@ -1,3 +1,57 @@
+
+/* Responsive Master-Detail layout for mobile */
+const style2 = document.createElement('style');
+style2.innerHTML = `
+  @media (max-width: 768px) {
+    #view-references > div {
+      flex-direction: column !important;
+      height: auto !important;
+    }
+    .ref-sidebar {
+      width: 100% !important;
+      height: auto !important;
+      border-right: none !important;
+      padding-right: 0 !important;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      max-height: 40vh;
+    }
+    #ref-detail-area {
+      height: auto !important;
+      padding-left: 0 !important;
+    }
+  }
+`;
+document.head.appendChild(style2);
+
+/* Inject responsive styling dynamically to avoid changing styles.css */
+const style = document.createElement('style');
+style.innerHTML = `
+  @media (max-width: 768px) {
+    #view-references > div {
+      flex-direction: column !important;
+    }
+    .ref-sidebar {
+      width: 100% !important;
+      display: flex;
+      flex-direction: column;
+    }
+    .ref-sidebar ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .ref-sidebar li {
+      margin-bottom: 0 !important;
+      flex: 1 1 calc(50% - 0.5rem);
+    }
+    .ref-lib-btn {
+      text-align: center !important;
+    }
+  }
+`;
+document.head.appendChild(style);
 (function () {
   const main = document.querySelector('.main');
   const views = {
@@ -50,30 +104,13 @@
         '</div>'
       );
     }).join('');
-    if (typeof REFERENCES !== 'undefined' && REFERENCES.length) {
-      cardsHtml += '<h3 class="topic-section-title">Справочники команд</h3>';
-      cardsHtml += REFERENCES.map(function (r) {
-        return (
-          '<div class="topic-card topic-card-ref" data-ref-id="' + r.id + '">' +
-          '<h3>' + escapeHtml(r.title) + '</h3>' +
-          '<p>' + escapeHtml(r.shortDesc) + '</p>' +
-          '</div>'
-        );
-      }).join('');
-    }
+
     topicCards.innerHTML = cardsHtml;
     topicCards.querySelectorAll('.topic-card[data-lesson-id]').forEach(function (card) {
       card.addEventListener('click', function () {
         showView('lessons');
         renderLessonsList();
         openLesson(card.dataset.lessonId);
-      });
-    });
-    topicCards.querySelectorAll('.topic-card-ref').forEach(function (card) {
-      card.addEventListener('click', function () {
-        showView('references');
-        renderReferencesList();
-        openReference(card.dataset.refId);
       });
     });
   }
@@ -100,27 +137,137 @@
     });
   }
 
+
+  // Render a code block for references (plain code, runnable via pyodide)
+  function renderCodeBlock(block, container) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ref-entry'; // runcode.js expects this
+    wrapper.style.marginBottom = '2rem';
+
+    wrapper.innerHTML = `
+      <pre class="ref-code" style="background: #1e293b; padding: 1rem; border-radius: 6px; overflow-x: auto; color: #e2e8f0; font-family: monospace;"><code>${escapeHtml(block.initialCode)}</code></pre>
+      <button class="ref-run-btn" style="margin-top: 0.5rem; background: #10b981; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: bold;">▶ Запустить код</button>
+      <div class="ref-output" style="display: none; background: #0f172a; color: #a7f3d0; padding: 1rem; border-radius: 6px; margin-top: 0.5rem; font-family: monospace; white-space: pre-wrap;"></div>
+    `;
+
+    container.appendChild(wrapper);
+
+    if (window.initRefRunButtons) {
+      window.initRefRunButtons(wrapper);
+    }
+  }
+
   function renderReferencesList() {
+
     if (typeof REFERENCES === 'undefined' || !referencesList) return;
-    referencesList.innerHTML = REFERENCES.map(function (r) {
-      return (
-        '<div class="lesson-item ref-item" data-ref-id="' +
-        r.id +
-        '">' +
-        '<h3>' +
-        escapeHtml(r.title) +
-        '</h3>' +
-        '<span>' +
-        escapeHtml(r.shortDesc) +
-        '</span>' +
-        '</div>'
-      );
-    }).join('');
-    referencesList.querySelectorAll('.ref-item').forEach(function (item) {
-      item.addEventListener('click', function () {
-        openReference(item.dataset.refId);
+
+    // Group references by library
+    var libs = {};
+    REFERENCES.forEach(function(r) {
+      if (!libs[r.library]) libs[r.library] = [];
+      libs[r.library].push(r);
+    });
+
+    // Create Master-Detail layout
+    let html = '<div style="display: flex; gap: 2rem; align-items: flex-start; height: calc(100vh - 150px);">';
+
+    // LEFT SIDEBAR (Menu for libraries and their functions)
+    html += '<div class="ref-sidebar" style="width: 320px; flex-shrink: 0; overflow-y: auto; height: 100%; border-right: 1px solid #334155; padding-right: 1rem;">';
+    html += '<h3 style="margin-top: 0; color: #e2e8f0; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 1rem;">Справочник команд</h3>';
+
+    Object.keys(libs).forEach(function(libName) {
+      html += '<div class="ref-lib-section" style="margin-bottom: 0.5rem;">';
+      html += '<button class="ref-lib-btn" data-lib="' + escapeHtml(libName) + '" style="width: 100%; text-align: left; background: #1e293b; border: 1px solid #334155; padding: 0.75rem 1rem; border-radius: 6px; color: white; cursor: pointer; transition: background 0.2s; font-weight: bold; display: flex; justify-content: space-between;">';
+      html += '<span>' + escapeHtml(libName) + '</span><span class="chevron">▼</span></button>';
+
+      // List of functions (hidden by default)
+      html += '<ul class="ref-func-list" id="ref-list-' + escapeHtml(libName).replace(/[^a-zA-Z]/g, '') + '" style="list-style: none; padding: 0.5rem 0 0 0.5rem; margin: 0; display: none;">';
+      libs[libName].forEach(function(r) {
+        html += '<li style="margin-bottom: 0.2rem;">';
+        html += '<button class="ref-func-item" data-ref-id="' + r.id + '" style="width: 100%; text-align: left; background: transparent; border: none; padding: 0.5rem 0.5rem; border-radius: 4px; color: #94a3b8; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + escapeHtml(r.title) + '</button>';
+        html += '</li>';
+      });
+      html += '</ul>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // RIGHT CONTENT (Detail view)
+    html += '<div id="ref-detail-area" style="flex-grow: 1; overflow-y: auto; height: 100%; padding-left: 1rem;">';
+    html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #64748b; text-align: center;">';
+    html += '<svg style="width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>';
+    html += '<h3>Выберите команду слева</h3><p>Нажмите на категорию библиотеки, чтобы раскрыть список функций и методов, затем выберите нужную для просмотра деталей и примеров кода.</p>';
+    html += '</div>';
+    html += '</div></div>';
+
+    referencesList.innerHTML = html;
+
+    // Logic to render function details directly into the right area (no view switching)
+    const renderFuncDetail = function(refId) {
+      const area = document.getElementById('ref-detail-area');
+      const ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === refId; });
+      if (!ref) return;
+
+      let content = '<h2 style="margin-top: 0; margin-bottom: 5px; font-size: 2rem;">' + escapeHtml(ref.title) + ' <span style="font-size: 0.5em; color: #64748b; font-weight: normal; vertical-align: middle; background: #1e293b; padding: 2px 8px; border-radius: 12px;">' + escapeHtml(ref.library) + '</span></h2>';
+      content += '<p style="color: #94a3b8; font-style: italic; margin-bottom: 30px;">' + escapeHtml(ref.shortDesc) + '</p>';
+      content += ref.theory;
+
+      area.innerHTML = content;
+      area.scrollTo(0, 0);
+
+      // Render code blocks
+      if (ref.codeBlocks && ref.codeBlocks.length > 0) {
+        ref.codeBlocks.forEach(function (block) {
+          const container = document.getElementById('code-block-' + block.id);
+          if (container) {
+            container.innerHTML = '';
+            renderCodeBlock(block, container);
+          }
+        });
+      }
+      if (window.MathJax) {
+        window.MathJax.typesetPromise([area]).catch(console.error);
+      }
+    };
+
+    // Bind Accordion Clicks
+    referencesList.querySelectorAll('.ref-lib-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const list = btn.nextElementSibling;
+        const chevron = btn.querySelector('.chevron');
+        if (list.style.display === 'none') {
+          list.style.display = 'block';
+          btn.style.background = '#334155';
+          chevron.textContent = '▲';
+        } else {
+          list.style.display = 'none';
+          btn.style.background = '#1e293b';
+          chevron.textContent = '▼';
+        }
       });
     });
+
+    // Bind Function Clicks
+    referencesList.querySelectorAll('.ref-func-item').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        referencesList.querySelectorAll('.ref-func-item').forEach(b => {
+            b.style.color = '#94a3b8';
+            b.style.background = 'transparent';
+        });
+        btn.style.color = '#ffffff';
+        btn.style.background = '#2563eb';
+        renderFuncDetail(btn.dataset.refId);
+
+        // On mobile, optionally scroll to content
+        if (window.innerWidth <= 768) {
+           document.getElementById('ref-detail-area').scrollIntoView({behavior: 'smooth'});
+        }
+      });
+    });
+
+    // Open first library accordion by default
+    const firstLibBtn = referencesList.querySelector('.ref-lib-btn');
+    if(firstLibBtn) firstLibBtn.click();
   }
 
   function openReference(id) {
@@ -131,198 +278,34 @@
     const ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === id; });
     if (!ref) return;
 
-    // Populate sidebar with Table of Contents
+    // Remove sidebar for individual function references
     const sidebar = document.getElementById('lesson-sidebar');
     if (sidebar) {
-      const headings = Array.from(new DOMParser().parseFromString(ref.theory, 'text/html').querySelectorAll('h3, h4'));
-      if (headings.length > 0) {
-        let tocHtml = '<h3>Содержание</h3><ul>';
-        headings.forEach(function(h, index) {
-          const idStr = 'ref-heading-' + index;
-          // Note: we can't easily modify the parsed HTML back into ref.theory string safely without regex
-          // We'll inject IDs during rendering below
-          tocHtml += '<li><a href="#' + idStr + '">' + escapeHtml(h.textContent) + '</a></li>';
-        });
-        tocHtml += '</ul>';
-        sidebar.innerHTML = tocHtml;
-        sidebar.style.display = 'block';
-      } else {
-        sidebar.innerHTML = '';
-        sidebar.style.display = 'none';
-      }
+      sidebar.innerHTML = '';
+      sidebar.style.display = 'none';
     }
 
-    // Inject IDs into headings for TOC linking
-    let modifiedTheory = ref.theory;
-    let headingIndex = 0;
-    modifiedTheory = modifiedTheory.replace(/<(h[34])(.*?)>/g, function(match, tag, rest) {
-      if (rest.includes('id=')) return match;
-      return '<' + tag + ' id="ref-heading-' + (headingIndex++) + '"' + rest + '>';
-    });
+    lessonContent.innerHTML = '<h2>' + escapeHtml(ref.title) + ' <span style="font-size: 0.6em; color: #94a3b8; font-weight: normal;">(' + escapeHtml(ref.library) + ')</span></h2>' + ref.theory;
 
-    let html = '<h2>' + escapeHtml(ref.title) + '</h2>';
-    html += '<div class="lesson-theory reference-content">' + modifiedTheory.trim() + '</div>';
-    lessonContent.innerHTML = html;
-
-    // Setup smooth scroll for sidebar links
-    if (sidebar) {
-      sidebar.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.getAttribute('href').substring(1);
-          const targetEl = document.getElementById(targetId);
-          if (targetEl) {
-            targetEl.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
-      });
-    }
-
-    if (typeof window.initRefRunButtons === 'function') window.initRefRunButtons(lessonContent);
-    document.getElementById('back-from-lesson').textContent = '← Назад к справочникам';
-
-    // Re-trigger MathJax rendering if it's available
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([lessonContent]).catch(function (err) {
-        console.error('MathJax typeset failed: ' + err.message);
-      });
-    }
-  }
-
-  function openLesson(id) {
-    currentLessonId = id;
-    window.currentLessonForAI = id;
-    var ref = typeof REFERENCES !== 'undefined' && REFERENCES.find(function (r) { return r.id === id; });
-    if (ref) {
-      openReference(id);
-      return;
-    }
-    currentIsReference = false;
-    showView('lesson');
-    document.getElementById('back-from-lesson').textContent = '← Назад к урокам';
-    const lesson = LESSONS.find(function (l) {
-      return l.id === id;
-    });
-    if (!lesson) return;
-
-    let html = '<h2>' + escapeHtml(lesson.title) + '</h2>';
-    html += '<div class="lesson-theory">' + lesson.theory.trim() + '</div>';
-
-    fillInInputs = [];
-    let fillIndex = 0;
-
-    (lesson.codeBlocks || []).forEach(function (block) {
-      html += '<div class="code-block">';
-      block.lines.forEach(function (line) {
-        if (line.type === 'text') {
-          html += '<div class="code-line">' + escapeHtml(line.content) + '</div>';
-        } else if (line.type === 'hint') {
-          html +=
-            '<div class="code-line"><span class="hint-trigger" title="' +
-            escapeAttr(line.hint) +
-            '">' +
-            escapeHtml(line.content) +
-            '</span></div>';
-        } else if (line.type === 'fill') {
-          const inputId = 'fill-' + fillIndex;
-          fillInInputs.push({
-            id: inputId,
-            correct: normalizeAnswer(line.correct),
-          });
-          html +=
-            '<div class="code-line">' +
-            escapeHtml(line.content) +
-            '<input type="text" class="fill-in" id="' +
-            inputId +
-            '" placeholder="' +
-            escapeAttr(line.placeholder || '???') +
-            '" data-correct="' +
-            escapeAttr(line.correct) +
-            '">' +
-            '</div>';
-          fillIndex++;
+    // Render code blocks
+    if (ref.codeBlocks && ref.codeBlocks.length > 0) {
+      ref.codeBlocks.forEach(function (block) {
+        const container = document.getElementById('code-block-' + block.id);
+        if (container) {
+          container.innerHTML = '';
+          renderCodeBlock(block, container);
         }
       });
-      html += '</div>';
-    });
+    }
 
-    html +=
-      '<div class="check-section">' +
-      '<button type="button" class="check-btn" id="check-answers">Проверить ответы</button>' +
-      '<div class="check-result" id="check-result" style="display:none"></div>' +
-      '</div>';
-
-    lessonContent.innerHTML = html;
-
-    lessonContent.querySelectorAll('.hint-trigger').forEach(function (el) {
-      el.addEventListener('click', function (e) {
-        showTooltip(e.target, e.target.getAttribute('title'));
+    if (window.MathJax) {
+      window.MathJax.typesetPromise([lessonContent]).catch(function (err) {
+        console.error('MathJax error:', err);
       });
-    });
-
-    document.getElementById('check-answers').addEventListener('click', checkAnswers);
-  }
-
-  function normalizeAnswer(s) {
-    if (!s) return '';
-    return s
-      .trim()
-      .replace(/\s+/g, ' ')
-      .replace(/\s*\(\s*\)\s*$/, '')
-      .toLowerCase();
-  }
-
-  function checkAnswers() {
-    const resultEl = document.getElementById('check-result');
-    let allOk = true;
-    fillInInputs.forEach(function (f) {
-      const input = document.getElementById(f.id);
-      if (!input) return;
-      const value = normalizeAnswer(input.value);
-      const ok = value === f.correct;
-      input.classList.remove('correct', 'wrong');
-      input.classList.add(ok ? 'correct' : 'wrong');
-      if (!ok) allOk = false;
-    });
-    resultEl.style.display = 'block';
-    resultEl.className = 'check-result ' + (allOk ? 'success' : 'fail');
-    resultEl.textContent = allOk
-      ? 'Всё верно! Можешь переходить к следующему уроку.'
-      : 'Есть ошибки. Посмотри подсказки (подчёркнутые пунктиром) и исправь ввод.';
-  }
-
-  let tooltipEl = null;
-  function showTooltip(anchor, text) {
-    if (tooltipEl) {
-      tooltipEl.remove();
-      tooltipEl = null;
     }
-    if (!text) return;
-    tooltipEl = document.createElement('div');
-    tooltipEl.className = 'tooltip';
-    tooltipEl.textContent = text;
-    document.body.appendChild(tooltipEl);
-    const rect = anchor.getBoundingClientRect();
-    tooltipEl.style.left = rect.left + 'px';
-    tooltipEl.style.top = rect.bottom + 6 + 'px';
-    setTimeout(function () {
-      if (tooltipEl) {
-        tooltipEl.remove();
-        tooltipEl = null;
-      }
-    }, 5000);
-  }
 
-  backFromLesson.addEventListener('click', function () {
-    window.currentLessonForAI = null;
-    if (currentIsReference) {
-      showView('references');
-      renderReferencesList();
-    } else {
-      showView('lessons');
-      renderLessonsList();
-    }
-  });
+    window.scrollTo(0, 0);
+  }
 
   function renderSandbox() {
     const d = SANDBOX_DEFAULTS;
