@@ -874,3 +874,11 @@ body {
 @media (max-width: 480px) {
   .ai-settings-inner { margin: 0.5rem; padding: 1rem; max-width: 100%; }
 }
+
+/* Full width override for the Master-Detail view */
+main.main:has(#view-references.active) {
+  max-width: 1400px;
+}
+#view-references {
+  max-width: 100%;
+}
