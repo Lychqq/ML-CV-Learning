@@ -606,6 +606,160 @@ const LESSONS = [
       },
     ],
   },
+  {
+    id: 'game-matplotlib-plot',
+    title: 'Игра: Базовые графики в Matplotlib',
+    shortDesc: 'Построй свой первый график: plot, scatter, show',
+    theory: `
+      <p><strong>Matplotlib</strong> — базовая библиотека для визуализации данных.</p>
+      <ul>
+        <li><code>plt.plot(x, y)</code> — рисует линейный график по точкам x и y.</li>
+        <li><code>plt.scatter(x, y)</code> — рисует диаграмму рассеяния (набор точек без линий).</li>
+        <li><code>plt.title("Название")</code>, <code>plt.xlabel("X")</code>, <code>plt.ylabel("Y")</code> — подписи к графику.</li>
+        <li><code>plt.show()</code> — отображает график на экране (обязательно в конце!).</li>
+      </ul>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import matplotlib.pyplot as plt' },
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'x = np.array([1, 2, 3, 4])' },
+          { type: 'text', content: 'y = np.array([10, 20, 25, 30])' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Построй линейный график' },
+          { type: 'fill', content: 'plt.', placeholder: '???', correct: 'plot(x, y)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Добавь заголовок графика "Мой первый график"' },
+          { type: 'fill', content: 'plt.', placeholder: '???', correct: 'title("Мой первый график")' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Отобрази график на экране' },
+          { type: 'fill', content: 'plt.', placeholder: '???', correct: 'show()' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-numpy-indexing',
+    title: 'Игра: Индексация и срезы в NumPy',
+    shortDesc: 'Достань нужные элементы из матрицы: индексы, срезы, маски',
+    theory: `
+      <p><strong>Индексация в NumPy</strong> очень мощная.</p>
+      <ul>
+        <li><code>A[0, 0]</code> — элемент в первой строке и первом столбце.</li>
+        <li><code>A[:, 0]</code> — весь первый столбец. Символ <code>:</code> означает "все элементы по этой оси".</li>
+        <li><code>A[1:3, :]</code> — строки со второй (индекс 1) по третью (индекс 2, так как 3 не включается).</li>
+        <li><code>A[A > 5]</code> — маскирование (булева индексация). Выбирает все элементы больше 5.</li>
+      </ul>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import numpy as np' },
+          { type: 'text', content: 'A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Получи весь ПЕРВЫЙ столбец матрицы A' },
+          { type: 'fill', content: 'col1 = A[', placeholder: '???', correct: ':, 0' },
+          { type: 'text', content: ']' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Получи элемент в 3-й строке, 3-м столбце (значение 9)' },
+          { type: 'fill', content: 'val = A[', placeholder: '???', correct: '2, 2' },
+          { type: 'text', content: ']' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Выбери все элементы матрицы A, которые больше 5' },
+          { type: 'fill', content: 'gt_5 = A[', placeholder: '???', correct: 'A > 5' },
+          { type: 'text', content: ']' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-pandas-merge',
+    title: 'Игра: Объединение таблиц в Pandas',
+    shortDesc: 'Склей таблицы вместе: merge, concat',
+    theory: `
+      <p>Часто данные лежат в разных таблицах. Pandas умеет их объединять.</p>
+      <ul>
+        <li><code>pd.merge(df1, df2, on="column")</code> — соединяет таблицы по общему столбцу (аналог JOIN в SQL).</li>
+        <li><code>pd.concat([df1, df2])</code> — "склеивает" таблицы друг под другом (по вертикали) или рядом (по горизонтали, если axis=1).</li>
+      </ul>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'import pandas as pd' },
+          { type: 'text', content: 'users = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})' },
+          { type: 'text', content: 'orders = pd.DataFrame({"user_id": [1, 2], "amount": [100, 250]})' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Объедини users и orders (в users колонка id, в orders - user_id)' },
+          { type: 'fill', content: 'merged_df = pd.', placeholder: '???', correct: 'merge(users, orders, left_on="id", right_on="user_id")' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. У нас появилась новая таблица с юзерами, приклей её СНИЗУ к первой' },
+          { type: 'text', content: 'new_users = pd.DataFrame({"id": [3], "name": ["Charlie"]})' },
+          { type: 'fill', content: 'all_users = pd.', placeholder: '???', correct: 'concat([users, new_users])' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-sklearn-metrics',
+    title: 'Игра: Метрики качества в scikit-learn',
+    shortDesc: 'Оцени модель правильно: precision, recall, f1-score',
+    theory: `
+      <p>Одной Accuracy (доли правильных ответов) бывает недостаточно, особенно если классы несбалансированы (например, больных 1%, здоровых 99%).</p>
+      <ul>
+        <li><code>precision_score(y_true, y_pred)</code> — Точность: сколько из предсказанных положительных реально положительные.</li>
+        <li><code>recall_score(y_true, y_pred)</code> — Полнота: сколько из реальных положительных мы нашли.</li>
+        <li><code>f1_score(y_true, y_pred)</code> — Гармоническое среднее между Precision и Recall.</li>
+      </ul>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from sklearn.metrics import precision_score, recall_score, f1_score' },
+          { type: 'text', content: '' },
+          { type: 'text', content: 'y_true = [0, 1, 1, 0, 1]' },
+          { type: 'text', content: 'y_pred = [0, 1, 0, 0, 1]' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Посчитай Точность (Precision)' },
+          { type: 'fill', content: 'p = ', placeholder: '???', correct: 'precision_score(y_true, y_pred)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Посчитай Полноту (Recall)' },
+          { type: 'fill', content: 'r = ', placeholder: '???', correct: 'recall_score(y_true, y_pred)' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 3. Посчитай F1-меру' },
+          { type: 'fill', content: 'f1 = ', placeholder: '???', correct: 'f1_score(y_true, y_pred)' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'game-sklearn-pipeline',
+    title: 'Игра: Pipeline в scikit-learn',
+    shortDesc: 'Собери конвейер: StandardScaler + LogisticRegression',
+    theory: `
+      <p><strong>Pipeline</strong> позволяет объединить несколько шагов обработки данных и обучение модели в один объект.</p>
+      <p>Это спасает от утечек данных (data leakage) и делает код чище. В Pipeline передается список кортежей: <code>[("имя_шага", ОбъектШага()), ...]</code>.</p>
+    `,
+    codeBlocks: [
+      {
+        lines: [
+          { type: 'text', content: 'from sklearn.pipeline import Pipeline' },
+          { type: 'text', content: 'from sklearn.preprocessing import StandardScaler' },
+          { type: 'text', content: 'from sklearn.linear_model import LogisticRegression' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 1. Собери Pipeline из двух шагов: ' },
+          { type: 'text', content: '# шаг "scaler" (StandardScaler) и шаг "model" (LogisticRegression)' },
+          { type: 'fill', content: 'pipe = Pipeline([', placeholder: '???', correct: '("scaler", StandardScaler()), ("model", LogisticRegression())' },
+          { type: 'text', content: '])' },
+          { type: 'text', content: '' },
+          { type: 'text', content: '# 2. Теперь обучи весь пайплайн одной командой!' },
+          { type: 'fill', content: 'pipe.', placeholder: '???', correct: 'fit(X_train, y_train)' },
+        ],
+      },
+    ],
+  },
 ];
 
 const SANDBOX_DEFAULTS = {
